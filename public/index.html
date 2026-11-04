@@ -3,103 +3,119 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#b3261e">
+<meta name="theme-color" content="#f2f2f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <title>H B Lane Kali Puja – Bill Search 2025 / 2026</title>
 <style>
-:root{--bg:#f4f2ee;--card:#fff;--ink:#1d1b18;--mut:#78746c;--line:#ebe7df;--acc:#c62828;--acc2:#e65100;--ok:#14803c;--okbg:#e3f5e9;--due:#c62828;--duebg:#fde9e8;--na:#78746c;--nabg:#f0ede7;--shadow:0 1px 2px rgba(0,0,0,.04),0 6px 20px rgba(60,40,20,.07)}
-@media(prefers-color-scheme:dark){:root{--bg:#121110;--card:#1e1d1b;--ink:#f3f1ec;--mut:#a09c92;--line:#322f2b;--acc:#ff7a70;--acc2:#ffa040;--ok:#6fd48c;--okbg:#15301d;--due:#ff8a80;--duebg:#3a1c1a;--na:#a09c92;--nabg:#2a2825;--shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.35)}}
+:root{--bg:#f2f2f7;--card:#fff;--grp:#f2f2f7;--ink:#000;--mut:#6c6c70;--line:rgba(60,60,67,.16);--fill:rgba(118,118,128,.12);--blue:#007aff;--ok:#248a3d;--okbg:rgba(52,199,89,.17);--due:#d70015;--duebg:rgba(255,59,48,.13);--green:#34c759;--red:#ff3b30;
+--glass:rgba(255,255,255,.58);--glassb:rgba(255,255,255,.65);--gshadow:0 8px 30px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.7)}
+@media(prefers-color-scheme:dark){:root{--bg:#000;--card:#1c1c1e;--grp:#2c2c2e;--ink:#fff;--mut:#98989f;--line:rgba(84,84,88,.55);--fill:rgba(118,118,128,.32);--blue:#0a84ff;--ok:#30d158;--okbg:rgba(48,209,88,.18);--due:#ff6961;--duebg:rgba(255,69,58,.2);--green:#30d158;--red:#ff453a;
+--glass:rgba(44,44,48,.55);--glassb:rgba(255,255,255,.14);--gshadow:0 8px 30px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.14)}}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;padding-bottom:env(safe-area-inset-bottom,0px)}
-.hero{background:linear-gradient(135deg,#b3261e,#e65100);color:#fff;padding:calc(env(safe-area-inset-top,0px) + 16px) 16px 64px}
-.hero-in{max-width:760px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
-h1{font-size:1.3rem;margin:0;letter-spacing:-.01em}.sub{opacity:.85;font-size:.85rem;margin-top:2px}
-.ibtn{width:42px;height:42px;border-radius:14px;border:0;background:rgba(255,255,255,.2);color:#fff;font-size:1.15rem;display:grid;place-items:center;padding:0;cursor:pointer;backdrop-filter:blur(6px)}
-.wrap{max-width:760px;margin:-46px auto 0;padding:0 14px 110px}
-.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
-@media(min-width:640px){.stats{grid-template-columns:repeat(4,1fr)}}
-.stat{background:var(--card);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow)}
-.stat span{font-size:.72rem;color:var(--mut);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
-.stat b{display:block;font-size:1.15rem;margin-top:2px}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.35 -apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(60% 38% at 8% 0%,rgba(10,132,255,.22),transparent 70%),radial-gradient(50% 36% at 100% 22%,rgba(255,55,95,.16),transparent 70%),radial-gradient(70% 40% at 50% 105%,rgba(255,159,10,.16),transparent 70%)}
+.glass{background:var(--glass);-webkit-backdrop-filter:blur(26px) saturate(190%);backdrop-filter:blur(26px) saturate(190%);border:.5px solid var(--glassb);box-shadow:var(--gshadow)}
+.wrap{max-width:680px;margin:0 auto;padding:calc(env(safe-area-inset-top,0px) + 14px) 16px 130px}
+.lt h1{font-size:2.1rem;font-weight:800;letter-spacing:-.03em;margin:14px 0 0;line-height:1.1}
+.lt p{margin:4px 0 16px;color:var(--mut);font-size:.95rem}
+input,select,button{font:inherit;color:var(--ink)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+@media(min-width:620px){.stats{grid-template-columns:repeat(4,1fr)}}
+.stat{border-radius:22px;padding:12px 14px}
+.stat span{font-size:.7rem;color:var(--mut);font-weight:600;letter-spacing:.02em}
+.stat b{display:block;font-size:1.3rem;font-weight:750;letter-spacing:-.02em;margin-top:1px}
 .stat.g b{color:var(--ok)}.stat.r b{color:var(--due)}
 .searchbox{position:sticky;top:calc(env(safe-area-inset-top,0px) + 8px);z-index:10}
-.sbar{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:18px;padding:4px 6px 4px 14px;box-shadow:var(--shadow);border:1.5px solid transparent}
-.sbar:focus-within{border-color:var(--acc)}
+.sbar{display:flex;align-items:center;gap:8px;border-radius:99px;padding:3px 5px 3px 15px}
 .sbar svg{flex:none;color:var(--mut)}
-input,select,button{font:inherit;color:var(--ink)}
-input[type=search]{flex:1;min-width:0;border:0;background:none;padding:12px 4px;font-size:1rem;outline:none;-webkit-appearance:none}
-.go{border:0;background:var(--acc);color:#fff;border-radius:13px;padding:10px 16px;font-weight:650;cursor:pointer}
-@media(prefers-color-scheme:dark){.go,.primary{color:#171614}}
-.sugg{position:absolute;left:0;right:0;top:100%;margin-top:6px;background:var(--card);border-radius:16px;box-shadow:0 12px 36px rgba(0,0,0,.22);overflow:hidden;display:none;max-height:60vh;overflow-y:auto}
-.sugg div{padding:12px 16px;cursor:pointer;display:flex;flex-direction:column;border-bottom:1px solid var(--line)}
-.sugg div:last-child{border:0}.sugg div.on,.sugg div:hover{background:var(--nabg)}
+input[type=search]{flex:1;min-width:0;border:0;background:none;padding:12px 2px;font-size:17px;outline:none;-webkit-appearance:none}
+.go{border:0;background:var(--blue);color:#fff;border-radius:99px;padding:9px 16px;font-weight:600;font-size:15px;cursor:pointer}
+.sugg{position:absolute;left:0;right:0;top:100%;margin-top:8px;border-radius:22px;overflow:hidden;display:none;max-height:55vh;overflow-y:auto;background:var(--card);box-shadow:0 16px 40px rgba(0,0,0,.25)}
+.sugg div{padding:11px 16px;cursor:pointer;display:flex;flex-direction:column;border-bottom:.5px solid var(--line)}
+.sugg div:last-child{border:0}.sugg div.on,.sugg div:active{background:var(--fill)}
 .sugg small{color:var(--mut)}
-mark{background:#ffe08a;color:#000;border-radius:3px;padding:0 1px}
-.chips{display:flex;gap:8px;margin:14px -14px 6px;padding:0 14px;overflow-x:auto;scrollbar-width:none}
+mark{background:rgba(255,204,0,.55);color:inherit;border-radius:4px;padding:0 1px}
+.chips{display:flex;gap:8px;margin:14px -16px 4px;padding:2px 16px 6px;overflow-x:auto;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
-.chip{flex:none;border:0;background:var(--card);border-radius:99px;padding:8px 14px;font-size:.84rem;font-weight:600;color:var(--mut);box-shadow:0 1px 2px rgba(0,0,0,.06);cursor:pointer}
-.chip.on{background:var(--ink);color:var(--bg)}
-.info{color:var(--mut);font-size:.82rem;margin:8px 4px 10px}
-.res{background:var(--card);border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:var(--shadow)}
-.top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
-.name{font-weight:700;font-size:1.05rem;letter-spacing:-.005em}
-.addr{color:var(--mut);font-size:.9rem;margin-top:1px}
-.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-.tag{font-size:.72rem;font-weight:650;background:var(--nabg);color:var(--mut);padding:3px 10px;border-radius:99px}
-.tag.bill{background:var(--acc);color:#fff}
-@media(prefers-color-scheme:dark){.tag.bill{color:#171614}}
-.tag.new{background:var(--okbg);color:var(--ok)}
+.chip{flex:none;border:.5px solid var(--glassb);background:var(--glass);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-radius:99px;padding:8px 15px;font-size:.88rem;font-weight:600;color:var(--ink);cursor:pointer}
+.chip.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.info{color:var(--mut);font-size:.82rem;margin:8px 6px 10px}
+.card{background:var(--card);border-radius:26px;padding:16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.name{font-weight:700;font-size:1.12rem;letter-spacing:-.015em}
+.addr{color:var(--mut);font-size:.93rem;margin-top:1px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 2px}
+.tag{font-size:.72rem;font-weight:600;background:var(--fill);color:var(--mut);padding:4px 10px;border-radius:99px}
+.tag.bill{background:var(--blue);color:#fff}.tag.new{background:var(--okbg);color:var(--ok)}
 .note{font-size:.82rem;margin-top:8px;color:var(--mut)}
-.sec{border-radius:14px;padding:12px;margin-top:10px;background:var(--nabg)}
-.sec.y26{background:transparent;border:1.5px solid var(--line)}
-.sh{display:flex;justify-content:space-between;align-items:center;font-size:.72rem;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
-.amt{font-weight:750;font-size:1.25rem}
-.badge{display:inline-block;font-size:.68rem;font-weight:750;padding:3px 10px;border-radius:99px;letter-spacing:.03em}
-.b-paid{background:var(--okbg);color:var(--ok)}.b-due{background:var(--duebg);color:var(--due)}.b-na{background:var(--card);color:var(--na)}
-.y26 .b-na{background:var(--nabg)}
-.fields{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0 10px}
-.fld label{display:block;font-size:.72rem;color:var(--mut);font-weight:600;margin-bottom:4px}
-.fld input,.fld select{width:100%;min-width:0;padding:12px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);font-weight:650;font-size:1rem;outline:none}
-.fld input:focus,.fld select:focus{border-color:var(--acc)}
-.fld.full{grid-column:1/-1}
-.savebtn{grid-column:1/-1;border:0;background:var(--ink);color:var(--bg);border-radius:12px;padding:12px;font-weight:650;cursor:pointer}
-.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.seg button{border:1.5px solid var(--line);background:var(--card);border-radius:12px;padding:12px 6px;font-weight:650;cursor:pointer}
-.seg .p.sel{background:var(--ok);border-color:var(--ok);color:#fff}.seg .d.sel{background:var(--due);border-color:var(--due);color:#fff}
+.gt{font-size:.74rem;font-weight:600;color:var(--mut);text-transform:uppercase;letter-spacing:.05em;margin:14px 6px 6px}
+.group{background:var(--grp);border-radius:16px;overflow:hidden}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 14px;min-height:46px;position:relative}
+.row+.row::before{content:"";position:absolute;top:0;left:14px;right:0;border-top:.5px solid var(--line)}
+.row>span:first-child,.row>label{color:var(--mut);font-size:.95rem;flex:none}
+.row input,.row select{flex:1;min-width:0;border:0;background:none;text-align:right;font-size:17px;font-weight:600;outline:none;padding:0;-webkit-appearance:none;appearance:none}
+.row input::placeholder{color:var(--mut);font-weight:400;opacity:.7}
+.val{display:flex;align-items:center;gap:8px;font-weight:700;font-size:1.05rem}
+.badge{font-size:.66rem;font-weight:750;padding:3px 9px;border-radius:99px;letter-spacing:.04em}
+.b-paid{background:var(--okbg);color:var(--ok)}.b-due{background:var(--duebg);color:var(--due)}.b-na{background:var(--fill);color:var(--mut)}
+.tint{width:100%;margin-top:10px;border:0;border-radius:14px;padding:13px;font-weight:650;font-size:16px;background:rgba(0,122,255,.14);color:var(--blue);cursor:pointer}
+.tint:active{opacity:.6}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:3px;background:var(--fill);border-radius:15px;padding:3px;margin-top:10px}
+.seg button{border:0;background:none;border-radius:12px;padding:11px 6px;font-weight:600;font-size:15px;cursor:pointer}
+.seg .p.sel{background:var(--green);color:#fff;box-shadow:0 2px 8px rgba(52,199,89,.4)}
+.seg .d.sel{background:var(--red);color:#fff;box-shadow:0 2px 8px rgba(255,59,48,.4)}
 .seg button:disabled{cursor:default}
-.del{background:none;border:0;color:var(--due);font-size:.82rem;padding:12px 0 0;text-decoration:underline;cursor:pointer}
+.del{background:none;border:0;color:var(--red);font-size:.9rem;font-weight:500;padding:14px 0 0;width:100%;cursor:pointer}
+.more{width:100%;border:0;border-radius:16px;padding:14px;background:var(--card);color:var(--blue);font-weight:600;font-size:16px;cursor:pointer;margin-bottom:10px}
 .mode{font-size:.74rem;color:var(--mut);margin-top:20px;text-align:center}
-.fab{position:fixed;right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);height:56px;padding:0 20px;border-radius:28px;border:0;background:linear-gradient(135deg,#c62828,#e65100);color:#fff;font-weight:700;font-size:1rem;box-shadow:0 8px 24px rgba(198,40,40,.4);cursor:pointer;z-index:20;display:flex;align-items:center;gap:6px}
-.backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:30;opacity:0;pointer-events:none;transition:.2s}
+.bar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 14px);z-index:20;display:flex;align-items:center;gap:6px;padding:6px;border-radius:99px}
+.bar button{border:0;background:none;height:46px;min-width:46px;border-radius:99px;display:grid;place-items:center;cursor:pointer;color:var(--ink);padding:0}
+.bar button:active{background:var(--fill)}
+.bar .add{background:var(--blue);color:#fff;padding:0 22px;font-weight:650;font-size:16px;display:flex;gap:6px;align-items:center;white-space:nowrap}
+.bar .add:active{background:var(--blue);opacity:.8}
+.bar svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#lockBtn{position:relative}#lockBtn.on svg{color:var(--green)}
+.backdrop{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:30;opacity:0;pointer-events:none;transition:opacity .25s}
 .backdrop.open{opacity:1;pointer-events:auto}
-.sheet{position:fixed;left:0;right:0;bottom:0;z-index:31;background:var(--card);border-radius:24px 24px 0 0;padding:10px 18px calc(env(safe-area-inset-bottom,0px) + 18px);transform:translateY(105%);transition:transform .25s ease;max-width:560px;margin:0 auto;max-height:92vh;overflow-y:auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:31;margin:0 auto;max-width:560px;max-height:94vh;overflow-y:auto;background:var(--bg);border-radius:30px 30px 0 0;padding:8px 16px calc(env(safe-area-inset-bottom,0px) + 18px);transform:translateY(105%);transition:transform .32s cubic-bezier(.2,.9,.3,1)}
 .sheet.open{transform:none}
-.grab{width:40px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 12px}
-.sheet h2{margin:0 0 12px;font-size:1.1rem}
-.form{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.fbtns{display:flex;gap:8px;margin-top:6px}
-.fbtns button{flex:1;padding:14px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);font-weight:650;cursor:pointer}
-.fbtns .primary{background:var(--acc);border-color:var(--acc);color:#fff;flex:2}
-.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 86px);transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:99px;font-size:.88rem;opacity:0;transition:.25s;pointer-events:none;text-align:center;max-width:90vw;z-index:50}
-.toast.show{opacity:1}
+.grab{width:36px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 6px}
+.snav{display:flex;align-items:center;justify-content:space-between;padding:6px 2px 12px}
+.snav b{font-size:1.02rem}.snav button{border:0;background:none;color:var(--blue);font-size:17px;cursor:pointer;padding:6px 4px}
+.snav .done{font-weight:700}
+.sheet .group{background:var(--card);margin-bottom:14px}
+.asugg{background:var(--card)}
+.asugg div{padding:11px 14px;border-top:.5px solid var(--line);font-size:.95rem;cursor:pointer}
+.asugg div:active{background:var(--fill)}
+.asugg:empty{display:none}
+.dlg{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.35);padding:20px}
+.dlg.open{display:flex}
+.dbox{width:100%;max-width:300px;border-radius:26px;padding:20px 16px 14px;text-align:center;background:var(--glass);-webkit-backdrop-filter:blur(30px) saturate(190%);backdrop-filter:blur(30px) saturate(190%);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.dbox h3{margin:0 0 4px;font-size:1.05rem}.dbox p{margin:0 0 12px;font-size:.85rem;color:var(--mut)}
+.dbox input{width:100%;border:0;background:var(--fill);border-radius:12px;padding:12px;font-size:17px;text-align:center;outline:none}
+.derr{color:var(--red);font-size:.82rem;min-height:1.2em;margin:8px 0 6px}
+.dbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.dbtns button{border:0;border-radius:14px;padding:12px;font-size:16px;font-weight:600;background:var(--fill);cursor:pointer}
+.dbtns .pri{background:var(--blue);color:#fff}
+.shake{animation:sh .3s}@keyframes sh{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 82px);transform:translateX(-50%) translateY(8px);padding:10px 18px;border-radius:99px;font-size:.88rem;font-weight:500;opacity:0;transition:.25s;pointer-events:none;text-align:center;max-width:90vw;z-index:70}
+.toast.show{opacity:1;transform:translateX(-50%)}
 </style>
 </head>
 <body>
-<div class="hero"><div class="hero-in">
-  <div><h1>H B Lane Kali Puja</h1><div class="sub">Bill &amp; collection · 2025 (locked) &amp; 2026</div></div>
-  <button id="expBtn" class="ibtn" aria-label="Export CSV" title="Export CSV">⬇</button>
-</div></div>
 <div class="wrap">
+  <div class="lt"><h1>Kali Puja</h1><p>H B Lane · Bill &amp; collection · 2025 &amp; 2026</p></div>
   <div class="stats">
-    <div class="stat g"><span>2025 collected</span><b id="s25p">–</b></div>
-    <div class="stat r"><span>2025 due</span><b id="s25d">–</b></div>
-    <div class="stat g"><span>2026 collected</span><b id="s26p">–</b></div>
-    <div class="stat r"><span>2026 due</span><b id="s26d">–</b></div>
+    <div class="stat glass g"><span>2025 Collected</span><b id="s25p">–</b></div>
+    <div class="stat glass r"><span>2025 Due</span><b id="s25d">–</b></div>
+    <div class="stat glass g"><span>2026 Collected</span><b id="s26p">–</b></div>
+    <div class="stat glass r"><span>2026 Due</span><b id="s26d">–</b></div>
   </div>
   <div class="searchbox">
-    <form class="sbar" id="f" autocomplete="off">
+    <form class="sbar glass" id="f" autocomplete="off">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      <input type="search" id="q" placeholder="Name, address or bill no…" aria-label="Search" enterkeyhint="search">
+      <input type="search" id="q" placeholder="Name, address or bill no." aria-label="Search" enterkeyhint="search">
       <button class="go" type="submit">Search</button>
     </form>
     <div class="sugg" id="sugg" role="listbox"></div>
@@ -117,26 +133,44 @@ mark{background:#ffe08a;color:#000;border-radius:3px;padding:0 1px}
   <div id="out"></div>
   <div class="mode" id="mode"></div>
 </div>
-<button class="fab" id="addBtn"><span style="font-size:1.4rem;line-height:1">+</span> Add entry</button>
+
+<div class="bar glass">
+  <button id="lockBtn" aria-label="Editing lock"></button>
+  <button class="add" id="addBtn"><span style="font-size:1.35rem;line-height:1;margin-top:-2px">+</span>Add Entry</button>
+  <button id="expBtn" aria-label="Export CSV"><svg viewBox="0 0 24 24"><path d="M12 15V4M8 8l4-4 4 4"/><path d="M5 12v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg></button>
+</div>
+
 <div class="backdrop" id="bd"></div>
 <div class="sheet" id="addPanel" role="dialog" aria-label="New entry">
   <div class="grab"></div>
-  <h2>New manual entry (2026)</h2>
-  <form id="addForm" class="form" autocomplete="off">
-    <div class="fld full"><label>Name *</label><input id="aName" required maxlength="100"></div>
-    <div class="fld full"><label>Address</label><input id="aAddr" maxlength="200"></div>
-    <div class="fld"><label>2026 Bill no.</label><input id="aBill" maxlength="20" inputmode="text" placeholder="e.g. 1021"></div>
-    <div class="fld"><label>Amount (₹) *</label><input id="aAmt" type="number" min="0" step="any" inputmode="decimal" required></div>
-    <div class="fld full"><label>Payment status</label><select id="aSt"><option value="paid">Paid</option><option value="due">Due</option></select></div>
-    <div class="fbtns fld full"><button type="button" id="aCancel">Cancel</button><button class="primary" type="submit">Save entry</button></div>
+  <div class="snav"><button type="button" id="aCancel">Cancel</button><b>New Entry · 2026</b><button class="done" type="submit" form="addForm">Add</button></div>
+  <form id="addForm" autocomplete="off">
+    <div class="group">
+      <div class="row"><label for="aName">Name</label><input id="aName" required maxlength="100" placeholder="Required" autocapitalize="characters"></div>
+      <div class="row"><label for="aAddr">Address</label><input id="aAddr" maxlength="200" placeholder="Start typing…" autocapitalize="characters"></div>
+      <div class="asugg" id="aSugg"></div>
+    </div>
+    <div class="group">
+      <div class="row"><label for="aBill">Bill no.</label><input id="aBill" maxlength="20" placeholder="2026 bill no."></div>
+      <div class="row"><label for="aAmt">Amount (₹)</label><input id="aAmt" type="number" min="0" step="any" inputmode="decimal" required placeholder="Required"></div>
+      <div class="row"><label for="aSt">Status</label><select id="aSt" dir="rtl"><option value="paid">Paid</option><option value="due">Due</option></select></div>
+    </div>
   </form>
 </div>
-<div class="toast" id="toast"></div>
+
+<div class="dlg" id="dlg"><form class="dbox" id="pinForm" autocomplete="off">
+  <h3>Admin PIN</h3><p>Enter the PIN to enable editing. You'll only need to do this once on this device.</p>
+  <input type="password" id="pinIn" inputmode="text" placeholder="PIN" autocomplete="off">
+  <div class="derr" id="pinErr"></div>
+  <div class="dbtns"><button type="button" id="pinCancel">Cancel</button><button type="submit" class="pri">Unlock</button></div>
+</form></div>
+<div class="toast glass" id="toast"></div>
 <script>
 const DATA = [{"cn":1,"name":"ENTALLY PS","addr":"ENTALLY PS","amt":0,"st":"na","note":"","book":"Book 1"},{"cn":2,"name":"NILMONI NANDI","addr":"6/1 H B LANE","amt":301,"st":"paid","note":"","book":"Book 1"},{"cn":3,"name":"SUDIPTA SARKAR","addr":"6/1A H B LANE","amt":501,"st":"paid","note":"","book":"Book 1"},{"cn":4,"name":"DULAL GHOSH","addr":"1A/3F H B LANE","amt":151,"st":"paid","note":"","book":"Book 1"},{"cn":5,"name":"S S MUKHERJEE","addr":"1A/3G H B LANE","amt":101,"st":"paid","note":"","book":"Book 1"},{"cn":6,"name":"PRABIR KUMAR DUTTA","addr":"7E H B LANE","amt":151,"st":"paid","note":"","book":"Book 1"},{"cn":7,"name":"KUNAL GHOSH","addr":"7E H B LANE","amt":201,"st":"paid","note":"","book":"Book 1"},{"cn":8,"name":"H B COMPLEX","addr":"1B H B LANE","amt":1400,"st":"paid","note":"","book":"Book 1"},{"cn":9,"name":"ANUP KR MUKHERJEE","addr":"5F H B LANE","amt":251,"st":"paid","note":"","book":"Book 1"},{"cn":10,"name":"SUSMITA CHATTERJEE","addr":"5F H B LANE","amt":251,"st":"paid","note":"","book":"Book 1"},{"cn":11,"name":"RAJESH KR SHAW","addr":"5E H B LANE","amt":101,"st":"paid","note":"","book":"Book 1"},{"cn":12,"name":"MAMATA CHOWDHURY","addr":"5C H B LANE","amt":100,"st":"paid","note":"","book":"Book 1"},{"cn":13,"name":"MUNNA JAISWAL","addr":"5C H B LANE","amt":101,"st":"paid","note":"","book":"Book 1"},{"cn":14,"name":"TARAK NATH AUDDY","addr":"5C H B LANE","amt":201,"st":"paid","note":"","book":"Book 1"},{"cn":15,"name":"DIBYENDY BHATTACHARYA","addr":"5C H B LANE","amt":151,"st":"paid","note":"","book":"Book 1"},{"cn":16,"name":"PRITAM DUTTA","addr":"5C H B LANE","amt":101,"st":"paid","note":"","book":"Book 1"},{"cn":17,"name":"DIPANKAR DUTTA","addr":"5B H B LANE","amt":201,"st":"paid","note":"","book":"Book 1"},{"cn":18,"name":"BISWAJIT DAS","addr":"1A/4/2 H B LANE","amt":201,"st":"paid","note":"","book":"Book 1"},{"cn":19,"name":"GHANA DA","addr":"1A/4/2 H B LANE","amt":101,"st":"paid","note":"","book":"Book 1"},{"cn":20,"name":"A K DUTTA","addr":"1A/3A/2 H B LANE","amt":101,"st":"paid","note":"","book":"Book 1"},{"cn":21,"name":"M MUNSI","addr":"1A/4A/2 H B LANE","amt":101,"st":"paid","note":"","book":"Book 1"},{"cn":22,"name":"PRASENJIT GHOSH(TENNIS)","addr":"7E H B LANE","amt":601,"st":"paid","note":"","book":"Book 1"},{"cn":23,"name":"RAJU DA","addr":"5F H B LANE","amt":301,"st":"paid","note":"","book":"Book 1"},{"cn":24,"name":"RATNESWAR SARKAR","addr":"5F H B LANE","amt":401,"st":"paid","note":"","book":"Book 1"},{"cn":25,"name":"PETER GOMES","addr":"5E H B LANE","amt":151,"st":"paid","note":"","book":"Book 1"},{"cn":26,"name":"JOYNA ADHIKARY","addr":"5E H B LANE","amt":151,"st":"due","note":"","book":"Book 1"},{"cn":27,"name":"BIKRAMJIT MITRA","addr":"5C H B LANE","amt":101,"st":"paid","note":"","book":"Book 1"},{"cn":28,"name":"MANGAL DAS","addr":"5C H B LANE","amt":101,"st":"paid","note":"","book":"Book 1"},{"cn":29,"name":"SANJOY KUMAR","addr":"5C H B LANE","amt":151,"st":"paid","note":"","book":"Book 1"},{"cn":30,"name":"DEBASIS BHATTACHARYA","addr":"1A/3A/2 H B LANE","amt":151,"st":"paid","note":"","book":"Book 1"},{"cn":31,"name":"GOPAL DAS","addr":"1A/3D H B LANE","amt":151,"st":"paid","note":"","book":"Book 1"},{"cn":32,"name":"PARESH DAS","addr":"7H/48 K D ROAD","amt":151,"st":"paid","note":"","book":"Book 1"},{"cn":33,"name":"BIMAL DAS","addr":"7H/48 K D ROAD","amt":101,"st":"paid","note":"","book":"Book 1"},{"cn":34,"name":"DIPAK GHOSH","addr":"2A/5A H B LANE","amt":151,"st":"paid","note":"","book":"Book 1"},{"cn":35,"name":"L K KUNDU","addr":"12/AG BECHULAL RD","amt":101,"st":"paid","note":"","book":"Book 1"},{"cn":36,"name":"L K DAS","addr":"138C A P ROAD","amt":101,"st":"paid","note":"","book":"Book 1"},{"cn":37,"name":"LOKNATH FURNITURE","addr":"138 A P ROAD","amt":251,"st":"paid","note":"","book":"Book 1"},{"cn":38,"name":"RANJIT JADAV","addr":"138 A P ROAD","amt":200,"st":"paid","note":"","book":"Book 1"},{"cn":39,"name":"AMAR MRIDHA","addr":"138 A P ROAD","amt":201,"st":"due","note":"","book":"Book 1"},{"cn":40,"name":"SOMNATH DAS","addr":"138A A P ROAD","amt":151,"st":"paid","note":"","book":"Book 1"},{"cn":41,"name":"ANUP BHATTACHARYA","addr":"138A A P ROAD","amt":125,"st":"paid","note":"","book":"Book 1"},{"cn":42,"name":"CHAD HAZRA","addr":"138A  A P ROAD","amt":101,"st":"paid","note":"","book":"Book 1"},{"cn":43,"name":"EUROPLAST","addr":"1A/5 H B LANE","amt":401,"st":"paid","note":"","book":"Book 1"},{"cn":44,"name":"BISWAS CABLE","addr":"5E H B LANE","amt":401,"st":"paid","note":"500 NXT YR","book":"Book 1"},{"cn":45,"name":"SUMIT KR GHOSH","addr":"2A/5C H B LANE","amt":201,"st":"paid","note":"","book":"Book 1"},{"cn":46,"name":"SANTOSH KUMAR","addr":"138A A P ROAD","amt":301,"st":"paid","note":"","book":"Book 1"},{"cn":47,"name":"ATASHI ELECTRIC","addr":"118A A P ROAD","amt":201,"st":"paid","note":"","book":"Book 1"},{"cn":48,"name":"BINAY GUPTA","addr":"1A/2A H B LANE","amt":101,"st":"paid","note":"","book":"Book 1"},{"cn":49,"name":"RIJO DEY","addr":"2A/4 H B LANE","amt":601,"st":"paid","note":"","book":"Book 1"},{"cn":50,"name":"VIJAY SINGH","addr":"2A/3 H B LANE","amt":171,"st":"paid","note":"","book":"Book 1"},{"cn":51,"name":"RAJESH MALLICK","addr":"10C/9 H B LANE","amt":601,"st":"paid","note":"","book":"Book 2"},{"cn":52,"name":"DILIP MONDAL","addr":"10C H B LANE","amt":251,"st":"paid","note":"","book":"Book 2"},{"cn":53,"name":"SWAPAN SEAL","addr":"10C H B LANE","amt":151,"st":"paid","note":"","book":"Book 2"},{"cn":54,"name":"NARU PANDA","addr":"10C H B LANE","amt":101,"st":"paid","note":"","book":"Book 2"},{"cn":55,"name":"BUBAI BISWAS","addr":"10C H B LANE","amt":101,"st":"paid","note":"","book":"Book 2"},{"cn":56,"name":"RAJKUMAR BISWAS","addr":"10C H B LANE","amt":101,"st":"paid","note":"","book":"Book 2"},{"cn":57,"name":"DILIP RAM","addr":"10C H B LANE","amt":601,"st":"paid","note":"","book":"Book 2"},{"cn":58,"name":"ASHOK RANA","addr":"10C H B LANE","amt":401,"st":"paid","note":"","book":"Book 2"},{"cn":59,"name":"RAMESHWAR SHARMA","addr":"10C H B LANE","amt":501,"st":"paid","note":"100 BONUS","book":"Book 2"},{"cn":60,"name":"JOY GOMES","addr":"10A H B LANE","amt":201,"st":"paid","note":"","book":"Book 2"},{"cn":61,"name":"RAJU RAUT","addr":"10A H B LANE","amt":151,"st":"paid","note":"","book":"Book 2"},{"cn":62,"name":"B CHOWDHURY","addr":"11 H B LANE","amt":101,"st":"paid","note":"","book":"Book 2"},{"cn":63,"name":"UTTAM KUNDU","addr":"10A H B LANE","amt":201,"st":"paid","note":"","book":"Book 2"},{"cn":64,"name":"MANISH SHAW","addr":"10 H B LANE","amt":101,"st":"paid","note":"100 DUE","book":"Book 2"},{"cn":65,"name":"PATRA BARI","addr":"10 H B LANE","amt":301,"st":"paid","note":"","book":"Book 2"},{"cn":66,"name":"SOMNATH DE","addr":"13B H B LANE","amt":301,"st":"paid","note":"","book":"Book 2"},{"cn":67,"name":"SHYAMAL GHOSH","addr":"9A H B LANE","amt":151,"st":"paid","note":"","book":"Book 2"},{"cn":68,"name":"LAB KR SINGH","addr":"9B H B LANE","amt":201,"st":"paid","note":"","book":"Book 2"},{"cn":69,"name":"AKASH SINGH","addr":"9B H B LANE","amt":301,"st":"paid","note":"","book":"Book 2"},{"cn":70,"name":"SANJIT SHAW","addr":"9B H B LANE","amt":201,"st":"paid","note":"","book":"Book 2"},{"cn":71,"name":"UTTAM CHAKRABORTY","addr":"9B H B LANE","amt":501,"st":"paid","note":"","book":"Book 2"},{"cn":72,"name":"PIKU SHAW","addr":"9B H B LANE","amt":151,"st":"due","note":"","book":"Book 2"},{"cn":73,"name":"BIJON ROY","addr":"9B H B LANE","amt":151,"st":"paid","note":"","book":"Book 2"},{"cn":74,"name":"RAMESH MONDAL","addr":"9B H B LANE","amt":301,"st":"paid","note":"","book":"Book 2"},{"cn":75,"name":"GURIA DEVI","addr":"10A H B LANE","amt":131,"st":"paid","note":"","book":"Book 2"},{"cn":76,"name":"KHOKON GHOSH","addr":"10A H B LANE","amt":201,"st":"paid","note":"","book":"Book 2"},{"cn":77,"name":"BANANI KUNDU","addr":"10A H B LANE","amt":301,"st":"paid","note":"","book":"Book 2"},{"cn":78,"name":"PARTHA PAL","addr":"8A H B LANE","amt":301,"st":"paid","note":"","book":"Book 2"},{"cn":79,"name":"TARAK BASAK","addr":"6/1 H B LANE","amt":251,"st":"paid","note":"","book":"Book 2"},{"cn":80,"name":"R BISWAS","addr":"17 H B LANE","amt":201,"st":"paid","note":"","book":"Book 2"},{"cn":81,"name":"SOMA DAS","addr":"3A H B LANE","amt":101,"st":"paid","note":"","book":"Book 2"},{"cn":82,"name":"RAJU DA","addr":"5/3A H B LANE","amt":151,"st":"paid","note":"","book":"Book 2"},{"cn":83,"name":"GOPAL SARKAR","addr":"5/3A H B LANE","amt":501,"st":"paid","note":"","book":"Book 2"},{"cn":84,"name":"VEENA SINGH","addr":"5/3A H B LANE","amt":201,"st":"paid","note":"","book":"Book 2"},{"cn":85,"name":"SUKUMAR DAS","addr":"5//3A H B LANE","amt":151,"st":"paid","note":"","book":"Book 2"},{"cn":86,"name":"UTTAM SHAW","addr":"5/3A H B LANE","amt":151,"st":"paid","note":"50DUE","book":"Book 2"},{"cn":87,"name":"SUBHANKAR SHAW","addr":"27G H B LANE","amt":100,"st":"paid","note":"","book":"Book 2"},{"cn":88,"name":"RAJESH DA","addr":"27G H B LANE","amt":201,"st":"paid","note":"","book":"Book 2"},{"cn":89,"name":"KABERI DAS","addr":"27G H B LANE","amt":101,"st":"paid","note":"","book":"Book 2"},{"cn":90,"name":"TRIPTI BISWAS","addr":"2E H B LANE","amt":121,"st":"paid","note":"","book":"Book 2"},{"cn":91,"name":"SATYANARAYAN JADAV","addr":"2/1 H B LANE","amt":501,"st":"paid","note":"","book":"Book 2"},{"cn":92,"name":"MIRA RANI BOSE","addr":"22 H B LANE","amt":1101,"st":"paid","note":"","book":"Book 2"},{"cn":93,"name":"AMIYA PAL","addr":"2D/2 H B LANE","amt":101,"st":"paid","note":"","book":"Book 2"},{"cn":94,"name":"R MANNA","addr":"27G H B LANE","amt":101,"st":"paid","note":"","book":"Book 2"},{"cn":95,"name":"SUNNY MALLICK","addr":"10C H B LANE","amt":301,"st":"due","note":"","book":"Book 2"},{"cn":96,"name":"MAMATA GHOSH","addr":"9B H B LANE","amt":2001,"st":"paid","note":"","book":"Book 2"},{"cn":97,"name":"BINOY BHABAN","addr":"27C/1A H B LANE","amt":1500,"st":"paid","note":"","book":"Book 2"},{"cn":98,"name":"ANNAPURNA APARTMENT","addr":"27/1A H B LANE","amt":1200,"st":"paid","note":"","book":"Book 2"},{"cn":99,"name":"AMITAYU MAZUMDER","addr":"27G H B LANE","amt":501,"st":"paid","note":"TO RAJA ONLINE","book":"Book 2"},{"cn":100,"name":"ROCKY GOMES","addr":"2/1 H B LANE","amt":201,"st":"paid","note":"","book":"Book 2"},{"cn":101,"name":"KHOKA DA","addr":"5M H B LANE","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":102,"name":"LUCKY DI","addr":"138A A P ROAD","amt":301,"st":"paid","note":"","book":"Book 3"},{"cn":103,"name":"ABUL KALAM","addr":"138A A P ROAD","amt":100,"st":"paid","note":"","book":"Book 3"},{"cn":104,"name":"SUDHIR SHAW","addr":"138A A P ROAD","amt":131,"st":"paid","note":"","book":"Book 3"},{"cn":105,"name":"SUBHAL SHARMA","addr":"138A A P ROAD","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":106,"name":"JAHAR DAS","addr":"138A A P ROAD","amt":151,"st":"paid","note":"","book":"Book 3"},{"cn":107,"name":"PIYALI PAL","addr":"138A A P ROAD","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":108,"name":"JAGDISH SINGH","addr":"138A A P ROAD","amt":151,"st":"paid","note":"","book":"Book 3"},{"cn":109,"name":"RAJU PAN","addr":"138A A P ROAD","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":110,"name":"BUNTY GUPTA","addr":"138A A P ROAD","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":111,"name":"RAKESH SHAW","addr":"138 A P ROAD","amt":201,"st":"due","note":"","book":"Book 3"},{"cn":112,"name":"SOPHIA JI","addr":"138 A P ROAD","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":113,"name":"RAMESH NAIK","addr":"138A A P ROAD","amt":201,"st":"paid","note":"","book":"Book 3"},{"cn":114,"name":"ABDUL ROB","addr":"138A A P ROAD","amt":121,"st":"due","note":"","book":"Book 3"},{"cn":115,"name":"M GHOSH DOSTIDAR","addr":"128A A P ROAD","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":116,"name":"ANIKET PATRA","addr":"118A A P ROAD","amt":201,"st":"paid","note":"","book":"Book 3"},{"cn":117,"name":"DIPAK CHANDRA","addr":"118 A P ROAD","amt":151,"st":"paid","note":"*","book":"Book 3"},{"cn":118,"name":"A DHAR","addr":"118A A P ROAD","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":119,"name":"JAGANNATH ONLINE SERVICES","addr":"118A A P ROAD","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":120,"name":"BAPPA DA (FRIDGE)","addr":"118A A P ROAD","amt":201,"st":"paid","note":"","book":"Book 3"},{"cn":121,"name":"UTSAV GALLERY","addr":"A P ROAD","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":122,"name":"NARAYAN SAHA","addr":"A P ROAD","amt":201,"st":"paid","note":"","book":"Book 3"},{"cn":123,"name":"PRABHAT KAKA (DOKAN)","addr":"A P ROAD","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":124,"name":"BHARAT SHAW(BIKE GARAGE)","addr":"7H/44 K D ROAD","amt":151,"st":"paid","note":"","book":"Book 3"},{"cn":125,"name":"P N PLASTIC","addr":"1/1B POTTARY ROAD","amt":301,"st":"paid","note":"","book":"Book 3"},{"cn":126,"name":"CIT CAFE","addr":"CIT ROAD","amt":121,"st":"paid","note":"","book":"Book 3"},{"cn":127,"name":"55NO WARD BABSAYI SAMITI","addr":"A P ROAD","amt":500,"st":"paid","note":"","book":"Book 3"},{"cn":128,"name":"AYUSH ROY","addr":"2C H B LANE","amt":201,"st":"due","note":"","book":"Book 3"},{"cn":129,"name":"A GHOSAL","addr":"2C H B LANE","amt":151,"st":"paid","note":"","book":"Book 3"},{"cn":130,"name":"KOUSHIK GHOSH","addr":"2C H B LANE","amt":151,"st":"paid","note":"","book":"Book 3"},{"cn":131,"name":"PUSHPA DAS","addr":"2C H B LANE","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":132,"name":"RONI DA","addr":"1A/3H H B LANE","amt":201,"st":"paid","note":"","book":"Book 3"},{"cn":133,"name":"DAS MEDICAL HALL","addr":"7P K D ROAD","amt":121,"st":"paid","note":"","book":"Book 3"},{"cn":134,"name":"DIGITAL TELECOM","addr":"1/1A POTTARY ROAD","amt":100,"st":"paid","note":"","book":"Book 3"},{"cn":135,"name":"SHIV SANKAR MISTANNA BHANDER","addr":"A P ROAD","amt":201,"st":"paid","note":"","book":"Book 3"},{"cn":136,"name":"MANIK DA - JEWELLERY","addr":"5F H B LANE","amt":501,"st":"paid","note":"","book":"Book 3"},{"cn":137,"name":"RANJIIT RAJAT","addr":"5C H B LANE","amt":121,"st":"due","note":"","book":"Book 3"},{"cn":138,"name":"GOUTAM BISWAS","addr":"5C H B LANE","amt":151,"st":"due","note":"","book":"Book 3"},{"cn":139,"name":"ABHIJIT DAS","addr":"1A/38 H B LANE","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":140,"name":"PREMA ROY","addr":"1A/1 H B LANE","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":141,"name":"R BISWAS (RAJIB)","addr":"7W K D ROAD","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":142,"name":"SOMA BOSE(RAIL DI)","addr":"2A/4 H B LANE","amt":1500,"st":"paid","note":"","book":"Book 3"},{"cn":143,"name":"S K DAS","addr":"2E H B LANE","amt":251,"st":"paid","note":"","book":"Book 3"},{"cn":145,"name":"PRASENJIT ROYCHOUDHURY(H B COMPLEX)","addr":"1B H B LANE","amt":200,"st":"paid","note":"","book":"Book 3"},{"cn":146,"name":"DEBU KAKA","addr":"118A A P ROAD","amt":100,"st":"paid","note":"","book":"Book 3"},{"cn":147,"name":"PRATIBHA PATRA(RUNA NANDY)","addr":"118A A P ROAD","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":148,"name":"A NAG","addr":"1A/7B H B LANE","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":149,"name":"LIFEGUARD","addr":"A P ROAD","amt":1001,"st":"paid","note":"","book":"Book 3"},{"cn":150,"name":"SETT BROTHERS","addr":"H B LANE","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":151,"name":"SHIVAM PYNE","addr":"17 H B LANE","amt":101,"st":"paid","note":"","book":"Book 4"},{"cn":152,"name":"ABHISHEK RAM","addr":"3 H B LANE","amt":1000,"st":"due","note":"","book":"Book 4"},{"cn":153,"name":"PRASANTA DUTTA(MOON)","addr":"3/1B H B LANE","amt":101,"st":"paid","note":"","book":"Book 4"},{"cn":154,"name":"ROBIN BISWAS","addr":"5/3A H B LANE","amt":201,"st":"paid","note":"","book":"Book 4"},{"cn":155,"name":"SOMA DAS","addr":"26B H B LANE","amt":301,"st":"paid","note":"","book":"Book 4"},{"cn":156,"name":"LALTU DA","addr":"6/1 H B LANE","amt":201,"st":"paid","note":"","book":"Book 4"},{"cn":157,"name":"SHANKAR BASAK","addr":"6/1 H B LANE","amt":1201,"st":"paid","note":"","book":"Book 4"},{"cn":158,"name":"NABA KAKA","addr":"5K H B LANE","amt":101,"st":"paid","note":"","book":"Book 4"},{"cn":159,"name":"SAMBHU MAZUMDER","addr":"5K H B LANE","amt":301,"st":"paid","note":"200 DUE","book":"Book 4"},{"cn":160,"name":"AMAR DA","addr":"10C H B LANE","amt":1001,"st":"paid","note":"","book":"Book 4"},{"cn":161,"name":"ABHIJIT SEN","addr":"4 H B LANE","amt":201,"st":"paid","note":"","book":"Book 4"},{"cn":162,"name":"PRECISION ADHESIVE","addr":"27A H B LANE","amt":350,"st":"paid","note":"","book":"Book 4"},{"cn":163,"name":"KRISHNA DEB","addr":"3 H B LANE","amt":300,"st":"paid","note":"","book":"Book 4"},{"cn":164,"name":"RADHAKRISHNA APT","addr":"3 H B LANE","amt":3000,"st":"paid","note":"","book":"Book 4"},{"cn":165,"name":"GANESH KAKIMA","addr":"3 H B LANE","amt":301,"st":"paid","note":"","book":"Book 4"},{"cn":166,"name":"BHADU KAKU","addr":"17 H B LANE","amt":101,"st":"paid","note":"","book":"Book 4"},{"cn":167,"name":"DAKU KAKA","addr":"5/3A H B LANE","amt":101,"st":"paid","note":"","book":"Book 4"},{"cn":168,"name":"ARCHANA DA","addr":"138A A P ROAD","amt":101,"st":"paid","note":"","book":"Book 4"},{"cn":169,"name":"APARNA KARKI","addr":"MUKUNDAPUR","amt":500,"st":"paid","note":"","book":"Book 4"},{"cn":170,"name":"ANITA GHOSH","addr":"8B H B LANE","amt":302,"st":"paid","note":"","book":"Book 4"},{"cn":171,"name":"SAYANTIKA SAHA","addr":"26A H B LANE","amt":501,"st":"paid","note":"","book":"Book 4"},{"cn":172,"name":"ASHIT BARAN KAYAL","addr":"405 MTG (BEHALA)","amt":501,"st":"paid","note":"","book":"Book 4"},{"cn":173,"name":"KARTHIK DA (AAHAAR)","addr":"3/1C H B LANE","amt":151,"st":"paid","note":"","book":"Book 4"},{"cn":174,"name":"SOMONI DAS","addr":"25 H B LANE","amt":200,"st":"paid","note":"","book":"Book 4"},{"cn":175,"name":"DOLON DA","addr":"25 H B LANE","amt":251,"st":"paid","note":"","book":"Book 4"},{"cn":176,"name":"KAGAL GHOSH","addr":"4A H B LANE","amt":200,"st":"paid","note":"51 DUE","book":"Book 4"},{"cn":177,"name":"AMAL GHOSH","addr":"5//3A H B LANE","amt":201,"st":"paid","note":"","book":"Book 4"},{"cn":178,"name":"HARIPADA GHOSH","addr":"27F H B LANE","amt":101,"st":"paid","note":"","book":"Book 4"},{"cn":179,"name":"SMARTYA GHOSH","addr":"5D H B LANE","amt":1001,"st":"paid","note":"BILLI BABU","book":"Book 4"},{"cn":180,"name":"KESTO KAKA","addr":"5/3A H B LANE","amt":201,"st":"paid","note":"","book":"Book 4"},{"cn":181,"name":"SUMONA SEAL","addr":"10C H B LANE","amt":601,"st":"paid","note":"","book":"Book 4"},{"cn":182,"name":"APU DA","addr":"5/3A H B LANE","amt":501,"st":"paid","note":"","book":"Book 4"},{"cn":183,"name":"BISWAJIT DAS","addr":"5/3A H B LANE","amt":501,"st":"paid","note":"","book":"Book 4"},{"cn":184,"name":"DEBASIS DA (MASTER FRIEND)","addr":"A P ROAD","amt":150,"st":"paid","note":"","book":"Book 4"},{"cn":185,"name":"BAIDYA DA","addr":"H B LANE","amt":501,"st":"paid","note":"","book":"Book 4"},{"cn":186,"name":"LABU DA","addr":"H B LANE","amt":500,"st":"paid","note":"","book":"Book 4"},{"cn":187,"name":"PRANJAL ROY","addr":"3/1B H B LANE","amt":101,"st":"paid","note":"","book":"Book 4"},{"cn":188,"name":"DILIP SAHA","addr":"26 H B LANE","amt":501,"st":"paid","note":"","book":"Book 4"},{"cn":189,"name":"RONU ROY","addr":"25 H B LANE","amt":500,"st":"paid","note":"","book":"Book 4"},{"cn":190,"name":"SOMEN BOSE","addr":"","amt":505,"st":"paid","note":"","book":"Book 4"},{"cn":191,"name":"CONTINENTAL ENGG.","addr":"5L/1 H B LANE","amt":701,"st":"paid","note":"","book":"Book 4"},{"cn":192,"name":"DANIEL MISHRA","addr":"4 H B LANE","amt":200,"st":"paid","note":"","book":"Book 4"},{"cn":193,"name":"BHANU DA","addr":"25 H B LANE","amt":501,"st":"paid","note":"","book":"Book 4"},{"cn":194,"name":"ANJAN MONDAL","addr":"2F H B LANE","amt":251,"st":"paid","note":"","book":"Book 4"},{"cn":195,"name":"SWAPAN DAS & BHULAN NATH","addr":"6A H B LANE","amt":151,"st":"paid","note":"","book":"Book 4"},{"cn":196,"name":"ABHIJIT & MUNMUN CHATTERJEE","addr":"CENTRAL AVENUE","amt":501,"st":"paid","note":"","book":"Book 4"},{"cn":197,"name":"SUPRIYO DA","addr":"10 H B LANE","amt":301,"st":"paid","note":"","book":"Book 4"},{"cn":198,"name":"GOUTAM DA","addr":"7C H B LANE","amt":351,"st":"paid","note":"","book":"Book 4"},{"cn":199,"name":"BUBAI DAS","addr":"16 H B LANE","amt":501,"st":"paid","note":"","book":"Book 4"},{"cn":200,"name":"GOUTAM DA","addr":"17/1 H B LANE","amt":301,"st":"paid","note":"","book":"Book 4"},{"cn":201,"name":"RASENDU BISWAS","addr":"18 H B LANE","amt":501,"st":"paid","note":"","book":"Book 5"},{"cn":202,"name":"MANOJ MALLICK","addr":"5/3A H B LANE","amt":1001,"st":"due","note":"","book":"Book 5"},{"cn":203,"name":"ROSHAN SHAW","addr":"5/3A H B LANE","amt":501,"st":"paid","note":"","book":"Book 5"},{"cn":204,"name":"BABUA KAKA","addr":"5/3A H B LANE","amt":101,"st":"paid","note":"","book":"Book 5"},{"cn":205,"name":"SONU KUMAR","addr":"5/3A H B LANE","amt":101,"st":"paid","note":"","book":"Book 5"},{"cn":206,"name":"RANJHA KAKA","addr":"16 H B LANE","amt":301,"st":"paid","note":"","book":"Book 5"},{"cn":207,"name":"ARIJIT GHOSH","addr":"25 H B LANE","amt":201,"st":"paid","note":"","book":"Book 5"},{"cn":208,"name":"JOYDEB CHAKROBORTY","addr":"25 H B LANE","amt":301,"st":"paid","note":"","book":"Book 5"},{"cn":209,"name":"MITHU MANNA","addr":"25 H B LANE","amt":301,"st":"paid","note":"","book":"Book 5"},{"cn":210,"name":"TARAKNATH KUITI","addr":"25 H B LANE","amt":301,"st":"paid","note":"","book":"Book 5"},{"cn":211,"name":"TARAK KAR","addr":"26A H B LANE","amt":151,"st":"paid","note":"","book":"Book 5"},{"cn":212,"name":"ARJUN GUPTA","addr":"4 H B LANE","amt":251,"st":"paid","note":"","book":"Book 5"},{"cn":213,"name":"KAUSTAV DE (BABUA)","addr":"13A H B LANE","amt":1001,"st":"paid","note":"","book":"Book 5"},{"cn":214,"name":"MEMBERSHIP - CANCEL","addr":"CANCELED","amt":0,"st":"paid","note":"","book":"Book 5"},{"cn":215,"name":"MEMBERSHIP - CANCEL","addr":"CANCELED","amt":0,"st":"paid","note":"","book":"Book 5"},{"cn":216,"name":"BYABSAHI SAMITY 56NO WARD","addr":"39A POTTERY ROAD","amt":300,"st":"paid","note":"","book":"Book 5"},{"cn":217,"name":"HAPPY MOTORS","addr":"27C H B LANE","amt":800,"st":"paid","note":"","book":"Book 5"},{"cn":218,"name":"SAMBHU DA","addr":"4A H B LANE","amt":700,"st":"paid","note":"","book":"Book 5"},{"cn":219,"name":"MONIKA GHOSH","addr":"4A H B LANE","amt":201,"st":"paid","note":"","book":"Book 5"},{"cn":220,"name":"SANJOY DA","addr":"5L H B LANE","amt":101,"st":"paid","note":"","book":"Book 5"},{"cn":221,"name":"ALPANA DI","addr":"H B LANE","amt":401,"st":"paid","note":"","book":"Book 5"},{"cn":222,"name":"SANKY RAUT","addr":"5/3A H B LANE","amt":1001,"st":"due","note":"","book":"Book 5"},{"cn":223,"name":"PRAMOD DA (IRONMAN)","addr":"H B LANE","amt":101,"st":"paid","note":"","book":"Book 5"},{"cn":224,"name":"ADHOYA(BLOOD COLLECTION)","addr":"A P ROAD","amt":501,"st":"paid","note":"","book":"Book 5"},{"cn":225,"name":"MAHESH DA","addr":"10C H B LANE","amt":500,"st":"paid","note":"","book":"Book 5"},{"cn":226,"name":"PABAN DA SHOP","addr":"14 H B LANE","amt":633,"st":"paid","note":"","book":"Book 5"},{"cn":251,"name":"SUDHANYA BASU","addr":"IBM","amt":1000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":252,"name":"SOMASRI DAS","addr":"IBM","amt":801,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":253,"name":"SURAJIT ROY","addr":"CBS","amt":1501,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":254,"name":"SIMANTINI ROY","addr":"IBM","amt":800,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":255,"name":"SAUBHIK DAS","addr":"IBM","amt":1500,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":256,"name":"SOMSUVRO BANERJEE","addr":"CBS","amt":3000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":257,"name":"DIP DAS","addr":"IBM","amt":1001,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":258,"name":"MANSI BHISE","addr":"IBM","amt":1000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":259,"name":"DEEPAK DA","addr":"H B LANE","amt":20000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":260,"name":"EMON MISHRA","addr":"IBM","amt":1500,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":261,"name":"ROHIT GHOSH - POPO","addr":"17 H B LANE","amt":10000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":262,"name":"SHANKAR DA","addr":"A P ROAD","amt":2000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":263,"name":"MD ASIF","addr":"5A H B LANE","amt":3500,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":264,"name":"WELLWISHER – KMC","addr":"KMC-KAUSHIK-CBS","amt":1000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":265,"name":"DOMICILE ASSC – KMC","addr":"KMC-KAUSHIK-CBS","amt":1700,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":266,"name":"PAR DESIGN – KMC","addr":"KMC-KAUSHIK-CBS","amt":2000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":267,"name":"RATNASREE CHOWDHURY","addr":"IBM","amt":1000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":268,"name":"SAYANTI MUKHERJEE","addr":"IBM","amt":703,"st":"paid","note":"501+101+101","book":"Book 6 (MEMBERSHIP)"},{"cn":269,"name":"CANCELED","addr":"CANCELED","amt":0,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":270,"name":"NIPA","addr":"27 H B LANE","amt":1001,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":271,"name":"LUCKY","addr":"19 H B LANE","amt":1500,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":272,"name":"P L DUTTA - BABUNI","addr":"6B H B LANE","amt":1001,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":273,"name":"GURUPADA GHOSH - GURUKAKA","addr":"19 H B LANE","amt":3000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":274,"name":"BARTICK CHAKRABORTY","addr":"H B LANE","amt":2000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":275,"name":"ARIJIT GUHAROY - PAPPU DA","addr":"H B LANE","amt":2001,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":276,"name":"MANAS KONAR - PAPPU DENTIST","addr":"H B LANE","amt":2000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":277,"name":"NIRMAL KAKA","addr":"RONGKOL","amt":1001,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":278,"name":"RANJAN BISWAS - BUGO DA","addr":"5N H B LANE","amt":8000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":279,"name":"MANAS GHOSH - DUSTU","addr":"4A H B LANE","amt":2501,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":280,"name":"ASHIS DA & CO.","addr":"H B LANE","amt":20000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":281,"name":"DIPANKAR DA","addr":"H B LANE","amt":1500,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":282,"name":"TAPAS DA","addr":"2A/5B H B LANE","amt":601,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":283,"name":"SHRABONI GHOSH - DUSTU TENANT","addr":"4 H B LANE","amt":151,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":284,"name":"TUNAL DA","addr":"11 H B LANE","amt":2000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":285,"name":"RANADHIR BISWAS - TUKA","addr":"20D HB LANE","amt":10000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":286,"name":"BIKRAM DA","addr":"4 HB LANE","amt":1000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":287,"name":"PRANAB ROY - KMC","addr":"KMC-KAUSHIK-CBS","amt":1000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":288,"name":"SUBHAJIT - CHIMNEY","addr":"25 HB LANE","amt":4000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":289,"name":"SHANTANU DAS - BITTU","addr":"26 HB LANE","amt":3000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":290,"name":"PRANAMI BOX","addr":"MANDIR - HB LANE","amt":925,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":291,"name":"ANIRBAN GHOSH - BABAI","addr":"4A HB LANE","amt":1500,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":292,"name":"SHANTANU GHOSH - RAJA","addr":"19 HB LANE","amt":2000,"st":"paid","note":"500 DUE","book":"Book 6 (MEMBERSHIP)"},{"cn":293,"name":"SUDIP DAS - BURO","addr":"26 HB LANE","amt":1000,"st":"due","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":294,"name":"DEBASHISH MUKHERJEE - MASTER","addr":"27F HB LANE","amt":7000,"st":"due","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":295,"name":"RAJIB GHOSH - TATTU","addr":"4 HB LANE","amt":2300,"st":"due","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":296,"name":"DAMU DA","addr":"136 A P ROAD","amt":2000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":297,"name":"DEBKUMAR DUTTA","addr":"3/1B H B LANE","amt":2000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"}];
-const API = "/api/status", LSKEY = "kalipuja2026-state";
+const API = "/api/status", LSKEY = "kalipuja2026-state", PINKEY = "kp-pin";
 const BASE = DATA.map(r => ({ id: String(r.cn), cn: r.cn, name: r.name, addr: r.addr, amt25: r.amt, st25: r.st, note: r.note, book: r.book, manual: false }));
-let S = { rec: {}, manual: [] }, shared = false, filter = "all", pin = sessionStorage.getItem("kp-pin") || "";
+let S = { rec: {}, manual: [] }, shared = false, pinRequired = false, filter = "all", limit = 60;
+let pin = ""; try { pin = localStorage.getItem(PINKEY) || ""; } catch (e) {}
 const $ = id => document.getElementById(id);
 const rs = n => "₹" + Number(n).toLocaleString("en-IN");
 const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -168,31 +202,40 @@ function passes(r) {
     case "26none": return !x.status; case "26nobill": return !x.bill; default: return true;
   }
 }
+/* 2026 bill no. ascending (numeric-aware); entries without a bill no. go last */
+function byBill(a, b) {
+  const x = r26(a).bill || "", y = r26(b).bill || "";
+  if (!x && !y) return a.name.localeCompare(b.name);
+  if (!x) return 1; if (!y) return -1;
+  return x.localeCompare(y, undefined, { numeric: true, sensitivity: "base" }) || a.name.localeCompare(b.name);
+}
 function render() {
   const q = $("q").value.trim().toLowerCase();
   let list = (q ? match(q) : items()).filter(passes);
   if (!q && filter === "all") { $("info").textContent = "Type to search " + items().length + " entries"; $("out").innerHTML = ""; return; }
-  $("info").textContent = list.length + " result" + (list.length === 1 ? "" : "s") + (list.length > 60 ? " (showing first 60)" : "");
-  const keep = document.activeElement && document.activeElement.dataset ? (document.activeElement.dataset.bill || document.activeElement.dataset.amt) : null;
-  $("out").innerHTML = list.slice(0, 60).map(r => {
+  const sorted = filter === "26paid" || filter === "26due";
+  if (sorted) list.sort(byBill);
+  $("info").textContent = list.length + " result" + (list.length === 1 ? "" : "s") + (sorted ? " · sorted by 2026 bill no." : "");
+  $("out").innerHTML = list.slice(0, limit).map(r => {
     const x = r26(r), s = x.status || "", s25 = r.st25;
-    return `<div class="res"><div class="top"><div><div class="name">${hl(r.name,q)}</div><div class="addr">${hl(r.addr,q)}</div></div></div>
+    return `<div class="card"><div class="name">${hl(r.name,q)}</div><div class="addr">${hl(r.addr,q)}</div>
       <div class="tags">${r.manual ? '<span class="tag new">NEW · 2026</span>' : `<span class="tag">2025 Bill #${r.cn}</span><span class="tag">${esc(r.book)}</span>`}${x.bill ? `<span class="tag bill">2026 Bill #${hl(x.bill,q)}</span>` : ""}</div>
       ${r.note ? `<div class="note">2025 note: ${esc(r.note)}</div>` : ""}
-      <div class="sec"><div class="sh"><span>2025 🔒</span>${s25 ? `<span class="badge b-${s25}">${LBL[s25]}</span>` : ""}</div>
-        <div class="amt">${r.amt25 == null ? "—" : rs(r.amt25)}</div></div>
-      <div class="sec y26"><div class="sh"><span>2026</span>${s ? `<span class="badge b-${s}">${LBL[s]}</span>` : '<span class="badge b-na">NOT MARKED</span>'}</div>
-        <div class="fields">
-          <div class="fld"><label>Bill no.</label><input type="text" maxlength="20" placeholder="Add bill no." data-bill="${r.id}" value="${esc(x.bill || "")}"></div>
-          <div class="fld"><label>Amount (₹)</label><input type="number" min="0" step="any" inputmode="decimal" placeholder="Amount" data-amt="${r.id}" value="${x.amt ?? ""}"></div>
-          <button class="savebtn" data-save="${r.id}">Save bill no. &amp; amount</button>
-        </div>
-        <div class="seg"><button class="p ${s==="paid"?"sel":""}" data-id="${r.id}" data-s="paid" ${s==="paid"?"disabled":""}>✓ Mark Paid</button>
-        <button class="d ${s==="due"?"sel":""}" data-id="${r.id}" data-s="due" ${s==="due"?"disabled":""}>✗ Mark Due</button></div>
-      </div>${r.manual ? `<button class="del" data-del="${r.id}">Delete this entry</button>` : ""}</div>`;
-  }).join("");
+      <div class="gt">2025 · Locked</div>
+      <div class="group"><div class="row"><span>Amount</span><span class="val">${r.amt25 == null ? "—" : rs(r.amt25)}${s25 ? `<span class="badge b-${s25}">${LBL[s25]}</span>` : ""}</span></div></div>
+      <div class="gt">2026</div>
+      <div class="group">
+        <div class="row"><span>Bill no.</span><input type="text" maxlength="20" placeholder="Add bill no." data-bill="${r.id}" value="${esc(x.bill || "")}"></div>
+        <div class="row"><span>Amount ₹</span><input type="number" min="0" step="any" inputmode="decimal" placeholder="Amount" data-amt="${r.id}" value="${x.amt ?? ""}"></div>
+        <div class="row"><span>Status</span>${s ? `<span class="badge b-${s}">${LBL[s]}</span>` : '<span class="badge b-na">NOT MARKED</span>'}</div>
+      </div>
+      <button class="tint" data-save="${r.id}">Save bill no. &amp; amount</button>
+      <div class="seg"><button class="p ${s==="paid"?"sel":""}" data-id="${r.id}" data-s="paid" ${s==="paid"?"disabled":""}>✓ Paid</button>
+      <button class="d ${s==="due"?"sel":""}" data-id="${r.id}" data-s="due" ${s==="due"?"disabled":""}>✗ Due</button></div>
+      ${r.manual ? `<button class="del" data-del="${r.id}">Delete this entry</button>` : ""}</div>`;
+  }).join("") + (list.length > limit ? `<button class="more" id="more">Show more (${list.length - limit} left)</button>` : "");
 }
-/* autocomplete */
+/* search autocomplete */
 let sel = -1, sugg = [];
 function showSugg() {
   const q = $("q").value.trim().toLowerCase(), box = $("sugg");
@@ -201,8 +244,8 @@ function showSugg() {
   box.innerHTML = sugg.map((r,i) => `<div data-i="${i}"><span>${hl(r.name,q)}</span><small>${hl(r.addr,q)}</small></div>`).join("");
   box.style.display = sugg.length ? "block" : "none";
 }
-function pick(i) { $("q").value = sugg[i].name; $("sugg").style.display = "none"; render(); }
-$("q").addEventListener("input", () => { showSugg(); render(); });
+function pick(i) { $("q").value = sugg[i].name; $("sugg").style.display = "none"; limit = 60; render(); }
+$("q").addEventListener("input", () => { limit = 60; showSugg(); render(); });
 $("q").addEventListener("keydown", e => {
   const it = $("sugg").children; if ($("sugg").style.display !== "block") return;
   if (e.key === "ArrowDown" || e.key === "ArrowUp") {
@@ -213,16 +256,49 @@ $("q").addEventListener("keydown", e => {
 });
 $("sugg").addEventListener("mousedown", e => { const d = e.target.closest("[data-i]"); if (d) { e.preventDefault(); pick(+d.dataset.i); } });
 document.addEventListener("click", e => { if (!e.target.closest(".searchbox")) $("sugg").style.display = "none"; });
-$("f").addEventListener("submit", e => { e.preventDefault(); $("sugg").style.display = "none"; $("q").blur(); render(); });
+$("f").addEventListener("submit", e => { e.preventDefault(); $("sugg").style.display = "none"; $("q").blur(); limit = 60; render(); });
 $("chips").addEventListener("click", e => {
-  const c = e.target.closest(".chip"); if (!c) return; filter = c.dataset.f;
+  const c = e.target.closest(".chip"); if (!c) return; filter = c.dataset.f; limit = 60;
   document.querySelectorAll(".chip").forEach(x => x.classList.toggle("on", x === c)); render();
 });
-/* actions (2026 only) */
+/* toast + local persistence */
 function toast(m) { const t = $("toast"); t.textContent = m; t.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("show"), 2600); }
 function saveLocal() { try { localStorage.setItem(LSKEY, JSON.stringify(S)); } catch (e) {} }
 const okAmt = v => typeof v === "number" && isFinite(v) && v >= 0 && v <= 1e9;
 const cleanBill = v => String(v == null ? "" : v).trim().slice(0, 20);
+/* admin PIN: asked once, then remembered on this device */
+const ICON_LOCK = '<svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+const ICON_OPEN = '<svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 7.5-1.9"/></svg>';
+function updateLock() {
+  const unlocked = !pinRequired || !!pin, b = $("lockBtn");
+  b.innerHTML = unlocked ? ICON_OPEN : ICON_LOCK; b.classList.toggle("on", unlocked && pinRequired);
+  b.title = !pinRequired ? "Editing is open" : unlocked ? "Editing unlocked on this device" : "Editing locked – tap to unlock";
+}
+function storePin(v) { pin = v; try { v ? localStorage.setItem(PINKEY, v) : localStorage.removeItem(PINKEY); } catch (e) {} updateLock(); }
+let pinResolve = null;
+function askPin() {
+  return new Promise(res => { pinResolve = res; $("pinIn").value = ""; $("pinErr").textContent = ""; $("dlg").classList.add("open"); setTimeout(() => $("pinIn").focus(), 60); });
+}
+function closePin(ok) { $("dlg").classList.remove("open"); const r = pinResolve; pinResolve = null; if (r) r(ok); }
+$("pinCancel").onclick = () => closePin(false);
+$("pinForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const v = $("pinIn").value; if (!v) return;
+  try {
+    const r = await fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "verify", pin: v }) });
+    if (r.status === 401) { $("pinErr").textContent = "Incorrect PIN"; const b = $("pinForm"); b.classList.remove("shake"); void b.offsetWidth; b.classList.add("shake"); $("pinIn").value = ""; return; }
+    if (!r.ok) throw 0;
+    storePin(v); closePin(true); toast("Editing unlocked on this device");
+  } catch (err) { $("pinErr").textContent = "Couldn't reach the server"; }
+});
+function ensureAuth() { return (!shared || !pinRequired || pin) ? Promise.resolve(true) : askPin(); }
+$("lockBtn").onclick = async () => {
+  if (!shared) return toast("Local mode – no PIN needed");
+  if (!pinRequired) return toast("No admin PIN is set on the server");
+  if (pin) { if (confirm("Lock editing on this device? You'll need the PIN again.")) { storePin(""); toast("Editing locked"); } }
+  else await ensureAuth();
+};
+/* actions (2026 only) */
 function applyLocal(p) {
   if (p.action === "set") {
     const x = S.rec[p.id] = S.rec[p.id] || {};
@@ -239,23 +315,23 @@ function applyLocal(p) {
 }
 function norm(s) { return { rec: (s && s.rec) || {}, manual: (s && s.manual) || [] }; }
 async function act(p, okMsg) {
+  if (!(await ensureAuth())) return toast("PIN needed to edit");
   const before = JSON.stringify(S);
   applyLocal(p); stats(); render();
   const send = () => fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...p, pin }) });
   try {
     if (!shared) throw new Error("local");
     let r = await send();
-    if (r.status === 401) {
-      pin = prompt("Enter admin PIN to make changes:") || ""; sessionStorage.setItem("kp-pin", pin); r = await send();
-      if (r.status === 401) { sessionStorage.removeItem("kp-pin"); pin = ""; S = JSON.parse(before); stats(); render(); return toast("Wrong PIN – not saved"); }
-    }
+    if (r.status === 401) { storePin(""); if (await ensureAuth()) r = await send(); }
+    if (r.status === 401) { S = JSON.parse(before); stats(); render(); return toast("Wrong PIN – not saved"); }
     if (!r.ok) throw new Error("fail");
     S = norm(await r.json()); stats(); render(); toast(okMsg + " (saved for everyone)");
   } catch (e) { saveLocal(); toast(okMsg + " (this device only)"); }
 }
 $("out").addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
-  if (b.dataset.s && !b.disabled) act({ action: "set", id: b.dataset.id, status: b.dataset.s }, "2026 marked " + b.dataset.s.toUpperCase());
+  if (b.id === "more") { limit += 60; render(); }
+  else if (b.dataset.s && !b.disabled) act({ action: "set", id: b.dataset.id, status: b.dataset.s }, "2026 marked " + b.dataset.s.toUpperCase());
   else if (b.dataset.save) saveEdit(b.dataset.save);
   else if (b.dataset.del && confirm("Delete this manual entry?")) act({ action: "delete", id: b.dataset.del }, "Entry deleted");
 });
@@ -273,11 +349,29 @@ function saveEdit(id) {
   if (!parts.length) return toast("Nothing changed");
   act(p, "2026 " + parts.join(" & ") + " saved");
 }
-/* add entry */
-const openSheet = o => { $("addPanel").classList.toggle("open", o); $("bd").classList.toggle("open", o); if (o) setTimeout(() => $("aName").focus(), 250); };
-$("addBtn").onclick = () => openSheet(true);
+/* add entry sheet */
+const openSheet = o => { $("addPanel").classList.toggle("open", o); $("bd").classList.toggle("open", o); if (o) setTimeout(() => $("aName").focus(), 300); else $("aSugg").innerHTML = ""; };
+$("addBtn").onclick = async () => { if (await ensureAuth()) openSheet(true); };
 $("bd").onclick = () => openSheet(false);
 $("aCancel").onclick = () => { openSheet(false); $("addForm").reset(); };
+/* address autocomplete (from all existing addresses) */
+function addrList() {
+  const m = new Map();
+  items().forEach(r => { const a = (r.addr || "").trim(); if (a && !m.has(a.toUpperCase())) m.set(a.toUpperCase(), a); });
+  return [...m.values()];
+}
+$("aAddr").addEventListener("input", () => {
+  const v = $("aAddr").value.trim().toLowerCase(), box = $("aSugg");
+  if (!v) { box.innerHTML = ""; return; }
+  const toks = v.split(/\s+/);
+  const hits = addrList().filter(a => { const l = a.toLowerCase(); return l !== v && toks.every(t => l.includes(t)); })
+    .sort((a, b) => (b.toLowerCase().startsWith(v) - a.toLowerCase().startsWith(v)) || a.localeCompare(b, undefined, { numeric: true })).slice(0, 6);
+  box.innerHTML = hits.map(a => `<div data-a="${esc(a)}">${esc(a)}</div>`).join("");
+});
+$("aSugg").addEventListener("pointerdown", e => {
+  const d = e.target.closest("[data-a]"); if (!d) return; e.preventDefault();
+  $("aAddr").value = d.dataset.a; $("aSugg").innerHTML = "";
+});
 $("addForm").addEventListener("submit", e => {
   e.preventDefault();
   const name = $("aName").value.trim(), amt = parseFloat($("aAmt").value);
@@ -286,7 +380,7 @@ $("addForm").addEventListener("submit", e => {
   const entry = { id: "m" + Date.now() + Math.floor(Math.random() * 900 + 100), name, addr: $("aAddr").value.trim(), amt, status: $("aSt").value, bill: cleanBill($("aBill").value) };
   act({ action: "add", entry }, "Entry added");
   $("addForm").reset(); openSheet(false);
-  filter = "all"; document.querySelectorAll(".chip").forEach(x => x.classList.toggle("on", x.dataset.f === "all"));
+  filter = "all"; limit = 60; document.querySelectorAll(".chip").forEach(x => x.classList.toggle("on", x.dataset.f === "all"));
   $("q").value = name; showSugg(); $("sugg").style.display = "none"; render();
 });
 /* export */
@@ -308,10 +402,12 @@ $("expBtn").onclick = () => {
 /* init */
 (async function () {
   try { S = norm(JSON.parse(localStorage.getItem(LSKEY) || "{}")); } catch (e) {}
+  updateLock();
   try {
     const r = await fetch(API, { cache: "no-store" });
-    if (r.ok && (r.headers.get("content-type") || "").includes("json")) { const j = await r.json(); if (j && j.rec) { S = norm(j); shared = true; } }
+    if (r.ok && (r.headers.get("content-type") || "").includes("json")) { const j = await r.json(); if (j && j.rec) { S = norm(j); shared = true; pinRequired = !!j.locked; } }
   } catch (e) {}
+  updateLock();
   $("mode").textContent = shared ? "2026 changes are saved online and visible to everyone. 2025 data is read-only." : "2026 changes are saved on this device only (shared sync not enabled). 2025 data is read-only.";
   stats(); render();
 })();

@@ -1,7 +1,7 @@
 import { getStore } from "@netlify/blobs";
 
 // 2025 data is read-only (embedded in index.html). This function stores 2026 data only.
-// GET  /api/status -> { rec: { "<id>": { status, amt, bill } }, manual: [ { id, name, addr } ] }
+// GET  /api/status -> { locked: <true if ADMIN_PIN is set>, rec: { "<id>": { status, amt, bill } }, manual: [ { id, name, addr } ] }
 // POST /api/status -> { action: "set"|"add"|"delete", ...,  pin }   (pin needed only if ADMIN_PIN env var is set)
 const KEY = "data2026";
 
@@ -14,13 +14,14 @@ export default async (req) => {
     return { rec: d.rec || {}, manual: d.manual || [] };
   };
 
-  if (req.method === "GET") return json(await load());
+  if (req.method === "GET") return json({ ...(await load()), locked: !!process.env.ADMIN_PIN });
   if (req.method !== "POST") return json({ error: "method not allowed" }, 405);
 
   let b;
   try { b = await req.json(); } catch { return json({ error: "bad json" }, 400); }
   const pin = process.env.ADMIN_PIN;
   if (pin && b.pin !== pin) return json({ error: "unauthorized" }, 401);
+  if (b.action === "verify") return json({ ok: true }); // lets the app check the PIN once, then remember it on that device
 
   const okAmt = (v) => typeof v === "number" && Number.isFinite(v) && v >= 0 && v <= 1e9;
   const okStatus = (v) => v === "paid" || v === "due";

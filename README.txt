@@ -17,3 +17,9 @@ OPTION B - Shared 2026 data for everyone (recommended)
      (or: npm i -g netlify-cli && netlify deploy --prod).
   2. Recommended: Site settings > Environment variables > add ADMIN_PIN = your secret PIN.
      Then only people who know the PIN can change 2026 data (anyone can still search).
+
+EDITING PIN
+  If ADMIN_PIN is set, the app asks for the PIN the first time someone tries to edit/add/delete.
+  Once the correct PIN is entered it is remembered on that device (until browser data is cleared
+  or the lock button in the bottom bar is used to lock the device again).
+  If you change ADMIN_PIN in Netlify, devices will be asked again automatically.

@@ -1,5 +1,10 @@
 [build]
   publish = "public"
 
+[build.environment]
+  # ADMIN_PIN is only read from the environment by the function; it is never written in the code.
+  # Without this, Netlify's secrets scan fails the build when the PIN is a short/common value.
+  SECRETS_SCAN_OMIT_KEYS = "ADMIN_PIN"
+
 [functions]
   directory = "netlify/functions"
