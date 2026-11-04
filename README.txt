@@ -5,7 +5,7 @@ netlify/functions/status.mjs Saves 2026 status, 2026 amounts and manual entries 
 netlify.toml, package.json   Netlify config
 
 2025: amount and status come from the Excel and cannot be changed in the app.
-2026: Mark Paid / Mark Due, edit amount, add manual entries, delete manual entries.
+2026: Mark Paid / Mark Due, edit amount, add or edit the 2026 bill number (also for bills found from 2025), add manual entries, delete manual entries.
 Export: "Export CSV" downloads both years in one file (opens in Excel).
 
 OPTION A - Quick (drag & drop)

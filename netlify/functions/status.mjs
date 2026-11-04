@@ -1,9 +1,9 @@
 import { getStore } from "@netlify/blobs";
 
 // 2025 data is read-only (embedded in index.html). This function stores 2026 data only.
-// GET  /api/status -> { rec: { "<id>": { status, amt } }, manual: [ { id, name, addr } ] }
+// GET  /api/status -> { rec: { "<id>": { status, amt, bill } }, manual: [ { id, name, addr } ] }
 // POST /api/status -> { action: "set"|"add"|"delete", ...,  pin }   (pin needed only if ADMIN_PIN env var is set)
-const KEY = "2026";
+const KEY = "data2026";
 
 export default async (req) => {
   const store = getStore("kalipuja-2026");
@@ -30,12 +30,14 @@ export default async (req) => {
     const id = String(b.id || "");
     const isBill = /^\d{1,4}$/.test(id), isManual = d.manual.some((m) => m.id === id);
     if (!isBill && !isManual) return json({ error: "unknown id" }, 400);
-    if (b.status === undefined && b.amt === undefined) return json({ error: "nothing to set" }, 400);
+    if (b.status === undefined && b.amt === undefined && b.bill === undefined) return json({ error: "nothing to set" }, 400);
+    if (b.bill !== undefined && typeof b.bill !== "string") return json({ error: "bad bill no" }, 400);
     if (b.status !== undefined && !okStatus(b.status)) return json({ error: "bad status" }, 400);
     if (b.amt !== undefined && !okAmt(b.amt)) return json({ error: "bad amount" }, 400);
     const x = (d.rec[id] = d.rec[id] || {});
     if (b.status !== undefined) x.status = b.status;
     if (b.amt !== undefined) x.amt = b.amt;
+    if (b.bill !== undefined) { const bn = b.bill.trim().slice(0, 20); if (bn) x.bill = bn; else delete x.bill; }
   } else if (b.action === "add") {
     const e = b.entry || {};
     const name = String(e.name || "").trim().slice(0, 100);
@@ -43,6 +45,8 @@ export default async (req) => {
       return json({ error: "bad entry" }, 400);
     d.manual.push({ id: e.id, name, addr: String(e.addr || "").trim().slice(0, 200) });
     d.rec[e.id] = { status: e.status, amt: e.amt };
+    const bn = typeof e.bill === "string" ? e.bill.trim().slice(0, 20) : "";
+    if (bn) d.rec[e.id].bill = bn;
   } else if (b.action === "delete") {
     const id = String(b.id || "");
     if (!d.manual.some((m) => m.id === id)) return json({ error: "only manual entries can be deleted" }, 400);

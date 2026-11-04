@@ -2,98 +2,105 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#b3261e">
 <title>H B Lane Kali Puja – Bill Search 2025 / 2026</title>
 <style>
-:root{--bg:#f6f4ef;--card:#fff;--ink:#1c1b19;--mut:#6b6860;--line:#e4e0d6;--acc:#b3261e;--ok:#1b7f3b;--okbg:#e4f4e8;--due:#b3261e;--duebg:#fdeceb;--na:#6b6860;--nabg:#eee}
-@media(prefers-color-scheme:dark){:root{--bg:#171614;--card:#222120;--ink:#f1efe9;--mut:#a29f95;--line:#37352f;--acc:#ff8a80;--ok:#6fd48c;--okbg:#17301f;--due:#ff8a80;--duebg:#3a1b19;--na:#a29f95;--nabg:#2c2b28}}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
-.wrap{max-width:780px;margin:0 auto;padding:20px 14px 60px}
-.head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap}
-h1{font-size:1.35rem;margin:0 0 2px}.sub{color:var(--mut);font-size:.9rem;margin-bottom:14px}
-.tools{display:flex;gap:8px}
-.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}
-@media(min-width:600px){.stats{grid-template-columns:repeat(4,1fr)}}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
-.stat b{display:block;font-size:1.02rem}.stat span{font-size:.75rem;color:var(--mut)}
-.searchbox{position:relative}
-.row{display:flex;gap:8px}
-input,select{font:inherit;color:var(--ink)}
-input[type=search],.fld input,.fld select{width:100%;min-width:0;padding:11px 13px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
-input[type=search]{flex:1}
-input:focus,select:focus{outline:2px solid var(--acc);outline-offset:0}
-button{font:inherit;cursor:pointer;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:10px 14px}
-button.primary{background:var(--acc);border-color:var(--acc);color:#fff}
-@media(prefers-color-scheme:dark){button.primary{color:#171614}}
-.sugg{position:absolute;left:0;right:0;top:100%;margin-top:4px;background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.15);z-index:5;overflow:hidden;display:none}
-.sugg div{padding:9px 14px;cursor:pointer;display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line)}
+:root{--bg:#f4f2ee;--card:#fff;--ink:#1d1b18;--mut:#78746c;--line:#ebe7df;--acc:#c62828;--acc2:#e65100;--ok:#14803c;--okbg:#e3f5e9;--due:#c62828;--duebg:#fde9e8;--na:#78746c;--nabg:#f0ede7;--shadow:0 1px 2px rgba(0,0,0,.04),0 6px 20px rgba(60,40,20,.07)}
+@media(prefers-color-scheme:dark){:root{--bg:#121110;--card:#1e1d1b;--ink:#f3f1ec;--mut:#a09c92;--line:#322f2b;--acc:#ff7a70;--acc2:#ffa040;--ok:#6fd48c;--okbg:#15301d;--due:#ff8a80;--duebg:#3a1c1a;--na:#a09c92;--nabg:#2a2825;--shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.35)}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;padding-bottom:env(safe-area-inset-bottom,0px)}
+.hero{background:linear-gradient(135deg,#b3261e,#e65100);color:#fff;padding:calc(env(safe-area-inset-top,0px) + 16px) 16px 64px}
+.hero-in{max-width:760px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+h1{font-size:1.3rem;margin:0;letter-spacing:-.01em}.sub{opacity:.85;font-size:.85rem;margin-top:2px}
+.ibtn{width:42px;height:42px;border-radius:14px;border:0;background:rgba(255,255,255,.2);color:#fff;font-size:1.15rem;display:grid;place-items:center;padding:0;cursor:pointer;backdrop-filter:blur(6px)}
+.wrap{max-width:760px;margin:-46px auto 0;padding:0 14px 110px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
+@media(min-width:640px){.stats{grid-template-columns:repeat(4,1fr)}}
+.stat{background:var(--card);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow)}
+.stat span{font-size:.72rem;color:var(--mut);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+.stat b{display:block;font-size:1.15rem;margin-top:2px}
+.stat.g b{color:var(--ok)}.stat.r b{color:var(--due)}
+.searchbox{position:sticky;top:calc(env(safe-area-inset-top,0px) + 8px);z-index:10}
+.sbar{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:18px;padding:4px 6px 4px 14px;box-shadow:var(--shadow);border:1.5px solid transparent}
+.sbar:focus-within{border-color:var(--acc)}
+.sbar svg{flex:none;color:var(--mut)}
+input,select,button{font:inherit;color:var(--ink)}
+input[type=search]{flex:1;min-width:0;border:0;background:none;padding:12px 4px;font-size:1rem;outline:none;-webkit-appearance:none}
+.go{border:0;background:var(--acc);color:#fff;border-radius:13px;padding:10px 16px;font-weight:650;cursor:pointer}
+@media(prefers-color-scheme:dark){.go,.primary{color:#171614}}
+.sugg{position:absolute;left:0;right:0;top:100%;margin-top:6px;background:var(--card);border-radius:16px;box-shadow:0 12px 36px rgba(0,0,0,.22);overflow:hidden;display:none;max-height:60vh;overflow-y:auto}
+.sugg div{padding:12px 16px;cursor:pointer;display:flex;flex-direction:column;border-bottom:1px solid var(--line)}
 .sugg div:last-child{border:0}.sugg div.on,.sugg div:hover{background:var(--nabg)}
 .sugg small{color:var(--mut)}
-mark{background:#ffe08a;color:#000;border-radius:2px;padding:0 1px}
-.chips{display:flex;gap:6px;margin:12px 0;flex-wrap:wrap}
-.chip{padding:5px 12px;border-radius:99px;font-size:.82rem}
-.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.info{color:var(--mut);font-size:.85rem;margin:6px 2px}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin:12px 0;display:none}
-.panel.open{display:block}.panel h2{font-size:1rem;margin:0 0 10px}
+mark{background:#ffe08a;color:#000;border-radius:3px;padding:0 1px}
+.chips{display:flex;gap:8px;margin:14px -14px 6px;padding:0 14px;overflow-x:auto;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:0;background:var(--card);border-radius:99px;padding:8px 14px;font-size:.84rem;font-weight:600;color:var(--mut);box-shadow:0 1px 2px rgba(0,0,0,.06);cursor:pointer}
+.chip.on{background:var(--ink);color:var(--bg)}
+.info{color:var(--mut);font-size:.82rem;margin:8px 4px 10px}
+.res{background:var(--card);border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:var(--shadow)}
+.top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.name{font-weight:700;font-size:1.05rem;letter-spacing:-.005em}
+.addr{color:var(--mut);font-size:.9rem;margin-top:1px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.tag{font-size:.72rem;font-weight:650;background:var(--nabg);color:var(--mut);padding:3px 10px;border-radius:99px}
+.tag.bill{background:var(--acc);color:#fff}
+@media(prefers-color-scheme:dark){.tag.bill{color:#171614}}
+.tag.new{background:var(--okbg);color:var(--ok)}
+.note{font-size:.82rem;margin-top:8px;color:var(--mut)}
+.sec{border-radius:14px;padding:12px;margin-top:10px;background:var(--nabg)}
+.sec.y26{background:transparent;border:1.5px solid var(--line)}
+.sh{display:flex;justify-content:space-between;align-items:center;font-size:.72rem;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.amt{font-weight:750;font-size:1.25rem}
+.badge{display:inline-block;font-size:.68rem;font-weight:750;padding:3px 10px;border-radius:99px;letter-spacing:.03em}
+.b-paid{background:var(--okbg);color:var(--ok)}.b-due{background:var(--duebg);color:var(--due)}.b-na{background:var(--card);color:var(--na)}
+.y26 .b-na{background:var(--nabg)}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0 10px}
+.fld label{display:block;font-size:.72rem;color:var(--mut);font-weight:600;margin-bottom:4px}
+.fld input,.fld select{width:100%;min-width:0;padding:12px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);font-weight:650;font-size:1rem;outline:none}
+.fld input:focus,.fld select:focus{border-color:var(--acc)}
+.fld.full{grid-column:1/-1}
+.savebtn{grid-column:1/-1;border:0;background:var(--ink);color:var(--bg);border-radius:12px;padding:12px;font-weight:650;cursor:pointer}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.seg button{border:1.5px solid var(--line);background:var(--card);border-radius:12px;padding:12px 6px;font-weight:650;cursor:pointer}
+.seg .p.sel{background:var(--ok);border-color:var(--ok);color:#fff}.seg .d.sel{background:var(--due);border-color:var(--due);color:#fff}
+.seg button:disabled{cursor:default}
+.del{background:none;border:0;color:var(--due);font-size:.82rem;padding:12px 0 0;text-decoration:underline;cursor:pointer}
+.mode{font-size:.74rem;color:var(--mut);margin-top:20px;text-align:center}
+.fab{position:fixed;right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);height:56px;padding:0 20px;border-radius:28px;border:0;background:linear-gradient(135deg,#c62828,#e65100);color:#fff;font-weight:700;font-size:1rem;box-shadow:0 8px 24px rgba(198,40,40,.4);cursor:pointer;z-index:20;display:flex;align-items:center;gap:6px}
+.backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:30;opacity:0;pointer-events:none;transition:.2s}
+.backdrop.open{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:31;background:var(--card);border-radius:24px 24px 0 0;padding:10px 18px calc(env(safe-area-inset-bottom,0px) + 18px);transform:translateY(105%);transition:transform .25s ease;max-width:560px;margin:0 auto;max-height:92vh;overflow-y:auto}
+.sheet.open{transform:none}
+.grab{width:40px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 12px}
+.sheet h2{margin:0 0 12px;font-size:1.1rem}
 .form{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.fld label{display:block;font-size:.78rem;color:var(--mut);margin-bottom:3px}.fld.full{grid-column:1/-1}
-.fbtns{display:flex;gap:8px;margin-top:12px}
-.res{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px}
-.name{font-weight:650}.addr{color:var(--mut);font-size:.92rem}
-.meta{font-size:.78rem;color:var(--mut);margin-top:3px}
-.tag{font-size:.68rem;background:var(--nabg);color:var(--mut);padding:1px 7px;border-radius:99px;margin-left:6px}
-.note{font-size:.82rem;margin-top:5px;color:var(--mut)}
-.yrs{display:grid;grid-template-columns:1fr 1.6fr;gap:8px;margin-top:10px}
-@media(max-width:480px){.yrs{grid-template-columns:1fr}}
-.yr{border:1px solid var(--line);border-radius:10px;padding:9px 11px}
-.yr.lock{background:var(--nabg)}
-.yl{font-size:.75rem;color:var(--mut);font-weight:700;margin-bottom:4px;display:flex;justify-content:space-between;align-items:center}
-.amt{font-weight:700;font-size:1.1rem}
-.badge{display:inline-block;font-size:.7rem;font-weight:700;padding:2px 9px;border-radius:99px}
-.b-paid{background:var(--okbg);color:var(--ok)}.b-due{background:var(--duebg);color:var(--due)}.b-na{background:var(--nabg);color:var(--na)}
-.lock .b-na{background:var(--card)}
-.edit{display:flex;gap:6px;align-items:center;margin:4px 0 8px}
-.edit span{font-weight:700}
-.edit input{flex:1;min-width:0;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);font-weight:700}
-.edit button{padding:8px 12px}
-.act{display:flex;gap:8px}
-.act button{flex:1;font-weight:600;padding:9px 6px}
-.act .p.sel{background:var(--ok);border-color:var(--ok);color:#fff}.act .d.sel{background:var(--due);border-color:var(--due);color:#fff}
-.act button:disabled{opacity:.65;cursor:default}
-.del{background:none;border:0;color:var(--due);font-size:.8rem;padding:6px 0 0;text-decoration:underline}
-.mode{font-size:.75rem;color:var(--mut);margin-top:18px;text-align:center}
-.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:99px;font-size:.88rem;opacity:0;transition:.25s;pointer-events:none;text-align:center;max-width:90vw}
+.fbtns{display:flex;gap:8px;margin-top:6px}
+.fbtns button{flex:1;padding:14px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);font-weight:650;cursor:pointer}
+.fbtns .primary{background:var(--acc);border-color:var(--acc);color:#fff;flex:2}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 86px);transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:99px;font-size:.88rem;opacity:0;transition:.25s;pointer-events:none;text-align:center;max-width:90vw;z-index:50}
 .toast.show{opacity:1}
 </style>
 </head>
 <body>
+<div class="hero"><div class="hero-in">
+  <div><h1>H B Lane Kali Puja</h1><div class="sub">Bill &amp; collection · 2025 (locked) &amp; 2026</div></div>
+  <button id="expBtn" class="ibtn" aria-label="Export CSV" title="Export CSV">⬇</button>
+</div></div>
 <div class="wrap">
-  <div class="head">
-    <div><h1>H B Lane Kali Puja</h1><div class="sub">Bill &amp; collection search · 2025 (locked) &amp; 2026</div></div>
-    <div class="tools"><button id="addBtn" class="primary">+ Add entry</button><button id="expBtn">⬇ Export CSV</button></div>
-  </div>
-  <div class="panel" id="addPanel">
-    <h2>New manual entry (2026)</h2>
-    <form id="addForm" class="form" autocomplete="off">
-      <div class="fld"><label>Name *</label><input id="aName" required maxlength="100"></div>
-      <div class="fld"><label>Address</label><input id="aAddr" maxlength="200"></div>
-      <div class="fld"><label>Amount (₹) *</label><input id="aAmt" type="number" min="0" step="any" inputmode="decimal" required></div>
-      <div class="fld"><label>Payment status</label><select id="aSt"><option value="paid">Paid</option><option value="due">Due</option></select></div>
-      <div class="fbtns fld full"><button class="primary" type="submit">Save entry</button><button type="button" id="aCancel">Cancel</button></div>
-    </form>
-  </div>
   <div class="stats">
-    <div class="stat"><b id="s25p">–</b><span>2025 collected</span></div>
-    <div class="stat"><b id="s25d">–</b><span>2025 due</span></div>
-    <div class="stat"><b id="s26p">–</b><span>2026 collected</span></div>
-    <div class="stat"><b id="s26d">–</b><span>2026 due</span></div>
+    <div class="stat g"><span>2025 collected</span><b id="s25p">–</b></div>
+    <div class="stat r"><span>2025 due</span><b id="s25d">–</b></div>
+    <div class="stat g"><span>2026 collected</span><b id="s26p">–</b></div>
+    <div class="stat r"><span>2026 due</span><b id="s26d">–</b></div>
   </div>
   <div class="searchbox">
-    <form class="row" id="f" autocomplete="off">
-      <input type="search" id="q" placeholder="Search name, address or bill no…" aria-label="Search" autofocus>
-      <button class="primary" type="submit">Search</button>
+    <form class="sbar" id="f" autocomplete="off">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="search" id="q" placeholder="Name, address or bill no…" aria-label="Search" enterkeyhint="search">
+      <button class="go" type="submit">Search</button>
     </form>
     <div class="sugg" id="sugg" role="listbox"></div>
   </div>
@@ -104,10 +111,25 @@ mark{background:#ffe08a;color:#000;border-radius:2px;padding:0 1px}
     <button class="chip" data-f="26paid">2026 Paid</button>
     <button class="chip" data-f="26due">2026 Due</button>
     <button class="chip" data-f="26none">2026 Not marked</button>
+    <button class="chip" data-f="26nobill">2026 No bill no.</button>
   </div>
   <div class="info" id="info"></div>
   <div id="out"></div>
   <div class="mode" id="mode"></div>
+</div>
+<button class="fab" id="addBtn"><span style="font-size:1.4rem;line-height:1">+</span> Add entry</button>
+<div class="backdrop" id="bd"></div>
+<div class="sheet" id="addPanel" role="dialog" aria-label="New entry">
+  <div class="grab"></div>
+  <h2>New manual entry (2026)</h2>
+  <form id="addForm" class="form" autocomplete="off">
+    <div class="fld full"><label>Name *</label><input id="aName" required maxlength="100"></div>
+    <div class="fld full"><label>Address</label><input id="aAddr" maxlength="200"></div>
+    <div class="fld"><label>2026 Bill no.</label><input id="aBill" maxlength="20" inputmode="text" placeholder="e.g. 1021"></div>
+    <div class="fld"><label>Amount (₹) *</label><input id="aAmt" type="number" min="0" step="any" inputmode="decimal" required></div>
+    <div class="fld full"><label>Payment status</label><select id="aSt"><option value="paid">Paid</option><option value="due">Due</option></select></div>
+    <div class="fbtns fld full"><button type="button" id="aCancel">Cancel</button><button class="primary" type="submit">Save entry</button></div>
+  </form>
 </div>
 <div class="toast" id="toast"></div>
 <script>
@@ -128,7 +150,7 @@ const hl = (t, q) => {
 };
 function match(q) {
   const toks = q.toLowerCase().split(/\s+/).filter(Boolean);
-  return items().filter(r => { const h = (r.name + " " + r.addr + " " + (r.cn ?? "") + " " + r.note).toLowerCase(); return toks.every(t => h.includes(t)); });
+  return items().filter(r => { const h = (r.name + " " + r.addr + " " + (r.cn ?? "") + " " + r.note + " " + (r26(r).bill || "")).toLowerCase(); return toks.every(t => h.includes(t)); });
 }
 function stats() {
   let a = 0, b = 0, c = 0, d = 0;
@@ -143,7 +165,7 @@ function passes(r) {
   switch (filter) {
     case "25paid": return r.st25 === "paid"; case "25due": return r.st25 === "due";
     case "26paid": return x.status === "paid"; case "26due": return x.status === "due";
-    case "26none": return !x.status; default: return true;
+    case "26none": return !x.status; case "26nobill": return !x.bill; default: return true;
   }
 }
 function render() {
@@ -151,18 +173,22 @@ function render() {
   let list = (q ? match(q) : items()).filter(passes);
   if (!q && filter === "all") { $("info").textContent = "Type to search " + items().length + " entries"; $("out").innerHTML = ""; return; }
   $("info").textContent = list.length + " result" + (list.length === 1 ? "" : "s") + (list.length > 60 ? " (showing first 60)" : "");
+  const keep = document.activeElement && document.activeElement.dataset ? (document.activeElement.dataset.bill || document.activeElement.dataset.amt) : null;
   $("out").innerHTML = list.slice(0, 60).map(r => {
     const x = r26(r), s = x.status || "", s25 = r.st25;
-    const meta = r.manual ? "Manual entry" : "Bill #" + r.cn + " · " + esc(r.book);
-    return `<div class="res"><div class="name">${hl(r.name,q)}${r.manual ? '<span class="tag">NEW</span>' : ""}</div>
-      <div class="addr">${hl(r.addr,q)}</div><div class="meta">${meta}</div>${r.note ? `<div class="note">2025 note: ${esc(r.note)}</div>` : ""}
-      <div class="yrs">
-        <div class="yr lock"><div class="yl"><span>2025 🔒</span>${s25 ? `<span class="badge b-${s25}">${LBL[s25]}</span>` : ""}</div>
-          <div class="amt">${r.amt25 == null ? "—" : rs(r.amt25)}</div></div>
-        <div class="yr"><div class="yl"><span>2026</span>${s ? `<span class="badge b-${s}">${LBL[s]}</span>` : '<span class="badge b-na">NOT MARKED</span>'}</div>
-          <div class="edit"><span>₹</span><input type="number" min="0" step="any" inputmode="decimal" placeholder="Amount" data-amt="${r.id}" value="${x.amt ?? ""}"><button data-save="${r.id}">Save</button></div>
-          <div class="act"><button class="p ${s==="paid"?"sel":""}" data-id="${r.id}" data-s="paid" ${s==="paid"?"disabled":""}>✓ Mark Paid</button>
-          <button class="d ${s==="due"?"sel":""}" data-id="${r.id}" data-s="due" ${s==="due"?"disabled":""}>✗ Mark Due</button></div></div>
+    return `<div class="res"><div class="top"><div><div class="name">${hl(r.name,q)}</div><div class="addr">${hl(r.addr,q)}</div></div></div>
+      <div class="tags">${r.manual ? '<span class="tag new">NEW · 2026</span>' : `<span class="tag">2025 Bill #${r.cn}</span><span class="tag">${esc(r.book)}</span>`}${x.bill ? `<span class="tag bill">2026 Bill #${hl(x.bill,q)}</span>` : ""}</div>
+      ${r.note ? `<div class="note">2025 note: ${esc(r.note)}</div>` : ""}
+      <div class="sec"><div class="sh"><span>2025 🔒</span>${s25 ? `<span class="badge b-${s25}">${LBL[s25]}</span>` : ""}</div>
+        <div class="amt">${r.amt25 == null ? "—" : rs(r.amt25)}</div></div>
+      <div class="sec y26"><div class="sh"><span>2026</span>${s ? `<span class="badge b-${s}">${LBL[s]}</span>` : '<span class="badge b-na">NOT MARKED</span>'}</div>
+        <div class="fields">
+          <div class="fld"><label>Bill no.</label><input type="text" maxlength="20" placeholder="Add bill no." data-bill="${r.id}" value="${esc(x.bill || "")}"></div>
+          <div class="fld"><label>Amount (₹)</label><input type="number" min="0" step="any" inputmode="decimal" placeholder="Amount" data-amt="${r.id}" value="${x.amt ?? ""}"></div>
+          <button class="savebtn" data-save="${r.id}">Save bill no. &amp; amount</button>
+        </div>
+        <div class="seg"><button class="p ${s==="paid"?"sel":""}" data-id="${r.id}" data-s="paid" ${s==="paid"?"disabled":""}>✓ Mark Paid</button>
+        <button class="d ${s==="due"?"sel":""}" data-id="${r.id}" data-s="due" ${s==="due"?"disabled":""}>✗ Mark Due</button></div>
       </div>${r.manual ? `<button class="del" data-del="${r.id}">Delete this entry</button>` : ""}</div>`;
   }).join("");
 }
@@ -187,24 +213,26 @@ $("q").addEventListener("keydown", e => {
 });
 $("sugg").addEventListener("mousedown", e => { const d = e.target.closest("[data-i]"); if (d) { e.preventDefault(); pick(+d.dataset.i); } });
 document.addEventListener("click", e => { if (!e.target.closest(".searchbox")) $("sugg").style.display = "none"; });
-$("f").addEventListener("submit", e => { e.preventDefault(); $("sugg").style.display = "none"; render(); });
+$("f").addEventListener("submit", e => { e.preventDefault(); $("sugg").style.display = "none"; $("q").blur(); render(); });
 $("chips").addEventListener("click", e => {
   const c = e.target.closest(".chip"); if (!c) return; filter = c.dataset.f;
   document.querySelectorAll(".chip").forEach(x => x.classList.toggle("on", x === c)); render();
 });
 /* actions (2026 only) */
-function toast(m) { const t = $("toast"); t.textContent = m; t.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("show"), 2400); }
+function toast(m) { const t = $("toast"); t.textContent = m; t.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("show"), 2600); }
 function saveLocal() { try { localStorage.setItem(LSKEY, JSON.stringify(S)); } catch (e) {} }
 const okAmt = v => typeof v === "number" && isFinite(v) && v >= 0 && v <= 1e9;
+const cleanBill = v => String(v == null ? "" : v).trim().slice(0, 20);
 function applyLocal(p) {
   if (p.action === "set") {
     const x = S.rec[p.id] = S.rec[p.id] || {};
     if (p.status) x.status = p.status;
     if (p.amt !== undefined) x.amt = p.amt;
-    const m = S.manual.find(m => m.id === p.id); if (m) { if (p.status) m.status = p.status; if (p.amt !== undefined) m.amt = p.amt; }
+    if (p.bill !== undefined) { const b = cleanBill(p.bill); if (b) x.bill = b; else delete x.bill; }
   } else if (p.action === "add") {
     const e = p.entry; S.manual.push({ id: e.id, name: e.name, addr: e.addr });
     S.rec[e.id] = { status: e.status, amt: e.amt };
+    const b = cleanBill(e.bill); if (b) S.rec[e.id].bill = b;
   } else if (p.action === "delete") {
     S.manual = S.manual.filter(m => m.id !== p.id); delete S.rec[p.id];
   }
@@ -228,26 +256,36 @@ async function act(p, okMsg) {
 $("out").addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
   if (b.dataset.s && !b.disabled) act({ action: "set", id: b.dataset.id, status: b.dataset.s }, "2026 marked " + b.dataset.s.toUpperCase());
-  else if (b.dataset.save) saveAmt(b.dataset.save);
+  else if (b.dataset.save) saveEdit(b.dataset.save);
   else if (b.dataset.del && confirm("Delete this manual entry?")) act({ action: "delete", id: b.dataset.del }, "Entry deleted");
 });
-$("out").addEventListener("keydown", e => { if (e.key === "Enter" && e.target.dataset.amt) { e.preventDefault(); saveAmt(e.target.dataset.amt); } });
-function saveAmt(id) {
-  const inp = document.querySelector(`input[data-amt="${id}"]`), v = parseFloat(inp.value);
-  if (inp.value.trim() === "" || !okAmt(v)) return toast("Enter a valid amount");
-  act({ action: "set", id, amt: v }, "2026 amount set to " + rs(v));
+$("out").addEventListener("keydown", e => { const id = e.target.dataset && (e.target.dataset.amt || e.target.dataset.bill); if (e.key === "Enter" && id) { e.preventDefault(); saveEdit(id); } });
+function saveEdit(id) {
+  const bi = document.querySelector(`input[data-bill="${id}"]`), ai = document.querySelector(`input[data-amt="${id}"]`);
+  const bill = cleanBill(bi.value), had = (S.rec[id] || {}).bill || "";
+  const p = { action: "set", id }, parts = [];
+  if (bill !== had) { p.bill = bill; parts.push(bill ? "bill no. " + bill : "bill no. cleared"); }
+  if (ai.value.trim() !== "") {
+    const v = parseFloat(ai.value);
+    if (!okAmt(v)) return toast("Enter a valid amount");
+    if (v !== (S.rec[id] || {}).amt) { p.amt = v; parts.push("amount " + rs(v)); }
+  }
+  if (!parts.length) return toast("Nothing changed");
+  act(p, "2026 " + parts.join(" & ") + " saved");
 }
 /* add entry */
-$("addBtn").onclick = () => { $("addPanel").classList.toggle("open"); $("aName").focus(); };
-$("aCancel").onclick = () => { $("addPanel").classList.remove("open"); $("addForm").reset(); };
+const openSheet = o => { $("addPanel").classList.toggle("open", o); $("bd").classList.toggle("open", o); if (o) setTimeout(() => $("aName").focus(), 250); };
+$("addBtn").onclick = () => openSheet(true);
+$("bd").onclick = () => openSheet(false);
+$("aCancel").onclick = () => { openSheet(false); $("addForm").reset(); };
 $("addForm").addEventListener("submit", e => {
   e.preventDefault();
   const name = $("aName").value.trim(), amt = parseFloat($("aAmt").value);
   if (!name) return toast("Name is required");
   if (!okAmt(amt)) return toast("Enter a valid amount");
-  const entry = { id: "m" + Date.now() + Math.floor(Math.random() * 900 + 100), name, addr: $("aAddr").value.trim(), amt, status: $("aSt").value };
+  const entry = { id: "m" + Date.now() + Math.floor(Math.random() * 900 + 100), name, addr: $("aAddr").value.trim(), amt, status: $("aSt").value, bill: cleanBill($("aBill").value) };
   act({ action: "add", entry }, "Entry added");
-  $("addForm").reset(); $("addPanel").classList.remove("open");
+  $("addForm").reset(); openSheet(false);
   filter = "all"; document.querySelectorAll(".chip").forEach(x => x.classList.toggle("on", x.dataset.f === "all"));
   $("q").value = name; showSugg(); $("sugg").style.display = "none"; render();
 });
@@ -258,8 +296,8 @@ function csvCell(v) {
   return /[",\n\r]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
 }
 $("expBtn").onclick = () => {
-  const head = ["Bill No","Book","Name","Address","2025 Amount (Rs)","2025 Status","2025 Note","2026 Amount (Rs)","2026 Status","Entry Type"];
-  const rows = items().map(r => { const x = r26(r); return [r.cn ?? "", r.manual ? "" : r.book, r.name, r.addr, r.amt25 ?? "", r.st25 ? LBL[r.st25] : "", r.note, x.amt ?? "", x.status ? LBL[x.status] : "", r.manual ? "Manual (2026)" : "Original"]; });
+  const head = ["2025 Bill No","Book","Name","Address","2025 Amount (Rs)","2025 Status","2025 Note","2026 Bill No","2026 Amount (Rs)","2026 Status","Entry Type"];
+  const rows = items().map(r => { const x = r26(r); return [r.cn ?? "", r.manual ? "" : r.book, r.name, r.addr, r.amt25 ?? "", r.st25 ? LBL[r.st25] : "", r.note, x.bill ?? "", x.amt ?? "", x.status ? LBL[x.status] : "", r.manual ? "Manual (2026)" : "Original"]; });
   const csv = "\ufeff" + [head].concat(rows).map(r => r.map(csvCell).join(",")).join("\r\n");
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
