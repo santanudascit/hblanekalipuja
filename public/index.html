@@ -93,7 +93,14 @@ mark{background:rgba(245,158,11,.5);color:inherit;border-radius:4px;padding:0 1p
 .sw i::after{content:"";position:absolute;top:2px;left:2px;width:28px;height:28px;border-radius:50%;background:#fff;box-shadow:0 2px 5px rgba(0,0,0,.3);transition:transform .2s}
 .sw input:checked+i{background:var(--gold);box-shadow:none}.sw.ind input:checked+i{background:var(--ind)}
 .sw input:checked+i::after{transform:translateX(20px)}
+.row[hidden]{display:none}
+.stat small{display:block;font-size:.74rem;color:var(--mut);font-weight:600;margin-top:1px}
 .hint{font-size:.78rem;color:var(--mut);margin:6px 6px 0}
+.arow{display:flex;align-items:center;gap:14px;width:100%;border:0;background:none;text-align:left;padding:14px;position:relative}
+.arow+.arow::before{content:"";position:absolute;top:0;left:58px;right:0;border-top:.5px solid var(--line)}
+.arow:active{background:var(--fill)}
+.arow .ai{font-size:1.5rem;width:30px;text-align:center;flex:none}
+.arow b{display:block;font-size:1rem}.arow small{display:block;color:var(--mut);font-size:.8rem;margin-top:1px}
 .del{background:none;border:0;color:var(--due);font-size:.92rem;font-weight:550;padding:16px 0 0;width:100%}
 .more{width:100%;border:0;border-radius:16px;padding:15px;background:var(--card);color:var(--cr);font-weight:650;font-size:16px;margin-bottom:10px;border:.5px solid var(--line)}
 .mode{font-size:.74rem;color:var(--mut);margin-top:20px;text-align:center}
@@ -140,7 +147,7 @@ mark{background:rgba(245,158,11,.5);color:inherit;border-radius:4px;padding:0 1p
     <button class="stat g" data-f="26paid"><span>2026 Collected</span><b id="s26p">–</b></button>
     <button class="stat r" data-f="26due"><span>2026 Due</span><b id="s26d">–</b></button>
     <button class="stat o" data-f="bhogdeliver"><span>🍚 Bhog to be delivered</span><b id="sb1">–</b></button>
-    <button class="stat i" data-f="bhogissued"><span>✅ Bhog issued</span><b id="sb2">–</b></button>
+    <button class="stat i" data-f="bhogissued"><span>✅ Bhog issued</span><b id="sb2">–</b><small id="sb2x"></small></button>
   </div>
   <div class="searchbox">
     <form class="sbar glass" id="f" autocomplete="off">
@@ -168,7 +175,7 @@ mark{background:rgba(245,158,11,.5);color:inherit;border-radius:4px;padding:0 1p
 <div class="bar glass">
   <button id="lockBtn" aria-label="Editing lock"></button>
   <button class="add" id="addBtn"><span style="font-size:1.35rem;line-height:1;margin-top:-2px">+</span>Add Entry</button>
-  <button id="expBtn" aria-label="Export CSV"><svg viewBox="0 0 24 24"><path d="M12 15V4M8 8l4-4 4 4"/><path d="M5 12v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg></button>
+  <button id="dataBtn" aria-label="Export, backup and restore" title="Export / Backup / Restore"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg></button>
 </div>
 
 <div class="backdrop" id="bd"></div>
@@ -187,8 +194,21 @@ mark{background:rgba(245,158,11,.5);color:inherit;border-radius:4px;padding:0 1p
       <div class="row"><label for="aSt">Payment</label><select id="aSt" dir="rtl"><option value="paid">Paid</option><option value="due">Due</option></select></div>
       <div class="row"><label for="aBhD">Bhog to be delivered</label><label class="sw"><input type="checkbox" id="aBhD"><i></i></label></div>
       <div class="row"><label for="aBhI">Bhog issued</label><label class="sw ind"><input type="checkbox" id="aBhI"><i></i></label></div>
+      <div class="row" id="aBoxRow" hidden><label for="aBoxes">Boxes issued</label><input id="aBoxes" type="number" min="0" max="100000" step="1" inputmode="numeric" placeholder="How many?"></div>
     </div>
   </form>
+</div>
+
+<div class="sheet" id="dataPanel" role="dialog" aria-label="Export, backup and restore">
+  <div class="grab"></div>
+  <div class="snav"><span style="width:60px"></span><b>Data</b><button class="done" type="button" id="dClose">Done</button></div>
+  <div class="group">
+    <button class="arow" id="dExport" type="button"><span class="ai">📄</span><span><b>Export 2026 list</b><small>CSV with SL No, Name, Address, Amount, Payment status</small></span></button>
+    <button class="arow" id="dBackup" type="button"><span class="ai">💾</span><span><b>Backup 2026 data</b><small>Downloads a backup file with everything saved for 2026</small></span></button>
+    <button class="arow" id="dRestore" type="button"><span class="ai">♻️</span><span><b>Restore from backup</b><small>Pick a backup file · replaces all current 2026 data</small></span></button>
+  </div>
+  <div class="hint" id="dInfo"></div>
+  <input type="file" id="dFile" accept=".json,application/json" hidden>
 </div>
 
 <div class="dlg" id="dlg"><form class="dbox" id="pinForm" autocomplete="off">
@@ -224,14 +244,14 @@ function match(q) {
   return items().filter(r => { const h = (r.name + " " + r.addr + " " + r.note + " " + (r26(r).bill || "")).toLowerCase(); return toks.every(t => h.includes(t)); });
 }
 function stats() {
-  let a = 0, b = 0, c = 0, d = 0, b1 = 0, b2 = 0;
+  let a = 0, b = 0, c = 0, d = 0, b1 = 0, b2 = 0, bx = 0;
   items().forEach(r => {
     if (r.st25 === "paid") a += r.amt25; else if (r.st25 === "due") b += r.amt25;
     const x = r26(r); if (x.status === "paid") c += x.amt || 0; else if (x.status === "due") d += x.amt || 0;
-    if (x.deliver) b1++; if (x.issued) b2++;
+    if (x.deliver) b1++; if (x.issued) { b2++; bx += x.boxes || 0; }
   });
   $("s25p").textContent = rs(a); $("s25d").textContent = rs(b); $("s26p").textContent = rs(c); $("s26d").textContent = rs(d);
-  $("sb1").textContent = b1; $("sb2").textContent = b2;
+  $("sb1").textContent = b1; $("sb2").textContent = b2; $("sb2x").textContent = bx ? bx + " box" + (bx === 1 ? "" : "es") + " issued" : "";
 }
 function passes(r) {
   const x = r26(r);
@@ -249,10 +269,10 @@ function byBill(a, b) {
   if (!x) return 1; if (!y) return -1;
   return x.localeCompare(y, undefined, { numeric: true, sensitivity: "base" }) || a.name.localeCompare(b.name);
 }
-/* Bhog "Issued" can only be marked from 8 Nov 2026, 00:00 India time (the server enforces this too). */
-const BHOG_OPEN = Date.UTC(2026, 10, 7, 18, 30);
+/* Bhog "Issued" can only be marked from 9 Nov 2026, 12:00 noon India time (the server enforces this too). */
+const BHOG_OPEN = Date.UTC(2026, 10, 9, 6, 30);
 const bhogReady = () => Date.now() >= BHOG_OPEN;
-const NOT_READY = "Bhog not ready – it can be marked as issued from 8 Nov 2026";
+const NOT_READY = "Bhog not ready – it can be marked as issued from 9 Nov 2026, 12:00 noon";
 const expanded = new Map();
 const sw = (kind, id, on, cls) => `<label class="sw ${cls || ""}"><input type="checkbox" data-bh="${kind}" data-id="${id}" ${on ? "checked" : ""}><i></i></label>`;
 function render() {
@@ -273,7 +293,7 @@ function render() {
     const open = expanded.has(r.id) ? expanded.get(r.id) : list.length <= 2;
     const pills = `<div class="pills">
       ${s ? `<span class="pill ${s}">2026 ${LBL[s]}${x.amt != null ? " · " + rs(x.amt) : ""}</span>` : '<span class="pill">2026 not marked</span>'}
-      ${x.deliver ? '<span class="pill deliver">🍚 Bhog to be delivered</span>' : ""}${x.issued ? '<span class="pill issued">✅ Bhog issued</span>' : ""}${!x.deliver && !x.issued ? '<span class="pill">🍚 No bhog marked</span>' : ""}
+      ${x.deliver ? '<span class="pill deliver">🍚 Bhog to be delivered</span>' : ""}${x.issued ? `<span class="pill issued">✅ Bhog issued${x.boxes != null ? " · " + x.boxes + " box" + (x.boxes === 1 ? "" : "es") : ""}</span>` : ""}${!x.deliver && !x.issued ? '<span class="pill">🍚 No bhog marked</span>' : ""}
       ${x.bill ? `<span class="pill bill">2026 Bill #${hl(x.bill,q)}</span>` : ""}
       ${r.manual ? '<span class="pill new">NEW · 2026</span>' : `<span class="pill">2025 Bill #${r.cn}</span>`}</div>`;
     const body = !open ? "" : `<div class="body">
@@ -285,8 +305,9 @@ function render() {
       <div class="group">
         <div class="row"><span>To be delivered</span>${sw("deliver", r.id, x.deliver)}</div>
         <div class="row"><span>Issued</span>${sw("issued", r.id, x.issued, "ind")}</div>
+        ${x.issued ? `<div class="row"><span>Boxes issued</span><input type="number" min="0" max="100000" step="1" inputmode="numeric" placeholder="How many?" data-boxes="${r.id}" value="${x.boxes ?? ""}"></div>` : ""}
       </div>
-      <div class="hint">“Issued” can be marked from 8 Nov 2026. Switch a bhog option off to undo it.</div>
+      <div class="hint">“Issued” can be marked from 9 Nov 2026, 12:00 noon. Switch a bhog option off to undo it.</div>
       <div class="gt">Edit 2026 bill &amp; amount</div>
       <div class="group">
         <div class="row"><span>Bill no.</span><input type="text" maxlength="20" placeholder="Add bill no." data-bill="${r.id}" value="${esc(x.bill || "")}"></div>
@@ -333,6 +354,7 @@ $("clr").onclick = () => { $("q").value = ""; $("sugg").style.display = "none"; 
 /* toast + local persistence */
 function toast(m) { const t = $("toast"); t.textContent = m; t.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("show"), 2600); }
 function saveLocal() { try { localStorage.setItem(LSKEY, JSON.stringify(S)); } catch (e) {} }
+const okBoxes = v => Number.isInteger(v) && v >= 0 && v <= 100000;
 const okAmt = v => typeof v === "number" && isFinite(v) && v >= 0 && v <= 1e9;
 const cleanBill = v => String(v == null ? "" : v).trim().slice(0, 20);
 /* admin PIN: asked once, then remembered on this device */
@@ -374,16 +396,19 @@ function applyLocal(p) {
     if (p.status) x.status = p.status;
     if (p.amt !== undefined) x.amt = p.amt;
     if (p.deliver !== undefined) { if (p.deliver) x.deliver = true; else delete x.deliver; }
-    if (p.issued !== undefined) { if (p.issued) x.issued = true; else delete x.issued; }
+    if (p.issued !== undefined) { if (p.issued) x.issued = true; else { delete x.issued; delete x.boxes; } }
+    if (p.boxes !== undefined) { if (p.boxes === null) delete x.boxes; else x.boxes = p.boxes; }
     if (p.bill !== undefined) { const b = cleanBill(p.bill); if (b) x.bill = b; else delete x.bill; }
   } else if (p.action === "add") {
     const e = p.entry; S.manual.push({ id: e.id, name: e.name, addr: e.addr });
     S.rec[e.id] = { status: e.status, amt: e.amt };
     if (e.deliver) S.rec[e.id].deliver = true;
-    if (e.issued) S.rec[e.id].issued = true;
+    if (e.issued) { S.rec[e.id].issued = true; if (okBoxes(e.boxes)) S.rec[e.id].boxes = e.boxes; }
     const b = cleanBill(e.bill); if (b) S.rec[e.id].bill = b;
   } else if (p.action === "delete") {
     S.manual = S.manual.filter(m => m.id !== p.id); delete S.rec[p.id];
+  } else if (p.action === "restore") {
+    S = norm(JSON.parse(JSON.stringify(p.data)));
   }
 }
 function norm(s) {
@@ -432,12 +457,21 @@ $("out").addEventListener("click", e => {
   else if (b.dataset.del && confirm("Delete this manual entry?")) act({ action: "delete", id: b.dataset.del }, "Entry deleted");
 });
 $("out").addEventListener("change", e => {
-  const t = e.target; if (!t.dataset || !t.dataset.bh) return;
+  const t = e.target;
+  if (t.dataset && t.dataset.boxes) {
+    const id = t.dataset.boxes, raw = t.value.trim(), had = (S.rec[id] || {}).boxes;
+    if (raw === "") { if (had == null) return; return void act({ action: "set", id, boxes: null }, "Boxes cleared"); }
+    const n = Number(raw);
+    if (!okBoxes(n)) { render(); return toast("Enter a whole number of boxes"); }
+    if (n === had) return;
+    return void act({ action: "set", id, boxes: n }, n + " bhog box" + (n === 1 ? "" : "es") + " issued saved");
+  }
+  if (!t.dataset || !t.dataset.bh) return;
   const on = t.checked, kind = t.dataset.bh;
   if (kind === "issued" && on && !bhogReady()) { render(); return toast(NOT_READY); }
   act({ action: "set", id: t.dataset.id, [kind]: on }, kind === "issued" ? (on ? "Bhog marked issued" : "Bhog issued removed") : (on ? "Bhog marked to be delivered" : "Bhog to be delivered removed"));
 });
-$("out").addEventListener("keydown", e => { const id = e.target.dataset && (e.target.dataset.amt || e.target.dataset.bill); if (e.key === "Enter" && id) { e.preventDefault(); saveEdit(id); } });
+$("out").addEventListener("keydown", e => { if (e.key === "Enter" && e.target.dataset && e.target.dataset.boxes) { e.preventDefault(); e.target.blur(); return; } const id = e.target.dataset && (e.target.dataset.amt || e.target.dataset.bill); if (e.key === "Enter" && id) { e.preventDefault(); saveEdit(id); } });
 function saveEdit(id) {
   const bi = document.querySelector(`input[data-bill="${id}"]`), ai = document.querySelector(`input[data-amt="${id}"]`);
   const bill = cleanBill(bi.value), had = (S.rec[id] || {}).bill || "";
@@ -454,7 +488,7 @@ function saveEdit(id) {
 /* add entry sheet */
 const openSheet = o => { $("addPanel").classList.toggle("open", o); $("bd").classList.toggle("open", o); if (o) setTimeout(() => $("aName").focus(), 300); else $("aSugg").innerHTML = ""; };
 $("addBtn").onclick = async () => { if (await ensureAuth()) openSheet(true); };
-$("bd").onclick = () => openSheet(false);
+$("bd").onclick = () => { openSheet(false); openData(false); };
 $("aCancel").onclick = () => { openSheet(false); $("addForm").reset(); };
 /* address autocomplete (from all existing addresses) */
 function addrList() {
@@ -475,13 +509,18 @@ $("aSugg").addEventListener("pointerdown", e => {
   $("aAddr").value = d.dataset.a; $("aSugg").innerHTML = "";
 });
 let adding = false;
+const syncBoxRow = () => { $("aBoxRow").hidden = !$("aBhI").checked; };
+$("aBhI").addEventListener("change", syncBoxRow);
+$("addForm").addEventListener("reset", () => setTimeout(syncBoxRow, 0));
 $("addForm").addEventListener("submit", async e => {
   e.preventDefault(); if (adding) return;
   const name = $("aName").value.trim(), amt = parseFloat($("aAmt").value);
   if (!name) return toast("Name is required");
   if (!okAmt(amt)) return toast("Enter a valid amount");
-  const entry = { id: "m" + Date.now() + Math.floor(Math.random() * 900 + 100), name, addr: $("aAddr").value.trim(), amt, status: $("aSt").value, deliver: $("aBhD").checked, issued: $("aBhI").checked, bill: cleanBill($("aBill").value) };
   if ($("aBhI").checked && !bhogReady()) return toast(NOT_READY);
+  const boxes = $("aBhI").checked && $("aBoxes").value.trim() !== "" ? Number($("aBoxes").value) : undefined;
+  if (boxes !== undefined && !okBoxes(boxes)) return toast("Enter a whole number of boxes");
+  const entry = { id: "m" + Date.now() + Math.floor(Math.random() * 900 + 100), name, addr: $("aAddr").value.trim(), amt, status: $("aSt").value, deliver: $("aBhD").checked, issued: $("aBhI").checked, boxes, bill: cleanBill($("aBill").value) };
   const btn = document.querySelector(".snav .done");
   adding = true; btn.disabled = true; btn.textContent = "Saving…";
   const ok = await act({ action: "add", entry }, "Entry added");
@@ -491,22 +530,82 @@ $("addForm").addEventListener("submit", async e => {
   filter = "all"; limit = 60; document.querySelectorAll(".chip").forEach(x => x.classList.toggle("on", x.dataset.f === "all"));
   $("q").value = name; showSugg(); $("sugg").style.display = "none"; render();
 });
-/* export */
+/* export (2026 only), backup and restore */
 function csvCell(v) {
   v = v == null ? "" : String(v);
   if (/^[=+\-@\t\r]/.test(v) && isNaN(Number(v))) v = "'" + v;
   return /[",\n\r]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
 }
-$("expBtn").onclick = () => {
-  const head = ["2025 Bill No","Book","Name","Address","2025 Amount (Rs)","2025 Status","2025 Note","2026 Bill No","2026 Amount (Rs)","2026 Status","2026 Bhog To Be Delivered","2026 Bhog Issued","Entry Type"];
-  const rows = items().map(r => { const x = r26(r); return [r.cn ?? "", r.manual ? "" : r.book, r.name, r.addr, r.amt25 ?? "", r.st25 ? LBL[r.st25] : "", r.note, x.bill ?? "", x.amt ?? "", x.status ? LBL[x.status] : "", x.deliver ? "Yes" : "", x.issued ? "Yes" : "", r.manual ? "Manual (2026)" : "Original"]; });
-  const csv = "\ufeff" + [head].concat(rows).map(r => r.map(csvCell).join(",")).join("\r\n");
+function download(name, text, type) {
   const a = document.createElement("a");
-  a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
-  a.download = "kalipuja_2025_2026_" + new Date().toISOString().slice(0,10) + ".csv";
-  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-  toast("Exported " + rows.length + " entries");
+  a.href = URL.createObjectURL(new Blob([text], { type }));
+  a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+const pad = n => String(n).padStart(2, "0");
+function stamp() { const t = new Date(); return t.getFullYear() + "-" + pad(t.getMonth() + 1) + "-" + pad(t.getDate()); }
+function exportCSV() {
+  /* only entries that have 2026 data, in ascending 2026 bill-no. order (SL NO = 2026 bill no.; entries without one come last) */
+  const rows = items().map(r => ({ r, x: r26(r) })).filter(o => o.x.status || o.x.amt != null || o.x.bill);
+  if (!rows.length) return toast("No 2026 data to export yet");
+  rows.sort((a, b) => byBill(a.r, b.r));
+  const head = ["SL NO", "NAME", "ADDRESS", "AMOUNT", "PAYMENT STATUS"];
+  const data = rows.map(o => [o.x.bill || "", o.r.name, o.r.addr, o.x.amt ?? "", o.x.status ? LBL[o.x.status] : ""]);
+  download("kalipuja_2026_" + stamp() + ".csv", "\ufeff" + [head].concat(data).map(r => r.map(csvCell).join(",")).join("\r\n"), "text/csv;charset=utf-8");
+  const nb = rows.filter(o => !o.x.bill).length;
+  toast("Exported " + rows.length + " entries" + (nb ? " (" + nb + " without a bill no. at the end)" : ""));
+}
+function backupData() {
+  const t = new Date(), payload = { app: "kalipuja-2026", version: 1, savedAt: t.toISOString(), rec: S.rec, manual: S.manual };
+  download("kalipuja2026_backup_" + stamp() + "_" + pad(t.getHours()) + pad(t.getMinutes()) + ".json", JSON.stringify(payload, null, 1), "application/json");
+  try { localStorage.setItem("kp-lastbackup", t.toISOString()); } catch (e) {}
+  showDataInfo(); toast("Backup downloaded – keep the file safe");
+}
+function showDataInfo() {
+  let lb = ""; try { lb = localStorage.getItem("kp-lastbackup") || ""; } catch (e) {}
+  const n = Object.keys(S.rec).length;
+  $("dInfo").textContent = n + " records and " + S.manual.length + " manual entries saved for 2026 · " + (lb ? "last backup from this device: " + new Date(lb).toLocaleString() : "no backup taken from this device yet");
+}
+function openData(o) { $("dataPanel").classList.toggle("open", o); $("bd").classList.toggle("open", o); if (o) showDataInfo(); }
+/* checks a backup file and keeps only valid 2026 fields (same rules as the server) */
+function cleanBackup(src) {
+  if (!src || typeof src !== "object" || !src.rec || typeof src.rec !== "object" || Array.isArray(src.rec)) return null;
+  const manual = [], seen = new Set(), rec = {};
+  for (const m of Array.isArray(src.manual) ? src.manual : []) {
+    const id = m && String(m.id || ""), name = m && String(m.name || "").trim().slice(0, 100);
+    if (!/^m\d{6,}$/.test(id) || !name || seen.has(id)) continue;
+    seen.add(id); manual.push({ id, name, addr: String(m.addr || "").trim().slice(0, 200) });
+  }
+  for (const k in src.rec) {
+    if (!/^\d{1,4}$/.test(k) && !seen.has(k)) continue;
+    const x = src.rec[k]; if (!x || typeof x !== "object") continue;
+    const c = {};
+    if (x.status === "paid" || x.status === "due") c.status = x.status;
+    if (okAmt(x.amt)) c.amt = x.amt;
+    if (typeof x.bill === "string" && x.bill.trim()) c.bill = x.bill.trim().slice(0, 20);
+    if (x.deliver === true || x.bhog === "deliver") c.deliver = true;
+    if ((x.issued === true || x.bhog === "issued") && bhogReady()) { c.issued = true; if (okBoxes(x.boxes)) c.boxes = x.boxes; }
+    if (Object.keys(c).length) rec[k] = c;
+  }
+  return { rec, manual };
+}
+$("dataBtn").onclick = () => openData(true);
+$("dClose").onclick = () => openData(false);
+$("dExport").onclick = exportCSV;
+$("dBackup").onclick = backupData;
+$("dRestore").onclick = async () => {
+  if (!(await ensureAuth())) return toast("PIN needed to restore");
+  $("dFile").value = ""; $("dFile").click();
 };
+$("dFile").addEventListener("change", async e => {
+  const f = e.target.files && e.target.files[0]; if (!f) return;
+  if (f.size > 5e6) return toast("That file is too large to be a backup");
+  let obj; try { obj = JSON.parse(await f.text()); } catch (err) { return toast("Not a valid backup file"); }
+  const clean = cleanBackup(obj); if (!clean) return toast("This is not a Kali Puja backup file");
+  const when = obj.savedAt && !isNaN(new Date(obj.savedAt)) ? new Date(obj.savedAt).toLocaleString() : "unknown date";
+  const cnt = z => Object.keys(z.rec).length + " records, " + z.manual.length + " manual entries";
+  if (!confirm("Restore this backup?\n\nBackup (" + when + "): " + cnt(clean) + "\nCurrent: " + cnt(S) + "\n\nThis REPLACES all current 2026 data. 2025 data is not affected.")) return;
+  if (await act({ action: "restore", data: clean }, "Backup restored")) { openData(false); stats(); render(); }
+});
 /* init */
 (async function () {
   try { S = norm(JSON.parse(localStorage.getItem(LSKEY) || "{}")); } catch (e) {}

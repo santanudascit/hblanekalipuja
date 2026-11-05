@@ -26,7 +26,17 @@ EDITING PIN
 
 BHOG (2026)
   Two optional switches on each entry: "To be delivered" and "Issued". Mark one, both, or none; switch off to undo.
-  "Issued" can only be marked from 8 Nov 2026 (00:00 India time). Before that the app and the server
+  "Issued" can only be marked from 9 Nov 2026, 12:00 noon India time. Before that the app and the server
   both say "Bhog not ready". The date is BHOG_OPEN in netlify/functions/status.mjs and in public/index.html.
   The top boxes and filter buttons list each group (sorted by 2026 bill number).
   The CSV export has "2026 Bhog To Be Delivered" and "2026 Bhog Issued" columns.
+
+EXPORT / BACKUP / RESTORE  (bottom bar, database icon)
+  Export 2026 list : CSV with SL NO, NAME, ADDRESS, AMOUNT, PAYMENT STATUS - 2026 entries only,
+                     in ascending 2026 bill-number order (SL NO = the 2026 bill number).
+  Backup           : downloads a .json file with all saved 2026 data (amounts, bill nos, status, bhog, manual entries).
+  Restore          : pick a backup .json; it REPLACES all current 2026 data (needs the admin PIN). 2025 data is never touched.
+
+BHOG BOXES
+  When "Issued" is on, a "Boxes issued" number box appears (whole number) on the entry and in the Add Entry form.
+  Switching Issued off clears it. The top "Bhog issued" box also shows the total boxes issued. Included in backups.
