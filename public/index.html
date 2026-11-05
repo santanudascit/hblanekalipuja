@@ -207,9 +207,13 @@ const hl = (t, q) => {
   const i = t.toLowerCase().indexOf(q); if (i < 0) return e;
   return esc(t.slice(0,i)) + "<mark>" + esc(t.slice(i,i+q.length)) + "</mark>" + esc(t.slice(i+q.length));
 };
+/* A search made only of digits is a bill-number search: it matches the 2026 bill no. exactly (never the 2025 bill no.). */
+const isBillQ = q => /^\d+$/.test(q);
 function match(q) {
-  const toks = q.toLowerCase().split(/\s+/).filter(Boolean);
-  return items().filter(r => { const h = (r.name + " " + r.addr + " " + (r.cn ?? "") + " " + r.note + " " + (r26(r).bill || "")).toLowerCase(); return toks.every(t => h.includes(t)); });
+  q = q.trim().toLowerCase();
+  if (isBillQ(q)) return items().filter(r => String(r26(r).bill || "").toLowerCase() === q);
+  const toks = q.split(/\s+/).filter(Boolean);
+  return items().filter(r => { const h = (r.name + " " + r.addr + " " + r.note + " " + (r26(r).bill || "")).toLowerCase(); return toks.every(t => h.includes(t)); });
 }
 function stats() {
   let a = 0, b = 0, c = 0, d = 0, b1 = 0, b2 = 0;
@@ -240,7 +244,7 @@ function byBill(a, b) {
 const BH = { deliver: "To be delivered", issued: "Issued" };
 const expanded = new Map();
 function render() {
-  const q = $("q").value.trim().toLowerCase();
+  const q = $("q").value.trim().toLowerCase(), hq = isBillQ(q) ? "" : q;
   $("clr").hidden = !$("q").value;
   let list = (q ? match(q) : items()).filter(passes);
   if (!q && filter === "all") {
@@ -277,7 +281,7 @@ function render() {
       <div class="gt">2025 · locked</div>
       <div class="group"><div class="row"><span>Amount</span><span class="val">${r.amt25 == null ? "—" : rs(r.amt25)}${s25 ? `<span class="badge b-${s25}">${LBL[s25]}</span>` : ""}</span></div></div>
       ${r.manual ? `<button class="del" data-del="${r.id}">Delete this entry</button>` : ""}</div>`;
-    return `<div class="card ${open ? "open" : ""}"><button class="chead" data-tog="${r.id}"><div class="ctext"><div class="name">${hl(r.name,q)}</div><div class="addr">${hl(r.addr,q)}</div></div><span class="chev">›</span></button>${pills}${body}</div>`;
+    return `<div class="card ${open ? "open" : ""}"><button class="chead" data-tog="${r.id}"><div class="ctext"><div class="name">${hl(r.name,hq)}</div><div class="addr">${hl(r.addr,hq)}</div></div><span class="chev">›</span></button>${pills}${body}</div>`;
   }).join("") + (list.length > limit ? `<button class="more" id="more">Show more (${list.length - limit} left)</button>` : "");
 }
 /* search autocomplete */
@@ -286,7 +290,8 @@ function showSugg() {
   const q = $("q").value.trim().toLowerCase(), box = $("sugg");
   if (!q) { box.style.display = "none"; return; }
   sugg = match(q).slice(0, 8); sel = -1;
-  box.innerHTML = sugg.map((r,i) => `<div data-i="${i}"><span>${hl(r.name,q)}</span><small>${hl(r.addr,q)}</small></div>`).join("");
+  const bq = isBillQ(q);
+  box.innerHTML = sugg.map((r,i) => `<div data-i="${i}"><span>${hl(r.name,bq ? "" : q)}</span><small>${bq ? "2026 Bill #" + esc(r26(r).bill) + " · " : ""}${hl(r.addr,bq ? "" : q)}</small></div>`).join("");
   box.style.display = sugg.length ? "block" : "none";
 }
 function pick(i) { $("q").value = sugg[i].name; $("sugg").style.display = "none"; limit = 60; render(); }
