@@ -6,7 +6,8 @@
 <meta name="theme-color" content="#fff6e8" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#140706" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>H B Lane Kali Puja – Bill Search 2025 / 2026</title>
+<title>Hazra Bagan Lane Sarbojanin Sri Sri Kali Puja Samity</title>
+<meta name="apple-mobile-web-app-title" content="Kali Puja Samity">
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
@@ -22,12 +23,15 @@ html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.35 -apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh}
 body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(60% 34% at 90% 0%,rgba(245,158,11,.22),transparent 70%),radial-gradient(60% 40% at 0% 30%,rgba(214,40,40,.14),transparent 70%),radial-gradient(70% 40% at 50% 105%,rgba(164,22,26,.14),transparent 70%)}
 .glass{background:var(--glass);-webkit-backdrop-filter:blur(26px) saturate(180%);backdrop-filter:blur(26px) saturate(180%);border:.5px solid var(--glassb);box-shadow:var(--gshadow)}
-.wrap{max-width:680px;margin:0 auto;padding:calc(env(safe-area-inset-top,0px) + 12px) 14px 130px}
+#fx{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.wrap{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:calc(env(safe-area-inset-top,0px) + 12px) 14px 130px}
 input,select,button{font:inherit;color:var(--ink)}
 button{cursor:pointer}
 .hero{position:relative;overflow:hidden;border-radius:28px;padding:20px 20px 22px;color:#fff3dc;background:linear-gradient(135deg,#5c0a10 0%,#a4161a 55%,#d9530f 100%);box-shadow:0 10px 30px rgba(120,20,15,.3);border-bottom:4px solid var(--gold)}
-.hero .logo{position:absolute;right:16px;top:50%;transform:translateY(-50%);width:92px;height:92px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);box-shadow:0 0 0 3px rgba(255,217,138,.35),0 6px 18px rgba(0,0,0,.45)}
-.hero{padding-right:122px}
+.hero .logo{position:absolute;right:16px;top:50%;transform:translateY(-50%);width:84px;height:84px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);box-shadow:0 0 0 3px rgba(255,217,138,.35),0 6px 18px rgba(0,0,0,.45)}
+.hero{padding-right:116px;padding-top:18px;padding-bottom:18px;min-height:96px;display:flex;flex-direction:column;justify-content:center}
+.hero h1{font-size:1.08rem;line-height:1.28;letter-spacing:.02em}
+.hero p.reg{margin-top:7px;font-size:.84rem;font-weight:700;letter-spacing:.08em;color:#ffd98a}
 .empty .logo2{width:84px;height:84px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);box-shadow:0 4px 14px rgba(120,20,15,.35)}
 .hero small{letter-spacing:.14em;font-size:.7rem;font-weight:700;color:#ffd98a}
 .hero h1{margin:2px 0 0;font-size:2rem;font-weight:800;letter-spacing:-.02em;line-height:1.1}
@@ -164,8 +168,9 @@ mark{background:rgba(245,158,11,.5);color:inherit;border-radius:4px;padding:0 1p
 </style>
 </head>
 <body>
+<canvas id="fx" aria-hidden="true"></canvas>
 <div class="wrap">
-  <div class="hero"><img class="logo" src="/logo.jpg" alt="Maa Kali" width="92" height="92"><small>H B LANE</small><h1>Kali Puja</h1><p>Bills, collection, bhog &amp; expenses · 2025 &amp; 2026</p></div>
+  <div class="hero"><img class="logo" src="/logo.jpg" alt="Maa Kali" width="84" height="84"><h1>HAZRA BAGAN LANE SARBOJANIN SRI SRI KALI PUJA SAMITY</h1><p class="reg">Reg. No. S0060686</p></div>
   <div class="tabs" id="tabs"><button class="on" data-v="bills">🔍 Bills</button><button data-v="exp">💸 Expenses</button></div>
   <div id="billsView">
   <div class="stats">
@@ -254,6 +259,7 @@ mark{background:rgba(245,158,11,.5);color:inherit;border-radius:4px;padding:0 1p
     <div id="xPayWrap"><div class="gt" style="margin-top:2px">Payment</div>
     <div class="seg" style="margin-bottom:14px"><button type="button" class="p sel" id="xFull">Full payment</button><button type="button" class="b1" id="xPart">Partial payment</button></div></div>
     <div class="group">
+      <div class="row" id="xSubRow" hidden><label for="xSub">Sub category</label><input id="xSub" maxlength="100" placeholder="Optional, e.g. Advance"></div>
       <div class="row"><label for="xAmt" id="xAmtL">Amount paid (₹)</label><input id="xAmt" type="number" min="0.01" step="any" inputmode="decimal" required placeholder="Required"></div>
     </div>
     <div class="hint" id="xHint" hidden>Part payment: you can add more payments later under this same entry, and the total is added up for you.</div>
@@ -266,6 +272,7 @@ mark{background:rgba(245,158,11,.5);color:inherit;border-radius:4px;padding:0 1p
   <div class="group">
     <button class="arow" id="dExport" type="button"><span class="ai">📄</span><span><b>Export 2026 list</b><small>CSV with SL No, Name, Address, Amount, Payment status</small></span></button>
     <button class="arow" id="dExpExport" type="button"><span class="ai">💸</span><span><b>Export expenses</b><small>CSV with every expense payment, other income and the in-hand balance</small></span></button>
+    <button class="arow" id="dFx" type="button"><span class="ai">🎆</span><span><b>Fireworks background</b><small id="dFxS">On · tap to switch off</small></span></button>
     <button class="arow" id="dBackup" type="button"><span class="ai">💾</span><span><b>Backup 2026 data</b><small>Downloads a backup file with everything saved for 2026</small></span></button>
     <button class="arow" id="dRestore" type="button"><span class="ai">♻️</span><span><b>Restore from backup</b><small>Pick a backup file · replaces all current 2026 data</small></span></button>
   </div>
@@ -634,7 +641,7 @@ function setView(v) {
   window.scrollTo({ top: 0 });
 }
 $("tabs").addEventListener("click", e => { const b = e.target.closest("button"); if (b) setView(b.dataset.v); });
-const expHay = e => (e.name + " " + e.note + " " + e.pays.map(p => p.amt).join(" ")).toLowerCase();
+const expHay = e => (e.name + " " + e.note + " " + e.pays.map(p => p.sub || "").join(" ") + " " + e.pays.map(p => p.amt).join(" ")).toLowerCase();
 function expMatch(q) { const toks = q.trim().toLowerCase().split(/\s+/).filter(Boolean); return S.expenses.filter(e => { const h = expHay(e); return toks.every(t => h.includes(t)); }); }
 const incMatch = q => { const toks = q.trim().toLowerCase().split(/\s+/).filter(Boolean); return S.income.filter(e => { const h = (e.name + " " + e.note + " " + e.amt).toLowerCase(); return toks.every(t => h.includes(t)); }); };
 let eSel = -1, eSugg = [];
@@ -680,11 +687,12 @@ function renderExp() {
     const body = !open ? "" : `<div class="body">
       <div class="gt">Payments</div>
       <div class="group">
-        ${e.pays.map((p, i) => `<div class="row"><span>${part ? "Payment " + (i + 1) : "Payment"}</span><span class="val">${rs(p.amt)}${e.pays.length > 1 ? `<button class="xdel" data-pdel="${e.id}|${p.id}" aria-label="Delete this payment">✕</button>` : ""}</span></div>`).join("")}
+        ${e.pays.map((p, i) => `<div class="row"><span>${part ? "Payment " + (i + 1) : "Payment"}${p.sub ? " · " + hl(p.sub, q) : ""}</span><span class="val">${rs(p.amt)}${e.pays.length > 1 ? `<button class="xdel" data-pdel="${e.id}|${p.id}" aria-label="Delete this payment">✕</button>` : ""}</span></div>`).join("")}
         <div class="row tot"><span>Total payment</span><span class="val">${rs(t)}</span></div>
       </div>
       ${part ? `<div class="gt">Add another payment</div>
       <div class="group">
+        <div class="row"><span>Sub category</span><input type="text" maxlength="100" placeholder="Optional" data-psub="${e.id}"></div>
         <div class="row"><span>Amount ₹</span><input type="number" min="0.01" step="any" inputmode="decimal" placeholder="Amount" data-pamt="${e.id}"></div>
       </div>
       <button class="tint" data-padd="${e.id}">Add payment</button>` : ""}
@@ -698,7 +706,8 @@ function addPayment(id) {
   const ai = document.querySelector(`input[data-pamt="${id}"]`);
   const amt = parseFloat(ai.value), date = stamp();
   if (!okAmt(amt) || amt <= 0) return toast("Enter a valid payment amount");
-  act({ action: "addPayment", id, pay: { id: newId("p"), amt, date } }, "Payment " + rs(amt) + " added");
+  const subv = (document.querySelector(`input[data-psub="${id}"]`).value || "").trim().slice(0, 100);
+  act({ action: "addPayment", id, pay: Object.assign({ id: newId("p"), amt, date }, subv ? { sub: subv } : {}) }, "Payment " + rs(amt) + " added");
 }
 $("eOut").addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
@@ -713,7 +722,7 @@ $("eOut").addEventListener("keydown", e => { if (e.key === "Enter" && e.target.d
 let expType = "full", addingExp = false;
 function setExpType(t) {
   expType = t; $("xFull").classList.toggle("sel", t === "full"); $("xPart").classList.toggle("sel", t === "partial");
-  $("xAmtL").textContent = t === "full" ? "Amount paid (₹)" : "First payment (₹)"; $("xHint").hidden = t === "full";
+  $("xAmtL").textContent = t === "full" ? "Amount paid (₹)" : "First payment (₹)"; $("xHint").hidden = t === "full"; $("xSubRow").hidden = t === "full";
 }
 let xKind = "exp";
 function setKind(k) {
@@ -722,7 +731,7 @@ function setKind(k) {
   $("xNameL").textContent = k === "exp" ? "Paid to / For" : "Source";
   $("xName").placeholder = k === "exp" ? "e.g. XYZ Decorators" : "e.g. Withdrawn from bank";
   $("xPayWrap").hidden = k === "inc";
-  if (k === "inc") { $("xAmtL").textContent = "Amount received (₹)"; $("xHint").hidden = true; } else setExpType(expType);
+  if (k === "inc") { $("xAmtL").textContent = "Amount received (₹)"; $("xHint").hidden = true; $("xSubRow").hidden = true; } else setExpType(expType);
 }
 $("xKExp").onclick = () => setKind("exp"); $("xKInc").onclick = () => setKind("inc");
 $("xFull").onclick = () => setExpType("full"); $("xPart").onclick = () => setExpType("partial");
@@ -744,7 +753,7 @@ $("expForm").addEventListener("submit", async e => {
     if (!ok2) return;
     $("expForm").reset(); setExpType("full"); setKind("exp"); openExp(false); renderExp(); return;
   }
-  const expense = { id: newId("e"), name, note: $("xNote").value.trim(), date, type: expType, pays: [{ id: newId("p"), amt, date }] };
+  const expense = { id: newId("e"), name, note: $("xNote").value.trim(), date, type: expType, pays: [Object.assign({ id: newId("p"), amt, date }, expType === "partial" && $("xSub").value.trim() ? { sub: $("xSub").value.trim().slice(0, 100) } : {})] };
   const btn = $("xDone"); addingExp = true; btn.disabled = true; btn.textContent = "Saving…";
   const ok = await act({ action: "addExpense", expense }, "Expense added");
   addingExp = false; btn.disabled = false; btn.textContent = "Add";
@@ -753,12 +762,12 @@ $("expForm").addEventListener("submit", async e => {
 });
 function exportExpenses() {
   if (!S.expenses.length && !S.income.length) return toast("No expenses or income to export yet");
-  const head = ["PAID TO / FOR", "NOTE", "TYPE", "AMOUNT"], rows = [];
+  const head = ["PAID TO / FOR", "NOTE", "TYPE", "SUB CATEGORY", "AMOUNT"], rows = [];
   S.expenses.slice().sort((a, b) => a.date.localeCompare(b.date) || a.id.localeCompare(b.id)).forEach(e =>
-    e.pays.forEach(p => rows.push([e.name, e.note, e.type === "partial" ? "Partial" : "Full", p.amt])));
-  S.income.slice().sort((a, b) => a.date.localeCompare(b.date)).forEach(e => rows.push([e.name, e.note, "Other income", e.amt]));
+    e.pays.forEach(p => rows.push([e.name, e.note, e.type === "partial" ? "Partial" : "Full", p.sub || "", p.amt])));
+  S.income.slice().sort((a, b) => a.date.localeCompare(b.date)).forEach(e => rows.push([e.name, e.note, "Other income", "", e.amt]));
   const col = collected26(), tot = expTotal(), inc = incTotal();
-  rows.push([], ["TOTAL EXPENSES", "", "", tot], ["OTHER INCOME", "", "", inc], ["2026 BILL COLLECTION", "", "", col], ["IN-HAND BALANCE", "", "", round2(col + inc - tot)]);
+  rows.push([], ["TOTAL EXPENSES", "", "", "", tot], ["OTHER INCOME", "", "", "", inc], ["2026 BILL COLLECTION", "", "", "", col], ["IN-HAND BALANCE", "", "", "", round2(col + inc - tot)]);
   download("kalipuja_2026_expenses_" + stamp() + ".csv", "\ufeff" + [head].concat(rows).map(r => r.map(csvCell).join(",")).join("\r\n"), "text/csv;charset=utf-8");
   toast("Exported " + S.expenses.length + " expenses and " + S.income.length + " other income");
 }
@@ -777,7 +786,7 @@ function cleanExp(e) {
   const seen = new Set(), pays = [];
   for (const p of Array.isArray(e.pays) ? e.pays.slice(0, 200) : []) {
     if (!p || !/^p\d{6,}$/.test(String(p.id)) || !okAmt(p.amt) || p.amt <= 0 || !dOk(p.date) || seen.has(p.id)) continue;
-    seen.add(p.id); pays.push({ id: p.id, amt: p.amt, date: p.date });
+    seen.add(p.id); { const o = { id: p.id, amt: p.amt, date: p.date }, t = String(p.sub == null ? "" : p.sub).trim().slice(0, 100); if (t) o.sub = t; pays.push(o); }
   }
   if (!pays.length) return null;
   if (e.type === "full") pays.splice(1);
@@ -869,6 +878,51 @@ $("dFile").addEventListener("change", async e => {
   if (!confirm("Restore this backup?\n\nBackup (" + when + "): " + cnt(clean) + "\nCurrent: " + cnt(S) + "\n\nThis REPLACES all current 2026 data. 2025 data is not affected.")) return;
   if (await act({ action: "restore", data: clean }, "Backup restored")) { openData(false); stats(); render(); }
 });
+/* ===== fireworks background (canvas behind the page; off if the device asks for reduced motion, can be switched off in Data) ===== */
+(function () {
+  const cv = $("fx"), cx = cv.getContext("2d"), KEY = "kp_fx";
+  const COLORS = ["#ff3b30", "#ff9500", "#e6a817", "#e91e63", "#8e24aa", "#1e88e5", "#2e9d4f", "#ff6f00"];
+  const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let on = !reduce; try { const v = localStorage.getItem(KEY); if (v !== null) on = v === "1"; } catch (e) {}
+  let W = 0, H = 0, raf = 0, last = 0, next = 0, running = false; const rockets = [], sparks = [];
+  function size() { const d = Math.min(window.devicePixelRatio || 1, 1.5); W = innerWidth; H = innerHeight; cv.width = W * d; cv.height = H * d; cx.setTransform(d, 0, 0, d, 0, 0); }
+  function launch() {
+    rockets.push({ x: W * (0.1 + Math.random() * 0.8), y: H + 8, vx: (Math.random() - 0.5) * 1.1, vy: -(6.2 + Math.random() * 2.2), ty: H * (0.1 + Math.random() * 0.42), c: COLORS[Math.random() * COLORS.length | 0] });
+  }
+  function burst(x, y, c) {
+    const n = 46 + (Math.random() * 30 | 0), ring = Math.random() < 0.35, c2 = Math.random() < 0.4 ? COLORS[Math.random() * COLORS.length | 0] : c;
+    for (let i = 0; i < n; i++) {
+      const a = Math.PI * 2 * i / n + Math.random() * 0.2, v = ring ? 2.6 : 1.1 + Math.random() * 2.9;
+      sparks.push({ x, y, px: x, py: y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: 1, dec: 0.009 + Math.random() * 0.01, c: i % 3 === 0 ? c2 : c });
+    }
+  }
+  function frame(t) {
+    if (!running) return;
+    const dt = Math.min(50, t - (last || t)), k = dt / 16.7; last = t;
+    cx.clearRect(0, 0, W, H);
+    if (t >= next && rockets.length < 3 && sparks.length < 380) { launch(); next = t + 750 + Math.random() * 1300; }
+    for (let i = rockets.length - 1; i >= 0; i--) {
+      const r = rockets[i]; r.x += r.vx * k; r.y += r.vy * k;
+      cx.globalAlpha = 0.85; cx.strokeStyle = r.c; cx.lineWidth = 2.2; cx.beginPath(); cx.moveTo(r.x - r.vx * 4, r.y - r.vy * 4); cx.lineTo(r.x, r.y); cx.stroke();
+      if (r.y <= r.ty) { burst(r.x, r.y, r.c); rockets.splice(i, 1); }
+    }
+    cx.lineWidth = 2; cx.lineCap = "round";
+    for (let i = sparks.length - 1; i >= 0; i--) {
+      const p = sparks[i]; p.px = p.x; p.py = p.y;
+      p.vx *= 0.985; p.vy = p.vy * 0.985 + 0.034 * k; p.x += p.vx * k; p.y += p.vy * k; p.life -= p.dec * k;
+      if (p.life <= 0) { sparks.splice(i, 1); continue; }
+      cx.globalAlpha = Math.min(1, p.life) * 0.8; cx.strokeStyle = p.c; cx.beginPath(); cx.moveTo(p.px, p.py); cx.lineTo(p.x, p.y); cx.stroke();
+    }
+    cx.globalAlpha = 1; raf = requestAnimationFrame(frame);
+  }
+  function start() { if (running || !on || document.hidden) return; running = true; last = 0; next = 0; raf = requestAnimationFrame(frame); }
+  function stop() { running = false; cancelAnimationFrame(raf); cx.clearRect(0, 0, W, H); rockets.length = 0; sparks.length = 0; }
+  function label() { const e = $("dFxS"); if (e) e.textContent = on ? "On · tap to switch off" : "Off · tap to switch on"; }
+  size(); addEventListener("resize", size);
+  document.addEventListener("visibilitychange", () => { if (document.hidden) stop(); else start(); });
+  const b = $("dFx"); if (b) b.onclick = () => { on = !on; try { localStorage.setItem(KEY, on ? "1" : "0"); } catch (e) {} on ? start() : stop(); label(); };
+  label(); start();
+})();
 /* init */
 (async function () {
   try { S = norm(JSON.parse(localStorage.getItem(LSKEY) || "{}")); } catch (e) {}

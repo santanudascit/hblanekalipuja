@@ -1,4 +1,4 @@
-H B LANE KALI PUJA - BILL SEARCH (2025 locked / 2026 editable)
+HAZRA BAGAN LANE SARBOJANIN SRI SRI KALI PUJA SAMITY (Reg. No. S0060686) - BILLS & EXPENSES (2025 locked / 2026 editable)
 ==============================================================
 public/index.html            The app (all 272 bills from your 2025 Excel are embedded, read-only)
 netlify/functions/status.mjs Saves 2026 status, 2026 amounts and manual entries so everyone sees the same data
@@ -81,3 +81,14 @@ LOGO / THEME
   public/icon-192.png, icon-512.png, apple-touch-icon.png, manifest.webmanifest
                                  browser tab icon and "Add to Home Screen" icon / name
   To change the picture later, replace these image files (same names).
+
+TITLE, REG. NO. & FIREWORKS
+  The header shows "HAZRA BAGAN LANE SARBOJANIN SRI SRI KALI PUJA SAMITY" and "Reg. No. S0060686"
+  (also used as the page title and the Home Screen app name).
+  Fireworks play on a canvas behind the page. Data panel > "Fireworks background" switches them on/off on that device.
+  See FEATURES.txt for the full feature list.
+
+SUB CATEGORY (partial payments)
+  When "Partial payment" is chosen in Add Expense, an optional "Sub category" text field appears next to the first payment.
+  Every "Add another payment" box also has an optional "Sub category" field. It is shown on each payment line
+  (e.g. "Payment 2 · Labour"), can be searched, is saved in backups and has its own column in the expenses CSV.

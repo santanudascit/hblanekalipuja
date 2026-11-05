@@ -35,6 +35,8 @@ export default async (req) => {
   const okBoxes = (v) => Number.isInteger(v) && v >= 0 && v <= 100000; // how many bhog boxes were issued
   const okDate = (v) => typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v) && !isNaN(Date.parse(v));
   const okPay = (p) => !!p && typeof p === "object" && /^p\d{6,}$/.test(String(p.id)) && typeof p.amt === "number" && Number.isFinite(p.amt) && p.amt > 0 && p.amt <= 1e9 && okDate(p.date);
+  // optional sub category text on a payment (only kept when not empty)
+  const withSub = (o, v) => { const t = String(v == null ? "" : v).trim().slice(0, 100); if (t) o.sub = t; return o; };
   // validates one expense (and its payments); returns a clean copy or null
   const cleanExp = (e) => {
     if (!e || typeof e !== "object" || !/^e\d{6,}$/.test(String(e.id))) return null;
@@ -43,7 +45,7 @@ export default async (req) => {
     const seen = new Set(), pays = [];
     for (const p of Array.isArray(e.pays) ? e.pays.slice(0, 200) : []) {
       if (!okPay(p) || seen.has(p.id)) continue;
-      seen.add(p.id); pays.push({ id: p.id, amt: p.amt, date: p.date });
+      seen.add(p.id); pays.push(withSub({ id: p.id, amt: p.amt, date: p.date }, p.sub));
     }
     if (!pays.length) return null;
     if (e.type === "full") pays.splice(1); // a full payment is a single payment
@@ -141,7 +143,7 @@ export default async (req) => {
     if (!e) return json({ error: "unknown expense" }, 400);
     if (e.type !== "partial") return json({ error: "this expense is a full payment" }, 400);
     if (!okPay(b.pay) || e.pays.length >= 200 || e.pays.some((p) => p.id === b.pay.id)) return json({ error: "bad payment" }, 400);
-    e.pays.push({ id: b.pay.id, amt: b.pay.amt, date: b.pay.date });
+    e.pays.push(withSub({ id: b.pay.id, amt: b.pay.amt, date: b.pay.date }, b.pay.sub));
   } else if (b.action === "delPayment") {
     const e = d.expenses.find((x) => x.id === String(b.id || ""));
     if (!e || !e.pays.some((p) => p.id === b.pid)) return json({ error: "unknown payment" }, 400);

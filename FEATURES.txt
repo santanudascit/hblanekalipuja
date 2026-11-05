@@ -1,0 +1,43 @@
+HAZRA BAGAN LANE SARBOJANIN SRI SRI KALI PUJA SAMITY (Reg. No. S0060686) - FEATURE LIST
+=====================================================================================
+
+LOOK & FEEL
+- Header with the full samity name, registration number and the round Maa Kali logo
+- Maa Kali picture as logo, browser-tab icon and phone "Add to Home Screen" icon
+- Fireworks animation in the background (can be switched off in the Data panel; automatically off if the device asks for reduced motion; pauses when the tab is hidden)
+- Mobile-first design, light and dark mode, works on desktop too
+
+BILLS TAB
+- Search by name, address or bill number, with auto-complete suggestions and highlighted matches
+- A search of only digits is an exact 2026 bill-number search
+- Top boxes: 2026 Collected, 2026 Due, Bhog to be delivered, Bhog issued (with total boxes) and In-hand balance (tap to open Expenses)
+- Filter buttons: All, 2026 Paid, 2026 Due, Bhog to be delivered, Bhog issued, Bill not issued, Premium members, 2025 Paid, 2025 Due
+- Lists from the boxes/filters are sorted by 2026 bill number; "Show more" for long lists
+- 272 bills from the 2025 Excel are built in and read-only (2025 amount, status, notes)
+
+2026 EDITING (each bill)
+- Mark Paid / Due
+- Add or edit 2026 bill number and amount
+- Bhog switches: "To be delivered" and "Issued" (optional, one, both or none; undo by switching off)
+- "Issued" opens on 9 Nov 2026, 12:00 noon India time (checked by app and server)
+- "Boxes issued" count when Bhog is issued
+- Tags: Bill not issued, NEW · 2026 (manual entries), 2025 bill number
+- Premium members: 2026 bill numbers 251-300 get a gold crown badge and card
+- Add Entry form (manual entries for new members) with address auto-complete from existing addresses; manual entries can be deleted
+
+EXPENSES TAB
+- In-hand balance card = 2026 bill collection + other income - total expenses (turns red if negative), with the three figures listed
+- Add Expense: paid to / for, optional note, Full or Partial payment, amount (no date to enter)
+- Partial payment: optional Sub category text on every payment, "Add another payment" under the same name, every payment listed, Total payment line, delete a single payment
+- Delete a whole expense
+- Other income entries (e.g. Withdrawn from bank): source, note, amount; listed under "Other income", can be deleted
+- Search with auto-complete across expenses and other income (name, note, amount); shows the total of matches
+
+DATA & SHARING
+- 2026 data saved online and visible to everyone (Netlify function + storage); falls back to this device only if sync is not set up
+- Optional ADMIN_PIN: anyone can search, only people with the PIN can change data; PIN remembered per device; lock button in the bottom bar
+- Saves are sent one at a time so quick edits never overwrite each other
+- Export 2026 list (CSV: SL No, Name, Address, Amount, Payment status, bhog columns)
+- Export expenses (CSV: every payment, other income, totals and in-hand balance)
+- Backup (JSON, includes bills, bhog, expenses, other income) and Restore (replaces 2026 data; older backups keep current expenses/income)
+- 2025 data is never changed
