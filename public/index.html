@@ -87,6 +87,13 @@ mark{background:rgba(245,158,11,.5);color:inherit;border-radius:4px;padding:0 1p
 .seg .b1.sel{background:var(--gold);color:#2a1210;box-shadow:0 2px 8px rgba(245,158,11,.5)}
 .seg .b2.sel{background:var(--ind);color:#fff;box-shadow:0 2px 8px rgba(63,58,143,.4)}
 .seg button:disabled{cursor:default}
+.sw{position:relative;width:52px;height:32px;flex:none;display:block}
+.row .sw input{position:absolute;inset:0;opacity:0;width:100%;height:100%;margin:0;z-index:2;cursor:pointer;flex:none;padding:0}
+.sw i{position:absolute;inset:0;background:var(--fill);border-radius:99px;transition:background .2s;box-shadow:inset 0 0 0 1px var(--line)}
+.sw i::after{content:"";position:absolute;top:2px;left:2px;width:28px;height:28px;border-radius:50%;background:#fff;box-shadow:0 2px 5px rgba(0,0,0,.3);transition:transform .2s}
+.sw input:checked+i{background:var(--gold);box-shadow:none}.sw.ind input:checked+i{background:var(--ind)}
+.sw input:checked+i::after{transform:translateX(20px)}
+.hint{font-size:.78rem;color:var(--mut);margin:6px 6px 0}
 .del{background:none;border:0;color:var(--due);font-size:.92rem;font-weight:550;padding:16px 0 0;width:100%}
 .more{width:100%;border:0;border-radius:16px;padding:15px;background:var(--card);color:var(--cr);font-weight:650;font-size:16px;margin-bottom:10px;border:.5px solid var(--line)}
 .mode{font-size:.74rem;color:var(--mut);margin-top:20px;text-align:center}
@@ -178,7 +185,8 @@ mark{background:rgba(245,158,11,.5);color:inherit;border-radius:4px;padding:0 1p
       <div class="row"><label for="aBill">Bill no.</label><input id="aBill" maxlength="20" placeholder="2026 bill no."></div>
       <div class="row"><label for="aAmt">Amount (₹)</label><input id="aAmt" type="number" min="0" step="any" inputmode="decimal" required placeholder="Required"></div>
       <div class="row"><label for="aSt">Payment</label><select id="aSt" dir="rtl"><option value="paid">Paid</option><option value="due">Due</option></select></div>
-      <div class="row"><label for="aBhog">Bhog</label><select id="aBhog" dir="rtl"><option value="deliver">To be delivered</option><option value="issued">Issued</option></select></div>
+      <div class="row"><label for="aBhD">Bhog to be delivered</label><label class="sw"><input type="checkbox" id="aBhD"><i></i></label></div>
+      <div class="row"><label for="aBhI">Bhog issued</label><label class="sw ind"><input type="checkbox" id="aBhI"><i></i></label></div>
     </div>
   </form>
 </div>
@@ -220,7 +228,7 @@ function stats() {
   items().forEach(r => {
     if (r.st25 === "paid") a += r.amt25; else if (r.st25 === "due") b += r.amt25;
     const x = r26(r); if (x.status === "paid") c += x.amt || 0; else if (x.status === "due") d += x.amt || 0;
-    if (x.bhog === "deliver") b1++; else if (x.bhog === "issued") b2++;
+    if (x.deliver) b1++; if (x.issued) b2++;
   });
   $("s25p").textContent = rs(a); $("s25d").textContent = rs(b); $("s26p").textContent = rs(c); $("s26d").textContent = rs(d);
   $("sb1").textContent = b1; $("sb2").textContent = b2;
@@ -230,7 +238,7 @@ function passes(r) {
   switch (filter) {
     case "25paid": return r.st25 === "paid"; case "25due": return r.st25 === "due";
     case "26paid": return x.status === "paid"; case "26due": return x.status === "due";
-    case "bhogdeliver": return x.bhog === "deliver"; case "bhogissued": return x.bhog === "issued";
+    case "bhogdeliver": return !!x.deliver; case "bhogissued": return !!x.issued;
     default: return true;
   }
 }
@@ -241,8 +249,12 @@ function byBill(a, b) {
   if (!x) return 1; if (!y) return -1;
   return x.localeCompare(y, undefined, { numeric: true, sensitivity: "base" }) || a.name.localeCompare(b.name);
 }
-const BH = { deliver: "To be delivered", issued: "Issued" };
+/* Bhog "Issued" can only be marked from 8 Nov 2026, 00:00 India time (the server enforces this too). */
+const BHOG_OPEN = Date.UTC(2026, 10, 7, 18, 30);
+const bhogReady = () => Date.now() >= BHOG_OPEN;
+const NOT_READY = "Bhog not ready – it can be marked as issued from 8 Nov 2026";
 const expanded = new Map();
+const sw = (kind, id, on, cls) => `<label class="sw ${cls || ""}"><input type="checkbox" data-bh="${kind}" data-id="${id}" ${on ? "checked" : ""}><i></i></label>`;
 function render() {
   const q = $("q").value.trim().toLowerCase(), hq = isBillQ(q) ? "" : q;
   $("clr").hidden = !$("q").value;
@@ -257,11 +269,11 @@ function render() {
   $("info").textContent = list.length + " result" + (list.length === 1 ? "" : "s") + (sorted ? " · sorted by 2026 bill no." : "");
   if (!list.length) { $("out").innerHTML = `<div class="empty"><div class="big">🔍</div><b>Nothing found</b><p>Try a shorter name or part of the address.</p></div>`; return; }
   $("out").innerHTML = list.slice(0, limit).map(r => {
-    const x = r26(r), s = x.status || "", s25 = r.st25, bh = x.bhog || "";
+    const x = r26(r), s = x.status || "", s25 = r.st25;
     const open = expanded.has(r.id) ? expanded.get(r.id) : list.length <= 2;
     const pills = `<div class="pills">
       ${s ? `<span class="pill ${s}">2026 ${LBL[s]}${x.amt != null ? " · " + rs(x.amt) : ""}</span>` : '<span class="pill">2026 not marked</span>'}
-      ${bh ? `<span class="pill ${bh}">🍚 Bhog: ${BH[bh]}</span>` : '<span class="pill">🍚 Bhog: not set</span>'}
+      ${x.deliver ? '<span class="pill deliver">🍚 Bhog to be delivered</span>' : ""}${x.issued ? '<span class="pill issued">✅ Bhog issued</span>' : ""}${!x.deliver && !x.issued ? '<span class="pill">🍚 No bhog marked</span>' : ""}
       ${x.bill ? `<span class="pill bill">2026 Bill #${hl(x.bill,q)}</span>` : ""}
       ${r.manual ? '<span class="pill new">NEW · 2026</span>' : `<span class="pill">2025 Bill #${r.cn}</span>`}</div>`;
     const body = !open ? "" : `<div class="body">
@@ -269,10 +281,13 @@ function render() {
       <div class="gt">2026 payment</div>
       <div class="seg"><button class="p ${s==="paid"?"sel":""}" data-id="${r.id}" data-s="paid" ${s==="paid"?"disabled":""}>✓ Paid</button>
         <button class="d ${s==="due"?"sel":""}" data-id="${r.id}" data-s="due" ${s==="due"?"disabled":""}>✗ Due</button></div>
-      <div class="gt">🍚 Bhog</div>
-      <div class="seg"><button class="b1 ${bh==="deliver"?"sel":""}" data-id="${r.id}" data-bhog="deliver" ${bh==="deliver"?"disabled":""}>To be delivered</button>
-        <button class="b2 ${bh==="issued"?"sel":""}" data-id="${r.id}" data-bhog="issued" ${bh==="issued"?"disabled":""}>Issued</button></div>
-      <div class="gt">2026 bill &amp; amount</div>
+      <div class="gt">🍚 Bhog · optional, mark one, both or none</div>
+      <div class="group">
+        <div class="row"><span>To be delivered</span>${sw("deliver", r.id, x.deliver)}</div>
+        <div class="row"><span>Issued</span>${sw("issued", r.id, x.issued, "ind")}</div>
+      </div>
+      <div class="hint">“Issued” can be marked from 8 Nov 2026. Switch a bhog option off to undo it.</div>
+      <div class="gt">Edit 2026 bill &amp; amount</div>
       <div class="group">
         <div class="row"><span>Bill no.</span><input type="text" maxlength="20" placeholder="Add bill no." data-bill="${r.id}" value="${esc(x.bill || "")}"></div>
         <div class="row"><span>Amount ₹</span><input type="number" min="0" step="any" inputmode="decimal" placeholder="Amount" data-amt="${r.id}" value="${x.amt ?? ""}"></div>
@@ -358,18 +373,24 @@ function applyLocal(p) {
     const x = S.rec[p.id] = S.rec[p.id] || {};
     if (p.status) x.status = p.status;
     if (p.amt !== undefined) x.amt = p.amt;
-    if (p.bhog) x.bhog = p.bhog;
+    if (p.deliver !== undefined) { if (p.deliver) x.deliver = true; else delete x.deliver; }
+    if (p.issued !== undefined) { if (p.issued) x.issued = true; else delete x.issued; }
     if (p.bill !== undefined) { const b = cleanBill(p.bill); if (b) x.bill = b; else delete x.bill; }
   } else if (p.action === "add") {
     const e = p.entry; S.manual.push({ id: e.id, name: e.name, addr: e.addr });
     S.rec[e.id] = { status: e.status, amt: e.amt };
-    if (e.bhog) S.rec[e.id].bhog = e.bhog;
+    if (e.deliver) S.rec[e.id].deliver = true;
+    if (e.issued) S.rec[e.id].issued = true;
     const b = cleanBill(e.bill); if (b) S.rec[e.id].bill = b;
   } else if (p.action === "delete") {
     S.manual = S.manual.filter(m => m.id !== p.id); delete S.rec[p.id];
   }
 }
-function norm(s) { return { rec: (s && s.rec) || {}, manual: (s && s.manual) || [] }; }
+function norm(s) {
+  const rec = (s && s.rec) || {};
+  for (const k in rec) { const x = rec[k]; if (x && x.bhog) { if (x.bhog === "deliver") x.deliver = true; if (x.bhog === "issued") x.issued = true; delete x.bhog; } } // older single-choice data
+  return { rec, manual: (s && s.manual) || [] };
+}
 /* Saves are sent one at a time (in order) so quick successive edits can never overwrite each other.
    If a save fails it is NOT kept as a device-only entry: the screen re-syncs with the server and you are told. */
 let pending = 0, chain = Promise.resolve();
@@ -379,7 +400,7 @@ async function post(p) {
     let r = await send();
     if (r.status === 401) { storePin(""); if (await ensureAuth()) r = await send(); else return { ok: false, msg: "PIN needed – not saved" }; }
     if (r.status === 401) return { ok: false, msg: "Wrong PIN – not saved" };
-    if (!r.ok) return { ok: false, msg: "Not saved (server error) – please try again" };
+    if (!r.ok) { let j = {}; try { j = await r.json(); } catch (e) {} return { ok: false, msg: j.error === "bhog_not_ready" ? NOT_READY : "Not saved (server error) – please try again" }; }
     return { ok: true, data: await r.json() };
   } catch (e) { return { ok: false, msg: "Not saved (no connection) – please try again" }; }
 }
@@ -407,9 +428,14 @@ $("out").addEventListener("click", e => {
   if (b.id === "more") { limit += 60; render(); }
   else if (b.dataset.tog) { const id = b.dataset.tog, card = b.closest(".card"); expanded.set(id, !card.classList.contains("open")); render(); }
   else if (b.dataset.s && !b.disabled) act({ action: "set", id: b.dataset.id, status: b.dataset.s }, "2026 marked " + b.dataset.s.toUpperCase());
-  else if (b.dataset.bhog && !b.disabled) act({ action: "set", id: b.dataset.id, bhog: b.dataset.bhog }, "Bhog: " + BH[b.dataset.bhog]);
   else if (b.dataset.save) saveEdit(b.dataset.save);
   else if (b.dataset.del && confirm("Delete this manual entry?")) act({ action: "delete", id: b.dataset.del }, "Entry deleted");
+});
+$("out").addEventListener("change", e => {
+  const t = e.target; if (!t.dataset || !t.dataset.bh) return;
+  const on = t.checked, kind = t.dataset.bh;
+  if (kind === "issued" && on && !bhogReady()) { render(); return toast(NOT_READY); }
+  act({ action: "set", id: t.dataset.id, [kind]: on }, kind === "issued" ? (on ? "Bhog marked issued" : "Bhog issued removed") : (on ? "Bhog marked to be delivered" : "Bhog to be delivered removed"));
 });
 $("out").addEventListener("keydown", e => { const id = e.target.dataset && (e.target.dataset.amt || e.target.dataset.bill); if (e.key === "Enter" && id) { e.preventDefault(); saveEdit(id); } });
 function saveEdit(id) {
@@ -454,7 +480,8 @@ $("addForm").addEventListener("submit", async e => {
   const name = $("aName").value.trim(), amt = parseFloat($("aAmt").value);
   if (!name) return toast("Name is required");
   if (!okAmt(amt)) return toast("Enter a valid amount");
-  const entry = { id: "m" + Date.now() + Math.floor(Math.random() * 900 + 100), name, addr: $("aAddr").value.trim(), amt, status: $("aSt").value, bhog: $("aBhog").value, bill: cleanBill($("aBill").value) };
+  const entry = { id: "m" + Date.now() + Math.floor(Math.random() * 900 + 100), name, addr: $("aAddr").value.trim(), amt, status: $("aSt").value, deliver: $("aBhD").checked, issued: $("aBhI").checked, bill: cleanBill($("aBill").value) };
+  if ($("aBhI").checked && !bhogReady()) return toast(NOT_READY);
   const btn = document.querySelector(".snav .done");
   adding = true; btn.disabled = true; btn.textContent = "Saving…";
   const ok = await act({ action: "add", entry }, "Entry added");
@@ -471,8 +498,8 @@ function csvCell(v) {
   return /[",\n\r]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
 }
 $("expBtn").onclick = () => {
-  const head = ["2025 Bill No","Book","Name","Address","2025 Amount (Rs)","2025 Status","2025 Note","2026 Bill No","2026 Amount (Rs)","2026 Status","2026 Bhog","Entry Type"];
-  const rows = items().map(r => { const x = r26(r); return [r.cn ?? "", r.manual ? "" : r.book, r.name, r.addr, r.amt25 ?? "", r.st25 ? LBL[r.st25] : "", r.note, x.bill ?? "", x.amt ?? "", x.status ? LBL[x.status] : "", x.bhog ? BH[x.bhog] : "", r.manual ? "Manual (2026)" : "Original"]; });
+  const head = ["2025 Bill No","Book","Name","Address","2025 Amount (Rs)","2025 Status","2025 Note","2026 Bill No","2026 Amount (Rs)","2026 Status","2026 Bhog To Be Delivered","2026 Bhog Issued","Entry Type"];
+  const rows = items().map(r => { const x = r26(r); return [r.cn ?? "", r.manual ? "" : r.book, r.name, r.addr, r.amt25 ?? "", r.st25 ? LBL[r.st25] : "", r.note, x.bill ?? "", x.amt ?? "", x.status ? LBL[x.status] : "", x.deliver ? "Yes" : "", x.issued ? "Yes" : "", r.manual ? "Manual (2026)" : "Original"]; });
   const csv = "\ufeff" + [head].concat(rows).map(r => r.map(csvCell).join(",")).join("\r\n");
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));

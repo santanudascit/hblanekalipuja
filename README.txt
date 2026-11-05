@@ -25,6 +25,8 @@ EDITING PIN
   If you change ADMIN_PIN in Netlify, devices will be asked again automatically.
 
 BHOG (2026)
-  Each entry has a Bhog status: "To be delivered" or "Issued". Set it from the entry card,
-  or when adding a new entry. The top boxes and filter buttons list each group
-  (sorted by 2026 bill number). The CSV export has a "2026 Bhog" column.
+  Two optional switches on each entry: "To be delivered" and "Issued". Mark one, both, or none; switch off to undo.
+  "Issued" can only be marked from 8 Nov 2026 (00:00 India time). Before that the app and the server
+  both say "Bhog not ready". The date is BHOG_OPEN in netlify/functions/status.mjs and in public/index.html.
+  The top boxes and filter buttons list each group (sorted by 2026 bill number).
+  The CSV export has "2026 Bhog To Be Delivered" and "2026 Bhog Issued" columns.
