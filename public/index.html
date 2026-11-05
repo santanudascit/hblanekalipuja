@@ -126,8 +126,6 @@ mark{background:rgba(255,204,0,.55);color:inherit;border-radius:4px;padding:0 1p
     <button class="chip" data-f="25due">2025 Due</button>
     <button class="chip" data-f="26paid">2026 Paid</button>
     <button class="chip" data-f="26due">2026 Due</button>
-    <button class="chip" data-f="26none">2026 Not marked</button>
-    <button class="chip" data-f="26nobill">2026 No bill no.</button>
   </div>
   <div class="info" id="info"></div>
   <div id="out"></div>
@@ -199,7 +197,7 @@ function passes(r) {
   switch (filter) {
     case "25paid": return r.st25 === "paid"; case "25due": return r.st25 === "due";
     case "26paid": return x.status === "paid"; case "26due": return x.status === "due";
-    case "26none": return !x.status; case "26nobill": return !x.bill; default: return true;
+    default: return true;
   }
 }
 /* 2026 bill no. ascending (numeric-aware); entries without a bill no. go last */
@@ -314,19 +312,37 @@ function applyLocal(p) {
   }
 }
 function norm(s) { return { rec: (s && s.rec) || {}, manual: (s && s.manual) || [] }; }
-async function act(p, okMsg) {
-  if (!(await ensureAuth())) return toast("PIN needed to edit");
-  const before = JSON.stringify(S);
-  applyLocal(p); stats(); render();
+/* Saves are sent one at a time (in order) so quick successive edits can never overwrite each other.
+   If a save fails it is NOT kept as a device-only entry: the screen re-syncs with the server and you are told. */
+let pending = 0, chain = Promise.resolve();
+async function post(p) {
   const send = () => fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...p, pin }) });
   try {
-    if (!shared) throw new Error("local");
     let r = await send();
-    if (r.status === 401) { storePin(""); if (await ensureAuth()) r = await send(); }
-    if (r.status === 401) { S = JSON.parse(before); stats(); render(); return toast("Wrong PIN – not saved"); }
-    if (!r.ok) throw new Error("fail");
-    S = norm(await r.json()); stats(); render(); toast(okMsg + " (saved for everyone)");
-  } catch (e) { saveLocal(); toast(okMsg + " (this device only)"); }
+    if (r.status === 401) { storePin(""); if (await ensureAuth()) r = await send(); else return { ok: false, msg: "PIN needed – not saved" }; }
+    if (r.status === 401) return { ok: false, msg: "Wrong PIN – not saved" };
+    if (!r.ok) return { ok: false, msg: "Not saved (server error) – please try again" };
+    return { ok: true, data: await r.json() };
+  } catch (e) { return { ok: false, msg: "Not saved (no connection) – please try again" }; }
+}
+async function resync() {
+  try { const r = await fetch(API, { cache: "no-store" }); if (r.ok) { const j = await r.json(); if (j && j.rec) S = norm(j); } } catch (e) {}
+  stats(); render();
+}
+async function act(p, okMsg) {
+  if (!(await ensureAuth())) { toast("PIN needed to edit"); return false; }
+  applyLocal(p); stats(); render();
+  if (!shared) { saveLocal(); toast(okMsg + " (this device only)"); return true; }
+  pending++;
+  const job = chain.then(() => post(p));
+  chain = job.catch(() => {});
+  let res; try { res = await job; } finally { pending--; }
+  if (res.ok) {
+    if (!pending) { S = norm(res.data); stats(); render(); }
+    toast(okMsg + " (saved for everyone)"); return true;
+  }
+  toast(res.msg); if (!pending) await resync();
+  return false;
 }
 $("out").addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
@@ -372,13 +388,18 @@ $("aSugg").addEventListener("pointerdown", e => {
   const d = e.target.closest("[data-a]"); if (!d) return; e.preventDefault();
   $("aAddr").value = d.dataset.a; $("aSugg").innerHTML = "";
 });
-$("addForm").addEventListener("submit", e => {
-  e.preventDefault();
+let adding = false;
+$("addForm").addEventListener("submit", async e => {
+  e.preventDefault(); if (adding) return;
   const name = $("aName").value.trim(), amt = parseFloat($("aAmt").value);
   if (!name) return toast("Name is required");
   if (!okAmt(amt)) return toast("Enter a valid amount");
   const entry = { id: "m" + Date.now() + Math.floor(Math.random() * 900 + 100), name, addr: $("aAddr").value.trim(), amt, status: $("aSt").value, bill: cleanBill($("aBill").value) };
-  act({ action: "add", entry }, "Entry added");
+  const btn = document.querySelector(".snav .done");
+  adding = true; btn.disabled = true; btn.textContent = "Saving…";
+  const ok = await act({ action: "add", entry }, "Entry added");
+  adding = false; btn.disabled = false; btn.textContent = "Add";
+  if (!ok) return; /* keep the sheet open with everything typed so nothing is lost */
   $("addForm").reset(); openSheet(false);
   filter = "all"; limit = 60; document.querySelectorAll(".chip").forEach(x => x.classList.toggle("on", x.dataset.f === "all"));
   $("q").value = name; showSugg(); $("sugg").style.display = "none"; render();

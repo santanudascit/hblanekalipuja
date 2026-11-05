@@ -6,7 +6,7 @@ import { getStore } from "@netlify/blobs";
 const KEY = "data2026";
 
 export default async (req) => {
-  const store = getStore("kalipuja-2026");
+  const store = getStore({ name: "kalipuja-2026", consistency: "strong" }); // always read the latest saved data
   const json = (o, s = 200) =>
     new Response(JSON.stringify(o), { status: s, headers: { "content-type": "application/json", "cache-control": "no-store" } });
   const load = async () => {
