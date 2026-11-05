@@ -94,6 +94,14 @@ mark{background:rgba(245,158,11,.5);color:inherit;border-radius:4px;padding:0 1p
 .sw input:checked+i{background:var(--gold);box-shadow:none}.sw.ind input:checked+i{background:var(--ind)}
 .sw input:checked+i::after{transform:translateX(20px)}
 .row[hidden]{display:none}
+.pill.nobill{background:var(--duebg);color:var(--due);box-shadow:inset 0 0 0 1px var(--due)}
+.card.prem{border:1.5px solid #e2a63b;background:linear-gradient(180deg,rgba(245,176,40,.16),rgba(245,176,40,0) 130px),var(--card);box-shadow:0 8px 24px rgba(245,158,11,.28)}
+.premrow{margin-top:8px}
+.prem-badge{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:6px;padding:5px 13px 5px 9px;border-radius:99px;font-size:.72rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#4a2300;background:linear-gradient(135deg,#fff1b8 0%,#f9c846 38%,#e39a12 70%,#f7d56b 100%);box-shadow:0 2px 10px rgba(227,154,18,.55),inset 0 1px 0 rgba(255,255,255,.8),inset 0 -1px 0 rgba(120,60,0,.25);border:1px solid #c98a10}
+.prem-badge .crown{font-size:.95rem;filter:drop-shadow(0 1px 1px rgba(120,60,0,.4))}
+.prem-badge::after{content:"";position:absolute;top:0;bottom:0;width:40%;left:-60%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.75),transparent);animation:shine 3.2s ease-in-out infinite}
+@keyframes shine{0%,55%{left:-60%}100%{left:130%}}
+@media(prefers-reduced-motion:reduce){.prem-badge::after{animation:none}}
 .stat small{display:block;font-size:.74rem;color:var(--mut);font-weight:600;margin-top:1px}
 .hint{font-size:.78rem;color:var(--mut);margin:6px 6px 0}
 .arow{display:flex;align-items:center;gap:14px;width:100%;border:0;background:none;text-align:left;padding:14px;position:relative}
@@ -164,6 +172,8 @@ mark{background:rgba(245,158,11,.5);color:inherit;border-radius:4px;padding:0 1p
     <button class="chip" data-f="26due">2026 Due</button>
     <button class="chip" data-f="bhogdeliver">Bhog to be delivered</button>
     <button class="chip" data-f="bhogissued">Bhog issued</button>
+    <button class="chip" data-f="billnone">Bill not issued</button>
+    <button class="chip" data-f="premium">👑 Premium members</button>
     <button class="chip" data-f="25paid">2025 Paid</button>
     <button class="chip" data-f="25due">2025 Due</button>
   </div>
@@ -253,11 +263,17 @@ function stats() {
   $("s25p").textContent = rs(a); $("s25d").textContent = rs(b); $("s26p").textContent = rs(c); $("s26d").textContent = rs(d);
   $("sb1").textContent = b1; $("sb2").textContent = b2; $("sb2x").textContent = bx ? bx + " box" + (bx === 1 ? "" : "es") + " issued" : "";
 }
+/* 2026 bill numbers 251-300 belong to premium members */
+const PREMIUM_MIN = 251, PREMIUM_MAX = 300;
+function isPremium(r) { const b = String(r26(r).bill || "").trim(); if (!/^\d+$/.test(b)) return false; const n = Number(b); return n >= PREMIUM_MIN && n <= PREMIUM_MAX; }
+/* an entry that has 2026 data (amount or payment status) but no 2026 bill number = bill not issued */
+function billNotIssued(r) { const x = r26(r); return !x.bill && (!!x.status || x.amt != null); }
 function passes(r) {
   const x = r26(r);
   switch (filter) {
     case "25paid": return r.st25 === "paid"; case "25due": return r.st25 === "due";
     case "26paid": return x.status === "paid"; case "26due": return x.status === "due";
+    case "billnone": return billNotIssued(r); case "premium": return isPremium(r);
     case "bhogdeliver": return !!x.deliver; case "bhogissued": return !!x.issued;
     default: return true;
   }
@@ -284,7 +300,7 @@ function render() {
     $("out").innerHTML = `<div class="empty"><div class="big">🪔</div><b>Search to begin</b><p>Type a name, address or bill number above,<br>or tap any box or button to see a list.</p></div>`;
     return;
   }
-  const sorted = ["26paid", "26due", "bhogdeliver", "bhogissued"].includes(filter);
+  const sorted = ["26paid", "26due", "bhogdeliver", "bhogissued", "premium"].includes(filter);
   if (sorted) list.sort(byBill);
   $("info").textContent = list.length + " result" + (list.length === 1 ? "" : "s") + (sorted ? " · sorted by 2026 bill no." : "");
   if (!list.length) { $("out").innerHTML = `<div class="empty"><div class="big">🔍</div><b>Nothing found</b><p>Try a shorter name or part of the address.</p></div>`; return; }
@@ -294,7 +310,7 @@ function render() {
     const pills = `<div class="pills">
       ${s ? `<span class="pill ${s}">2026 ${LBL[s]}${x.amt != null ? " · " + rs(x.amt) : ""}</span>` : '<span class="pill">2026 not marked</span>'}
       ${x.deliver ? '<span class="pill deliver">🍚 Bhog to be delivered</span>' : ""}${x.issued ? `<span class="pill issued">✅ Bhog issued${x.boxes != null ? " · " + x.boxes + " box" + (x.boxes === 1 ? "" : "es") : ""}</span>` : ""}${!x.deliver && !x.issued ? '<span class="pill">🍚 No bhog marked</span>' : ""}
-      ${x.bill ? `<span class="pill bill">2026 Bill #${hl(x.bill,q)}</span>` : ""}
+      ${x.bill ? `<span class="pill bill">2026 Bill #${hl(x.bill,q)}</span>` : (billNotIssued(r) ? '<span class="pill nobill">⚠ Bill not issued</span>' : "")}
       ${r.manual ? '<span class="pill new">NEW · 2026</span>' : `<span class="pill">2025 Bill #${r.cn}</span>`}</div>`;
     const body = !open ? "" : `<div class="body">
       ${r.note ? `<div class="note">2025 note: ${esc(r.note)}</div>` : ""}
@@ -317,7 +333,8 @@ function render() {
       <div class="gt">2025 · locked</div>
       <div class="group"><div class="row"><span>Amount</span><span class="val">${r.amt25 == null ? "—" : rs(r.amt25)}${s25 ? `<span class="badge b-${s25}">${LBL[s25]}</span>` : ""}</span></div></div>
       ${r.manual ? `<button class="del" data-del="${r.id}">Delete this entry</button>` : ""}</div>`;
-    return `<div class="card ${open ? "open" : ""}"><button class="chead" data-tog="${r.id}"><div class="ctext"><div class="name">${hl(r.name,hq)}</div><div class="addr">${hl(r.addr,hq)}</div></div><span class="chev">›</span></button>${pills}${body}</div>`;
+    const prem = isPremium(r);
+    return `<div class="card ${open ? "open" : ""} ${prem ? "prem" : ""}"><button class="chead" data-tog="${r.id}"><div class="ctext"><div class="name">${hl(r.name,hq)}</div><div class="addr">${hl(r.addr,hq)}</div>${prem ? '<div class="premrow"><span class="prem-badge"><span class="crown">👑</span>Premium Member</span></div>' : ""}</div><span class="chev">›</span></button>${pills}${body}</div>`;
   }).join("") + (list.length > limit ? `<button class="more" id="more">Show more (${list.length - limit} left)</button>` : "");
 }
 /* search autocomplete */

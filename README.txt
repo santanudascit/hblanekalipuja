@@ -40,3 +40,9 @@ EXPORT / BACKUP / RESTORE  (bottom bar, database icon)
 BHOG BOXES
   When "Issued" is on, a "Boxes issued" number box appears (whole number) on the entry and in the Add Entry form.
   Switching Issued off clears it. The top "Bhog issued" box also shows the total boxes issued. Included in backups.
+
+BILL NOT ISSUED / PREMIUM MEMBERS
+  An entry with 2026 data (amount or payment status) but no 2026 bill number is tagged "Bill not issued"
+  and listed under the "Bill not issued" button. It disappears from there once a bill number is saved.
+  2026 bill numbers 251-300 are premium members: they get a gold "Premium Member" badge and card,
+  and are listed under the "Premium members" button (PREMIUM_MIN / PREMIUM_MAX in public/index.html).
