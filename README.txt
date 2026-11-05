@@ -46,3 +46,38 @@ BILL NOT ISSUED / PREMIUM MEMBERS
   and listed under the "Bill not issued" button. It disappears from there once a bill number is saved.
   2026 bill numbers 251-300 are premium members: they get a gold "Premium Member" badge and card,
   and are listed under the "Premium members" button (PREMIUM_MIN / PREMIUM_MAX in public/index.html).
+
+EXPENSES (2026)  - "Expenses" tab at the top of the page
+  Add Expense (bottom bar, when the Expenses tab is open) = manual entry: Paid to / For, Note (optional), Date,
+  and a choice of "Full payment" or "Partial payment" + the amount.
+  Partial payment: the expense card shows an "Add another payment" field (amount + date) under the same name.
+  Every payment is listed, with a "Total payment" line that adds them all up. A payment can be deleted (x) if
+  there is more than one; the whole expense can be deleted too.
+  IN-HAND BALANCE = 2026 bill collection (all 2026 bills marked Paid) - 2026 total expenses (all payments).
+  It is shown at the top of the Expenses tab and as a box on the Bills tab (tap it to open Expenses).
+  The balance turns red when it is negative.
+  Data > "Export expenses" downloads a CSV of every payment plus total / collection / in-hand balance.
+  Expenses are included in Backup / Restore (older backups without expenses leave current expenses untouched).
+  Editing needs the same ADMIN_PIN as the rest of 2026 data.
+
+EXPENSE SEARCH
+  The Expenses tab has a search bar with auto-complete (name, note, date or amount). Picking a suggestion or pressing Search
+  filters the list; the info line shows the total of the matching expenses. The balance card always shows the overall figures.
+  The 2025 Collected / 2025 Due boxes were removed from the top of the Bills tab (the 2025 Paid / Due filter buttons remain).
+
+OTHER INCOME (Expenses tab)
+  "Add Expense / Income" > switch to "Other income" for money that is not a bill collection, e.g. "Withdrawn from bank".
+  Fields: Source, Note (optional), Date, Amount received. Entries are listed under "Other income" in the Expenses tab
+  (searchable, can be deleted) and are included in the expenses CSV export and in Backup / Restore.
+  IN-HAND BALANCE = 2026 bill collection + other income - 2026 total expenses.
+
+NO DATE IN EXPENSE / INCOME ENTRY
+  The Add Expense / Other income form and the "Add another payment" field no longer ask for a date.
+  Today's date is saved quietly in the background (used only to keep newest entries first); it is not shown,
+  not searched and not in the expenses CSV any more.
+
+LOGO / THEME
+  public/logo.jpg                Maa Kali picture shown in the page header (round, gold ring) and on the "Search to begin" screen
+  public/icon-192.png, icon-512.png, apple-touch-icon.png, manifest.webmanifest
+                                 browser tab icon and "Add to Home Screen" icon / name
+  To change the picture later, replace these image files (same names).

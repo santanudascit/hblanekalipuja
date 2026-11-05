@@ -1,8 +1,9 @@
 import { getStore } from "@netlify/blobs";
 
 // 2025 data is read-only (embedded in index.html). This function stores 2026 data only.
-// GET  /api/status -> { locked: <true if ADMIN_PIN is set>, rec: { "<id>": { status, amt, bill, deliver, issued, boxes } }, manual: [ { id, name, addr } ] }
-// POST /api/status -> { action: "set"|"add"|"delete"|"restore", ...,  pin }   (pin needed only if ADMIN_PIN env var is set)
+// GET  /api/status -> { locked: <true if ADMIN_PIN is set>, rec: { "<id>": { status, amt, bill, deliver, issued, boxes } }, manual: [ { id, name, addr } ],
+//                       expenses: [ { id, name, note, date, type: "full"|"partial", pays: [ { id, amt, date } ] } ] }
+// POST /api/status -> { action: "set"|"add"|"delete"|"restore"|"addExpense"|"addPayment"|"delPayment"|"delExpense"|"addIncome"|"delIncome", ...,  pin }   (pin needed only if ADMIN_PIN env var is set)
 const KEY = "data2026";
 // Bhog "Issued" can only be marked from 9 Nov 2026, 12:00 noon India time (= 9 Nov 06:30 UTC).
 const BHOG_OPEN = Date.UTC(2026, 10, 9, 6, 30);
@@ -15,7 +16,7 @@ export default async (req) => {
     const d = (await store.get(KEY, { type: "json" })) || {};
     const rec = d.rec || {};
     for (const k in rec) { const x = rec[k]; if (x && x.bhog) { if (x.bhog === "deliver") x.deliver = true; if (x.bhog === "issued") x.issued = true; delete x.bhog; } } // older single-choice data
-    return { rec, manual: d.manual || [] };
+    return { rec, manual: d.manual || [], expenses: Array.isArray(d.expenses) ? d.expenses : [], income: Array.isArray(d.income) ? d.income : [] };
   };
 
   if (req.method === "GET") return json({ ...(await load()), locked: !!process.env.ADMIN_PIN });
@@ -32,6 +33,29 @@ export default async (req) => {
   const isBool = (v) => typeof v === "boolean";
   const notReady = () => Date.now() < BHOG_OPEN;
   const okBoxes = (v) => Number.isInteger(v) && v >= 0 && v <= 100000; // how many bhog boxes were issued
+  const okDate = (v) => typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v) && !isNaN(Date.parse(v));
+  const okPay = (p) => !!p && typeof p === "object" && /^p\d{6,}$/.test(String(p.id)) && typeof p.amt === "number" && Number.isFinite(p.amt) && p.amt > 0 && p.amt <= 1e9 && okDate(p.date);
+  // validates one expense (and its payments); returns a clean copy or null
+  const cleanExp = (e) => {
+    if (!e || typeof e !== "object" || !/^e\d{6,}$/.test(String(e.id))) return null;
+    const name = String(e.name || "").trim().slice(0, 100);
+    if (!name || (e.type !== "full" && e.type !== "partial") || !okDate(e.date)) return null;
+    const seen = new Set(), pays = [];
+    for (const p of Array.isArray(e.pays) ? e.pays.slice(0, 200) : []) {
+      if (!okPay(p) || seen.has(p.id)) continue;
+      seen.add(p.id); pays.push({ id: p.id, amt: p.amt, date: p.date });
+    }
+    if (!pays.length) return null;
+    if (e.type === "full") pays.splice(1); // a full payment is a single payment
+    return { id: e.id, name, note: String(e.note || "").trim().slice(0, 200), date: e.date, type: e.type, pays };
+  };
+  // other income (e.g. "Withdrawn from bank"): one amount per entry
+  const cleanInc = (e) => {
+    if (!e || typeof e !== "object" || !/^i\d{6,}$/.test(String(e.id))) return null;
+    const name = String(e.name || "").trim().slice(0, 100);
+    if (!name || !okDate(e.date) || typeof e.amt !== "number" || !Number.isFinite(e.amt) || e.amt <= 0 || e.amt > 1e9) return null;
+    return { id: e.id, name, note: String(e.note || "").trim().slice(0, 200), date: e.date, amt: e.amt };
+  };
   const d = await load();
 
   if (b.action === "set") {
@@ -92,6 +116,41 @@ export default async (req) => {
       if (Object.keys(c).length) rec[k] = c;
     }
     d.manual = manual; d.rec = rec;
+    if (Array.isArray(src.expenses)) { // older backups have no expenses: then the current ones are kept
+      const ids = new Set(); d.expenses = [];
+      for (const e of src.expenses.slice(0, 5000)) { const c = cleanExp(e); if (c && !ids.has(c.id)) { ids.add(c.id); d.expenses.push(c); } }
+    }
+    if (Array.isArray(src.income)) { // older backups have no other income: then the current entries are kept
+      const ids = new Set(); d.income = [];
+      for (const e of src.income.slice(0, 5000)) { const c = cleanInc(e); if (c && !ids.has(c.id)) { ids.add(c.id); d.income.push(c); } }
+    }
+  } else if (b.action === "addIncome") {
+    const e = cleanInc(b.income);
+    if (!e || d.income.length >= 5000 || d.income.some((x) => x.id === e.id)) return json({ error: "bad income" }, 400);
+    d.income.push(e);
+  } else if (b.action === "delIncome") {
+    const id = String(b.id || "");
+    if (!d.income.some((x) => x.id === id)) return json({ error: "unknown income" }, 400);
+    d.income = d.income.filter((x) => x.id !== id);
+  } else if (b.action === "addExpense") {
+    const e = cleanExp(b.expense);
+    if (!e || d.expenses.length >= 5000 || d.expenses.some((x) => x.id === e.id)) return json({ error: "bad expense" }, 400);
+    d.expenses.push(e);
+  } else if (b.action === "addPayment") {
+    const e = d.expenses.find((x) => x.id === String(b.id || ""));
+    if (!e) return json({ error: "unknown expense" }, 400);
+    if (e.type !== "partial") return json({ error: "this expense is a full payment" }, 400);
+    if (!okPay(b.pay) || e.pays.length >= 200 || e.pays.some((p) => p.id === b.pay.id)) return json({ error: "bad payment" }, 400);
+    e.pays.push({ id: b.pay.id, amt: b.pay.amt, date: b.pay.date });
+  } else if (b.action === "delPayment") {
+    const e = d.expenses.find((x) => x.id === String(b.id || ""));
+    if (!e || !e.pays.some((p) => p.id === b.pid)) return json({ error: "unknown payment" }, 400);
+    if (e.pays.length <= 1) return json({ error: "delete the whole expense instead" }, 400);
+    e.pays = e.pays.filter((p) => p.id !== b.pid);
+  } else if (b.action === "delExpense") {
+    const id = String(b.id || "");
+    if (!d.expenses.some((x) => x.id === id)) return json({ error: "unknown expense" }, 400);
+    d.expenses = d.expenses.filter((x) => x.id !== id);
   } else if (b.action === "delete") {
     const id = String(b.id || "");
     if (!d.manual.some((m) => m.id === id)) return json({ error: "only manual entries can be deleted" }, 400);
