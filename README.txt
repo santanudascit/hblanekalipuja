@@ -23,3 +23,8 @@ EDITING PIN
   Once the correct PIN is entered it is remembered on that device (until browser data is cleared
   or the lock button in the bottom bar is used to lock the device again).
   If you change ADMIN_PIN in Netlify, devices will be asked again automatically.
+
+BHOG (2026)
+  Each entry has a Bhog status: "To be delivered" or "Issued". Set it from the entry card,
+  or when adding a new entry. The top boxes and filter buttons list each group
+  (sorted by 2026 bill number). The CSV export has a "2026 Bhog" column.
