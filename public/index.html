@@ -162,6 +162,11 @@ mark{background:rgba(245,158,11,.5);color:inherit;border-radius:4px;padding:0 1p
 .bal small{font-size:.72rem;font-weight:700;letter-spacing:.1em;opacity:.9}
 .bal b{display:block;font-size:2.1rem;font-weight:800;letter-spacing:-.02em;margin:2px 0}
 .bal p{margin:0;font-size:.82rem;opacity:.85}
+.bsum{border-radius:22px;padding:14px 18px;margin-bottom:12px;color:#fff;background:linear-gradient(135deg,#2e2a73,#4b44b8 70%,#6a5acd);box-shadow:0 8px 22px rgba(63,58,143,.35)}
+.bsum small{font-weight:700;letter-spacing:.06em;opacity:.85;font-size:.72rem}
+.bsum b{display:block;font-size:2.1rem;font-weight:800;letter-spacing:-.02em;line-height:1.15}
+.bsum .split{display:flex;flex-wrap:wrap;gap:4px 18px;margin-top:4px;font-size:.84rem;opacity:.92}
+.card.nb{border-left:4px solid var(--ind)}
 .xdel{border:0;background:var(--duebg);color:var(--due);width:26px;height:26px;border-radius:50%;font-size:13px;padding:0;flex:none}
 .row.tot{font-weight:750}.row.tot>span:first-child{color:var(--ink);font-weight:750}
 .addsplit{display:flex;gap:10px;margin-top:10px}.addsplit .tint{margin-top:0}
@@ -177,7 +182,7 @@ mark{background:rgba(245,158,11,.5);color:inherit;border-radius:4px;padding:0 1p
     <button class="stat g" data-f="26paid"><span>2026 Collected</span><b id="s26p">–</b></button>
     <button class="stat r" data-f="26due"><span>2026 Due</span><b id="s26d">–</b></button>
     <button class="stat o" data-f="bhogdeliver"><span>🍚 Bhog to be delivered</span><b id="sb1">–</b></button>
-    <button class="stat i" data-f="bhogissued"><span>✅ Bhog issued</span><b id="sb2">–</b><small id="sb2x"></small></button>
+    <button class="stat i" data-f="bhogissued"><span>📦 Bhog issued · total boxes</span><b id="sb2">–</b><small id="sb2x"></small></button>
     <button class="stat wide g" id="sbalBox" data-f="expenses"><span>💰 In-hand balance · collection + other income − expenses</span><b id="sbal">–</b></button>
   </div>
   <div class="searchbox">
@@ -195,6 +200,7 @@ mark{background:rgba(245,158,11,.5);color:inherit;border-radius:4px;padding:0 1p
     <button class="chip" data-f="26due">2026 Due</button>
     <button class="chip" data-f="bhogdeliver">Bhog to be delivered</button>
     <button class="chip" data-f="bhogissued">Bhog issued</button>
+    <button class="chip" data-f="bhognobill">Bhog without bill</button>
     <button class="chip" data-f="billnone">Bill not issued</button>
     <button class="chip" data-f="premium">👑 Premium members</button>
     <button class="chip" data-f="25paid">2025 Paid</button>
@@ -229,14 +235,15 @@ mark{background:rgba(245,158,11,.5);color:inherit;border-radius:4px;padding:0 1p
 <div class="backdrop" id="bd"></div>
 <div class="sheet" id="addPanel" role="dialog" aria-label="New entry">
   <div class="grab"></div>
-  <div class="snav"><button type="button" id="aCancel">Cancel</button><b>New Entry · 2026</b><button class="done" type="submit" form="addForm">Add</button></div>
+  <div class="snav"><button type="button" id="aCancel">Cancel</button><b id="aTitle">New Entry · 2026</b><button class="done" type="submit" form="addForm">Add</button></div>
   <form id="addForm" autocomplete="off">
+    <div class="seg" style="margin-bottom:14px"><button type="button" class="b1 sel" id="aKBill">🧾 With bill / amount</button><button type="button" class="b2" id="aKBhog">🍚 Bhog only (no bill)</button></div>
     <div class="group">
       <div class="row"><label for="aName">Name</label><input id="aName" required maxlength="100" placeholder="Required" autocapitalize="characters"></div>
-      <div class="row"><label for="aAddr">Address</label><input id="aAddr" maxlength="200" placeholder="Start typing…" autocapitalize="characters"></div>
+      <div class="row" id="aAddrRow"><label for="aAddr">Address</label><input id="aAddr" maxlength="200" placeholder="Start typing…" autocapitalize="characters"></div>
       <div class="asugg" id="aSugg"></div>
     </div>
-    <div class="group">
+    <div class="group" id="aBillGroup">
       <div class="row"><label for="aBill">Bill no.</label><input id="aBill" maxlength="20" placeholder="2026 bill no."></div>
       <div class="row"><label for="aAmt">Amount (₹)</label><input id="aAmt" type="number" min="0" step="any" inputmode="decimal" required placeholder="Required"></div>
       <div class="row"><label for="aSt">Payment</label><select id="aSt" dir="rtl"><option value="paid">Paid</option><option value="due">Due</option></select></div>
@@ -244,6 +251,8 @@ mark{background:rgba(245,158,11,.5);color:inherit;border-radius:4px;padding:0 1p
       <div class="row"><label for="aBhI">Bhog issued</label><label class="sw ind"><input type="checkbox" id="aBhI"><i></i></label></div>
       <div class="row" id="aBoxRow" hidden><label for="aBoxes">Boxes issued</label><input id="aBoxes" type="number" min="0" max="100000" step="1" inputmode="numeric" placeholder="How many?"></div>
     </div>
+    <div class="group" id="aBhogGroup" hidden><div class="row"><label for="aBoxesOnly">Boxes issued</label><input id="aBoxesOnly" type="number" min="1" max="100000" step="1" inputmode="numeric" placeholder="How many?"></div></div>
+    <div class="hint" id="aBhogHint" hidden>For people who have no bill: just the name and how many bhog boxes were issued. Bhog can be issued from 9 Nov 2026, 12:00 noon.</div>
   </form>
 </div>
 
@@ -271,6 +280,7 @@ mark{background:rgba(245,158,11,.5);color:inherit;border-radius:4px;padding:0 1p
   <div class="snav"><span style="width:60px"></span><b>Data</b><button class="done" type="button" id="dClose">Done</button></div>
   <div class="group">
     <button class="arow" id="dExport" type="button"><span class="ai">📄</span><span><b>Export 2026 list</b><small>CSV with SL No, Name, Address, Amount, Payment status</small></span></button>
+    <button class="arow" id="dBhogExport" type="button"><span class="ai">🍚</span><span><b>Export bhog issued</b><small>CSV of every bhog issued (with and without a bill) and the total boxes</small></span></button>
     <button class="arow" id="dExpExport" type="button"><span class="ai">💸</span><span><b>Export expenses</b><small>CSV with every expense payment, other income and the in-hand balance</small></span></button>
     <button class="arow" id="dFx" type="button"><span class="ai">🎆</span><span><b>Fireworks background</b><small id="dFxS">On · tap to switch off</small></span></button>
     <button class="arow" id="dBackup" type="button"><span class="ai">💾</span><span><b>Backup 2026 data</b><small>Downloads a backup file with everything saved for 2026</small></span></button>
@@ -291,7 +301,7 @@ mark{background:rgba(245,158,11,.5);color:inherit;border-radius:4px;padding:0 1p
 const DATA = [{"cn":1,"name":"ENTALLY PS","addr":"ENTALLY PS","amt":0,"st":"na","note":"","book":"Book 1"},{"cn":2,"name":"NILMONI NANDI","addr":"6/1 H B LANE","amt":301,"st":"paid","note":"","book":"Book 1"},{"cn":3,"name":"SUDIPTA SARKAR","addr":"6/1A H B LANE","amt":501,"st":"paid","note":"","book":"Book 1"},{"cn":4,"name":"DULAL GHOSH","addr":"1A/3F H B LANE","amt":151,"st":"paid","note":"","book":"Book 1"},{"cn":5,"name":"S S MUKHERJEE","addr":"1A/3G H B LANE","amt":101,"st":"paid","note":"","book":"Book 1"},{"cn":6,"name":"PRABIR KUMAR DUTTA","addr":"7E H B LANE","amt":151,"st":"paid","note":"","book":"Book 1"},{"cn":7,"name":"KUNAL GHOSH","addr":"7E H B LANE","amt":201,"st":"paid","note":"","book":"Book 1"},{"cn":8,"name":"H B COMPLEX","addr":"1B H B LANE","amt":1400,"st":"paid","note":"","book":"Book 1"},{"cn":9,"name":"ANUP KR MUKHERJEE","addr":"5F H B LANE","amt":251,"st":"paid","note":"","book":"Book 1"},{"cn":10,"name":"SUSMITA CHATTERJEE","addr":"5F H B LANE","amt":251,"st":"paid","note":"","book":"Book 1"},{"cn":11,"name":"RAJESH KR SHAW","addr":"5E H B LANE","amt":101,"st":"paid","note":"","book":"Book 1"},{"cn":12,"name":"MAMATA CHOWDHURY","addr":"5C H B LANE","amt":100,"st":"paid","note":"","book":"Book 1"},{"cn":13,"name":"MUNNA JAISWAL","addr":"5C H B LANE","amt":101,"st":"paid","note":"","book":"Book 1"},{"cn":14,"name":"TARAK NATH AUDDY","addr":"5C H B LANE","amt":201,"st":"paid","note":"","book":"Book 1"},{"cn":15,"name":"DIBYENDY BHATTACHARYA","addr":"5C H B LANE","amt":151,"st":"paid","note":"","book":"Book 1"},{"cn":16,"name":"PRITAM DUTTA","addr":"5C H B LANE","amt":101,"st":"paid","note":"","book":"Book 1"},{"cn":17,"name":"DIPANKAR DUTTA","addr":"5B H B LANE","amt":201,"st":"paid","note":"","book":"Book 1"},{"cn":18,"name":"BISWAJIT DAS","addr":"1A/4/2 H B LANE","amt":201,"st":"paid","note":"","book":"Book 1"},{"cn":19,"name":"GHANA DA","addr":"1A/4/2 H B LANE","amt":101,"st":"paid","note":"","book":"Book 1"},{"cn":20,"name":"A K DUTTA","addr":"1A/3A/2 H B LANE","amt":101,"st":"paid","note":"","book":"Book 1"},{"cn":21,"name":"M MUNSI","addr":"1A/4A/2 H B LANE","amt":101,"st":"paid","note":"","book":"Book 1"},{"cn":22,"name":"PRASENJIT GHOSH(TENNIS)","addr":"7E H B LANE","amt":601,"st":"paid","note":"","book":"Book 1"},{"cn":23,"name":"RAJU DA","addr":"5F H B LANE","amt":301,"st":"paid","note":"","book":"Book 1"},{"cn":24,"name":"RATNESWAR SARKAR","addr":"5F H B LANE","amt":401,"st":"paid","note":"","book":"Book 1"},{"cn":25,"name":"PETER GOMES","addr":"5E H B LANE","amt":151,"st":"paid","note":"","book":"Book 1"},{"cn":26,"name":"JOYNA ADHIKARY","addr":"5E H B LANE","amt":151,"st":"due","note":"","book":"Book 1"},{"cn":27,"name":"BIKRAMJIT MITRA","addr":"5C H B LANE","amt":101,"st":"paid","note":"","book":"Book 1"},{"cn":28,"name":"MANGAL DAS","addr":"5C H B LANE","amt":101,"st":"paid","note":"","book":"Book 1"},{"cn":29,"name":"SANJOY KUMAR","addr":"5C H B LANE","amt":151,"st":"paid","note":"","book":"Book 1"},{"cn":30,"name":"DEBASIS BHATTACHARYA","addr":"1A/3A/2 H B LANE","amt":151,"st":"paid","note":"","book":"Book 1"},{"cn":31,"name":"GOPAL DAS","addr":"1A/3D H B LANE","amt":151,"st":"paid","note":"","book":"Book 1"},{"cn":32,"name":"PARESH DAS","addr":"7H/48 K D ROAD","amt":151,"st":"paid","note":"","book":"Book 1"},{"cn":33,"name":"BIMAL DAS","addr":"7H/48 K D ROAD","amt":101,"st":"paid","note":"","book":"Book 1"},{"cn":34,"name":"DIPAK GHOSH","addr":"2A/5A H B LANE","amt":151,"st":"paid","note":"","book":"Book 1"},{"cn":35,"name":"L K KUNDU","addr":"12/AG BECHULAL RD","amt":101,"st":"paid","note":"","book":"Book 1"},{"cn":36,"name":"L K DAS","addr":"138C A P ROAD","amt":101,"st":"paid","note":"","book":"Book 1"},{"cn":37,"name":"LOKNATH FURNITURE","addr":"138 A P ROAD","amt":251,"st":"paid","note":"","book":"Book 1"},{"cn":38,"name":"RANJIT JADAV","addr":"138 A P ROAD","amt":200,"st":"paid","note":"","book":"Book 1"},{"cn":39,"name":"AMAR MRIDHA","addr":"138 A P ROAD","amt":201,"st":"due","note":"","book":"Book 1"},{"cn":40,"name":"SOMNATH DAS","addr":"138A A P ROAD","amt":151,"st":"paid","note":"","book":"Book 1"},{"cn":41,"name":"ANUP BHATTACHARYA","addr":"138A A P ROAD","amt":125,"st":"paid","note":"","book":"Book 1"},{"cn":42,"name":"CHAD HAZRA","addr":"138A  A P ROAD","amt":101,"st":"paid","note":"","book":"Book 1"},{"cn":43,"name":"EUROPLAST","addr":"1A/5 H B LANE","amt":401,"st":"paid","note":"","book":"Book 1"},{"cn":44,"name":"BISWAS CABLE","addr":"5E H B LANE","amt":401,"st":"paid","note":"500 NXT YR","book":"Book 1"},{"cn":45,"name":"SUMIT KR GHOSH","addr":"2A/5C H B LANE","amt":201,"st":"paid","note":"","book":"Book 1"},{"cn":46,"name":"SANTOSH KUMAR","addr":"138A A P ROAD","amt":301,"st":"paid","note":"","book":"Book 1"},{"cn":47,"name":"ATASHI ELECTRIC","addr":"118A A P ROAD","amt":201,"st":"paid","note":"","book":"Book 1"},{"cn":48,"name":"BINAY GUPTA","addr":"1A/2A H B LANE","amt":101,"st":"paid","note":"","book":"Book 1"},{"cn":49,"name":"RIJO DEY","addr":"2A/4 H B LANE","amt":601,"st":"paid","note":"","book":"Book 1"},{"cn":50,"name":"VIJAY SINGH","addr":"2A/3 H B LANE","amt":171,"st":"paid","note":"","book":"Book 1"},{"cn":51,"name":"RAJESH MALLICK","addr":"10C/9 H B LANE","amt":601,"st":"paid","note":"","book":"Book 2"},{"cn":52,"name":"DILIP MONDAL","addr":"10C H B LANE","amt":251,"st":"paid","note":"","book":"Book 2"},{"cn":53,"name":"SWAPAN SEAL","addr":"10C H B LANE","amt":151,"st":"paid","note":"","book":"Book 2"},{"cn":54,"name":"NARU PANDA","addr":"10C H B LANE","amt":101,"st":"paid","note":"","book":"Book 2"},{"cn":55,"name":"BUBAI BISWAS","addr":"10C H B LANE","amt":101,"st":"paid","note":"","book":"Book 2"},{"cn":56,"name":"RAJKUMAR BISWAS","addr":"10C H B LANE","amt":101,"st":"paid","note":"","book":"Book 2"},{"cn":57,"name":"DILIP RAM","addr":"10C H B LANE","amt":601,"st":"paid","note":"","book":"Book 2"},{"cn":58,"name":"ASHOK RANA","addr":"10C H B LANE","amt":401,"st":"paid","note":"","book":"Book 2"},{"cn":59,"name":"RAMESHWAR SHARMA","addr":"10C H B LANE","amt":501,"st":"paid","note":"100 BONUS","book":"Book 2"},{"cn":60,"name":"JOY GOMES","addr":"10A H B LANE","amt":201,"st":"paid","note":"","book":"Book 2"},{"cn":61,"name":"RAJU RAUT","addr":"10A H B LANE","amt":151,"st":"paid","note":"","book":"Book 2"},{"cn":62,"name":"B CHOWDHURY","addr":"11 H B LANE","amt":101,"st":"paid","note":"","book":"Book 2"},{"cn":63,"name":"UTTAM KUNDU","addr":"10A H B LANE","amt":201,"st":"paid","note":"","book":"Book 2"},{"cn":64,"name":"MANISH SHAW","addr":"10 H B LANE","amt":101,"st":"paid","note":"100 DUE","book":"Book 2"},{"cn":65,"name":"PATRA BARI","addr":"10 H B LANE","amt":301,"st":"paid","note":"","book":"Book 2"},{"cn":66,"name":"SOMNATH DE","addr":"13B H B LANE","amt":301,"st":"paid","note":"","book":"Book 2"},{"cn":67,"name":"SHYAMAL GHOSH","addr":"9A H B LANE","amt":151,"st":"paid","note":"","book":"Book 2"},{"cn":68,"name":"LAB KR SINGH","addr":"9B H B LANE","amt":201,"st":"paid","note":"","book":"Book 2"},{"cn":69,"name":"AKASH SINGH","addr":"9B H B LANE","amt":301,"st":"paid","note":"","book":"Book 2"},{"cn":70,"name":"SANJIT SHAW","addr":"9B H B LANE","amt":201,"st":"paid","note":"","book":"Book 2"},{"cn":71,"name":"UTTAM CHAKRABORTY","addr":"9B H B LANE","amt":501,"st":"paid","note":"","book":"Book 2"},{"cn":72,"name":"PIKU SHAW","addr":"9B H B LANE","amt":151,"st":"due","note":"","book":"Book 2"},{"cn":73,"name":"BIJON ROY","addr":"9B H B LANE","amt":151,"st":"paid","note":"","book":"Book 2"},{"cn":74,"name":"RAMESH MONDAL","addr":"9B H B LANE","amt":301,"st":"paid","note":"","book":"Book 2"},{"cn":75,"name":"GURIA DEVI","addr":"10A H B LANE","amt":131,"st":"paid","note":"","book":"Book 2"},{"cn":76,"name":"KHOKON GHOSH","addr":"10A H B LANE","amt":201,"st":"paid","note":"","book":"Book 2"},{"cn":77,"name":"BANANI KUNDU","addr":"10A H B LANE","amt":301,"st":"paid","note":"","book":"Book 2"},{"cn":78,"name":"PARTHA PAL","addr":"8A H B LANE","amt":301,"st":"paid","note":"","book":"Book 2"},{"cn":79,"name":"TARAK BASAK","addr":"6/1 H B LANE","amt":251,"st":"paid","note":"","book":"Book 2"},{"cn":80,"name":"R BISWAS","addr":"17 H B LANE","amt":201,"st":"paid","note":"","book":"Book 2"},{"cn":81,"name":"SOMA DAS","addr":"3A H B LANE","amt":101,"st":"paid","note":"","book":"Book 2"},{"cn":82,"name":"RAJU DA","addr":"5/3A H B LANE","amt":151,"st":"paid","note":"","book":"Book 2"},{"cn":83,"name":"GOPAL SARKAR","addr":"5/3A H B LANE","amt":501,"st":"paid","note":"","book":"Book 2"},{"cn":84,"name":"VEENA SINGH","addr":"5/3A H B LANE","amt":201,"st":"paid","note":"","book":"Book 2"},{"cn":85,"name":"SUKUMAR DAS","addr":"5//3A H B LANE","amt":151,"st":"paid","note":"","book":"Book 2"},{"cn":86,"name":"UTTAM SHAW","addr":"5/3A H B LANE","amt":151,"st":"paid","note":"50DUE","book":"Book 2"},{"cn":87,"name":"SUBHANKAR SHAW","addr":"27G H B LANE","amt":100,"st":"paid","note":"","book":"Book 2"},{"cn":88,"name":"RAJESH DA","addr":"27G H B LANE","amt":201,"st":"paid","note":"","book":"Book 2"},{"cn":89,"name":"KABERI DAS","addr":"27G H B LANE","amt":101,"st":"paid","note":"","book":"Book 2"},{"cn":90,"name":"TRIPTI BISWAS","addr":"2E H B LANE","amt":121,"st":"paid","note":"","book":"Book 2"},{"cn":91,"name":"SATYANARAYAN JADAV","addr":"2/1 H B LANE","amt":501,"st":"paid","note":"","book":"Book 2"},{"cn":92,"name":"MIRA RANI BOSE","addr":"22 H B LANE","amt":1101,"st":"paid","note":"","book":"Book 2"},{"cn":93,"name":"AMIYA PAL","addr":"2D/2 H B LANE","amt":101,"st":"paid","note":"","book":"Book 2"},{"cn":94,"name":"R MANNA","addr":"27G H B LANE","amt":101,"st":"paid","note":"","book":"Book 2"},{"cn":95,"name":"SUNNY MALLICK","addr":"10C H B LANE","amt":301,"st":"due","note":"","book":"Book 2"},{"cn":96,"name":"MAMATA GHOSH","addr":"9B H B LANE","amt":2001,"st":"paid","note":"","book":"Book 2"},{"cn":97,"name":"BINOY BHABAN","addr":"27C/1A H B LANE","amt":1500,"st":"paid","note":"","book":"Book 2"},{"cn":98,"name":"ANNAPURNA APARTMENT","addr":"27/1A H B LANE","amt":1200,"st":"paid","note":"","book":"Book 2"},{"cn":99,"name":"AMITAYU MAZUMDER","addr":"27G H B LANE","amt":501,"st":"paid","note":"TO RAJA ONLINE","book":"Book 2"},{"cn":100,"name":"ROCKY GOMES","addr":"2/1 H B LANE","amt":201,"st":"paid","note":"","book":"Book 2"},{"cn":101,"name":"KHOKA DA","addr":"5M H B LANE","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":102,"name":"LUCKY DI","addr":"138A A P ROAD","amt":301,"st":"paid","note":"","book":"Book 3"},{"cn":103,"name":"ABUL KALAM","addr":"138A A P ROAD","amt":100,"st":"paid","note":"","book":"Book 3"},{"cn":104,"name":"SUDHIR SHAW","addr":"138A A P ROAD","amt":131,"st":"paid","note":"","book":"Book 3"},{"cn":105,"name":"SUBHAL SHARMA","addr":"138A A P ROAD","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":106,"name":"JAHAR DAS","addr":"138A A P ROAD","amt":151,"st":"paid","note":"","book":"Book 3"},{"cn":107,"name":"PIYALI PAL","addr":"138A A P ROAD","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":108,"name":"JAGDISH SINGH","addr":"138A A P ROAD","amt":151,"st":"paid","note":"","book":"Book 3"},{"cn":109,"name":"RAJU PAN","addr":"138A A P ROAD","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":110,"name":"BUNTY GUPTA","addr":"138A A P ROAD","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":111,"name":"RAKESH SHAW","addr":"138 A P ROAD","amt":201,"st":"due","note":"","book":"Book 3"},{"cn":112,"name":"SOPHIA JI","addr":"138 A P ROAD","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":113,"name":"RAMESH NAIK","addr":"138A A P ROAD","amt":201,"st":"paid","note":"","book":"Book 3"},{"cn":114,"name":"ABDUL ROB","addr":"138A A P ROAD","amt":121,"st":"due","note":"","book":"Book 3"},{"cn":115,"name":"M GHOSH DOSTIDAR","addr":"128A A P ROAD","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":116,"name":"ANIKET PATRA","addr":"118A A P ROAD","amt":201,"st":"paid","note":"","book":"Book 3"},{"cn":117,"name":"DIPAK CHANDRA","addr":"118 A P ROAD","amt":151,"st":"paid","note":"*","book":"Book 3"},{"cn":118,"name":"A DHAR","addr":"118A A P ROAD","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":119,"name":"JAGANNATH ONLINE SERVICES","addr":"118A A P ROAD","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":120,"name":"BAPPA DA (FRIDGE)","addr":"118A A P ROAD","amt":201,"st":"paid","note":"","book":"Book 3"},{"cn":121,"name":"UTSAV GALLERY","addr":"A P ROAD","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":122,"name":"NARAYAN SAHA","addr":"A P ROAD","amt":201,"st":"paid","note":"","book":"Book 3"},{"cn":123,"name":"PRABHAT KAKA (DOKAN)","addr":"A P ROAD","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":124,"name":"BHARAT SHAW(BIKE GARAGE)","addr":"7H/44 K D ROAD","amt":151,"st":"paid","note":"","book":"Book 3"},{"cn":125,"name":"P N PLASTIC","addr":"1/1B POTTARY ROAD","amt":301,"st":"paid","note":"","book":"Book 3"},{"cn":126,"name":"CIT CAFE","addr":"CIT ROAD","amt":121,"st":"paid","note":"","book":"Book 3"},{"cn":127,"name":"55NO WARD BABSAYI SAMITI","addr":"A P ROAD","amt":500,"st":"paid","note":"","book":"Book 3"},{"cn":128,"name":"AYUSH ROY","addr":"2C H B LANE","amt":201,"st":"due","note":"","book":"Book 3"},{"cn":129,"name":"A GHOSAL","addr":"2C H B LANE","amt":151,"st":"paid","note":"","book":"Book 3"},{"cn":130,"name":"KOUSHIK GHOSH","addr":"2C H B LANE","amt":151,"st":"paid","note":"","book":"Book 3"},{"cn":131,"name":"PUSHPA DAS","addr":"2C H B LANE","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":132,"name":"RONI DA","addr":"1A/3H H B LANE","amt":201,"st":"paid","note":"","book":"Book 3"},{"cn":133,"name":"DAS MEDICAL HALL","addr":"7P K D ROAD","amt":121,"st":"paid","note":"","book":"Book 3"},{"cn":134,"name":"DIGITAL TELECOM","addr":"1/1A POTTARY ROAD","amt":100,"st":"paid","note":"","book":"Book 3"},{"cn":135,"name":"SHIV SANKAR MISTANNA BHANDER","addr":"A P ROAD","amt":201,"st":"paid","note":"","book":"Book 3"},{"cn":136,"name":"MANIK DA - JEWELLERY","addr":"5F H B LANE","amt":501,"st":"paid","note":"","book":"Book 3"},{"cn":137,"name":"RANJIIT RAJAT","addr":"5C H B LANE","amt":121,"st":"due","note":"","book":"Book 3"},{"cn":138,"name":"GOUTAM BISWAS","addr":"5C H B LANE","amt":151,"st":"due","note":"","book":"Book 3"},{"cn":139,"name":"ABHIJIT DAS","addr":"1A/38 H B LANE","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":140,"name":"PREMA ROY","addr":"1A/1 H B LANE","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":141,"name":"R BISWAS (RAJIB)","addr":"7W K D ROAD","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":142,"name":"SOMA BOSE(RAIL DI)","addr":"2A/4 H B LANE","amt":1500,"st":"paid","note":"","book":"Book 3"},{"cn":143,"name":"S K DAS","addr":"2E H B LANE","amt":251,"st":"paid","note":"","book":"Book 3"},{"cn":145,"name":"PRASENJIT ROYCHOUDHURY(H B COMPLEX)","addr":"1B H B LANE","amt":200,"st":"paid","note":"","book":"Book 3"},{"cn":146,"name":"DEBU KAKA","addr":"118A A P ROAD","amt":100,"st":"paid","note":"","book":"Book 3"},{"cn":147,"name":"PRATIBHA PATRA(RUNA NANDY)","addr":"118A A P ROAD","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":148,"name":"A NAG","addr":"1A/7B H B LANE","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":149,"name":"LIFEGUARD","addr":"A P ROAD","amt":1001,"st":"paid","note":"","book":"Book 3"},{"cn":150,"name":"SETT BROTHERS","addr":"H B LANE","amt":101,"st":"paid","note":"","book":"Book 3"},{"cn":151,"name":"SHIVAM PYNE","addr":"17 H B LANE","amt":101,"st":"paid","note":"","book":"Book 4"},{"cn":152,"name":"ABHISHEK RAM","addr":"3 H B LANE","amt":1000,"st":"due","note":"","book":"Book 4"},{"cn":153,"name":"PRASANTA DUTTA(MOON)","addr":"3/1B H B LANE","amt":101,"st":"paid","note":"","book":"Book 4"},{"cn":154,"name":"ROBIN BISWAS","addr":"5/3A H B LANE","amt":201,"st":"paid","note":"","book":"Book 4"},{"cn":155,"name":"SOMA DAS","addr":"26B H B LANE","amt":301,"st":"paid","note":"","book":"Book 4"},{"cn":156,"name":"LALTU DA","addr":"6/1 H B LANE","amt":201,"st":"paid","note":"","book":"Book 4"},{"cn":157,"name":"SHANKAR BASAK","addr":"6/1 H B LANE","amt":1201,"st":"paid","note":"","book":"Book 4"},{"cn":158,"name":"NABA KAKA","addr":"5K H B LANE","amt":101,"st":"paid","note":"","book":"Book 4"},{"cn":159,"name":"SAMBHU MAZUMDER","addr":"5K H B LANE","amt":301,"st":"paid","note":"200 DUE","book":"Book 4"},{"cn":160,"name":"AMAR DA","addr":"10C H B LANE","amt":1001,"st":"paid","note":"","book":"Book 4"},{"cn":161,"name":"ABHIJIT SEN","addr":"4 H B LANE","amt":201,"st":"paid","note":"","book":"Book 4"},{"cn":162,"name":"PRECISION ADHESIVE","addr":"27A H B LANE","amt":350,"st":"paid","note":"","book":"Book 4"},{"cn":163,"name":"KRISHNA DEB","addr":"3 H B LANE","amt":300,"st":"paid","note":"","book":"Book 4"},{"cn":164,"name":"RADHAKRISHNA APT","addr":"3 H B LANE","amt":3000,"st":"paid","note":"","book":"Book 4"},{"cn":165,"name":"GANESH KAKIMA","addr":"3 H B LANE","amt":301,"st":"paid","note":"","book":"Book 4"},{"cn":166,"name":"BHADU KAKU","addr":"17 H B LANE","amt":101,"st":"paid","note":"","book":"Book 4"},{"cn":167,"name":"DAKU KAKA","addr":"5/3A H B LANE","amt":101,"st":"paid","note":"","book":"Book 4"},{"cn":168,"name":"ARCHANA DA","addr":"138A A P ROAD","amt":101,"st":"paid","note":"","book":"Book 4"},{"cn":169,"name":"APARNA KARKI","addr":"MUKUNDAPUR","amt":500,"st":"paid","note":"","book":"Book 4"},{"cn":170,"name":"ANITA GHOSH","addr":"8B H B LANE","amt":302,"st":"paid","note":"","book":"Book 4"},{"cn":171,"name":"SAYANTIKA SAHA","addr":"26A H B LANE","amt":501,"st":"paid","note":"","book":"Book 4"},{"cn":172,"name":"ASHIT BARAN KAYAL","addr":"405 MTG (BEHALA)","amt":501,"st":"paid","note":"","book":"Book 4"},{"cn":173,"name":"KARTHIK DA (AAHAAR)","addr":"3/1C H B LANE","amt":151,"st":"paid","note":"","book":"Book 4"},{"cn":174,"name":"SOMONI DAS","addr":"25 H B LANE","amt":200,"st":"paid","note":"","book":"Book 4"},{"cn":175,"name":"DOLON DA","addr":"25 H B LANE","amt":251,"st":"paid","note":"","book":"Book 4"},{"cn":176,"name":"KAGAL GHOSH","addr":"4A H B LANE","amt":200,"st":"paid","note":"51 DUE","book":"Book 4"},{"cn":177,"name":"AMAL GHOSH","addr":"5//3A H B LANE","amt":201,"st":"paid","note":"","book":"Book 4"},{"cn":178,"name":"HARIPADA GHOSH","addr":"27F H B LANE","amt":101,"st":"paid","note":"","book":"Book 4"},{"cn":179,"name":"SMARTYA GHOSH","addr":"5D H B LANE","amt":1001,"st":"paid","note":"BILLI BABU","book":"Book 4"},{"cn":180,"name":"KESTO KAKA","addr":"5/3A H B LANE","amt":201,"st":"paid","note":"","book":"Book 4"},{"cn":181,"name":"SUMONA SEAL","addr":"10C H B LANE","amt":601,"st":"paid","note":"","book":"Book 4"},{"cn":182,"name":"APU DA","addr":"5/3A H B LANE","amt":501,"st":"paid","note":"","book":"Book 4"},{"cn":183,"name":"BISWAJIT DAS","addr":"5/3A H B LANE","amt":501,"st":"paid","note":"","book":"Book 4"},{"cn":184,"name":"DEBASIS DA (MASTER FRIEND)","addr":"A P ROAD","amt":150,"st":"paid","note":"","book":"Book 4"},{"cn":185,"name":"BAIDYA DA","addr":"H B LANE","amt":501,"st":"paid","note":"","book":"Book 4"},{"cn":186,"name":"LABU DA","addr":"H B LANE","amt":500,"st":"paid","note":"","book":"Book 4"},{"cn":187,"name":"PRANJAL ROY","addr":"3/1B H B LANE","amt":101,"st":"paid","note":"","book":"Book 4"},{"cn":188,"name":"DILIP SAHA","addr":"26 H B LANE","amt":501,"st":"paid","note":"","book":"Book 4"},{"cn":189,"name":"RONU ROY","addr":"25 H B LANE","amt":500,"st":"paid","note":"","book":"Book 4"},{"cn":190,"name":"SOMEN BOSE","addr":"","amt":505,"st":"paid","note":"","book":"Book 4"},{"cn":191,"name":"CONTINENTAL ENGG.","addr":"5L/1 H B LANE","amt":701,"st":"paid","note":"","book":"Book 4"},{"cn":192,"name":"DANIEL MISHRA","addr":"4 H B LANE","amt":200,"st":"paid","note":"","book":"Book 4"},{"cn":193,"name":"BHANU DA","addr":"25 H B LANE","amt":501,"st":"paid","note":"","book":"Book 4"},{"cn":194,"name":"ANJAN MONDAL","addr":"2F H B LANE","amt":251,"st":"paid","note":"","book":"Book 4"},{"cn":195,"name":"SWAPAN DAS & BHULAN NATH","addr":"6A H B LANE","amt":151,"st":"paid","note":"","book":"Book 4"},{"cn":196,"name":"ABHIJIT & MUNMUN CHATTERJEE","addr":"CENTRAL AVENUE","amt":501,"st":"paid","note":"","book":"Book 4"},{"cn":197,"name":"SUPRIYO DA","addr":"10 H B LANE","amt":301,"st":"paid","note":"","book":"Book 4"},{"cn":198,"name":"GOUTAM DA","addr":"7C H B LANE","amt":351,"st":"paid","note":"","book":"Book 4"},{"cn":199,"name":"BUBAI DAS","addr":"16 H B LANE","amt":501,"st":"paid","note":"","book":"Book 4"},{"cn":200,"name":"GOUTAM DA","addr":"17/1 H B LANE","amt":301,"st":"paid","note":"","book":"Book 4"},{"cn":201,"name":"RASENDU BISWAS","addr":"18 H B LANE","amt":501,"st":"paid","note":"","book":"Book 5"},{"cn":202,"name":"MANOJ MALLICK","addr":"5/3A H B LANE","amt":1001,"st":"due","note":"","book":"Book 5"},{"cn":203,"name":"ROSHAN SHAW","addr":"5/3A H B LANE","amt":501,"st":"paid","note":"","book":"Book 5"},{"cn":204,"name":"BABUA KAKA","addr":"5/3A H B LANE","amt":101,"st":"paid","note":"","book":"Book 5"},{"cn":205,"name":"SONU KUMAR","addr":"5/3A H B LANE","amt":101,"st":"paid","note":"","book":"Book 5"},{"cn":206,"name":"RANJHA KAKA","addr":"16 H B LANE","amt":301,"st":"paid","note":"","book":"Book 5"},{"cn":207,"name":"ARIJIT GHOSH","addr":"25 H B LANE","amt":201,"st":"paid","note":"","book":"Book 5"},{"cn":208,"name":"JOYDEB CHAKROBORTY","addr":"25 H B LANE","amt":301,"st":"paid","note":"","book":"Book 5"},{"cn":209,"name":"MITHU MANNA","addr":"25 H B LANE","amt":301,"st":"paid","note":"","book":"Book 5"},{"cn":210,"name":"TARAKNATH KUITI","addr":"25 H B LANE","amt":301,"st":"paid","note":"","book":"Book 5"},{"cn":211,"name":"TARAK KAR","addr":"26A H B LANE","amt":151,"st":"paid","note":"","book":"Book 5"},{"cn":212,"name":"ARJUN GUPTA","addr":"4 H B LANE","amt":251,"st":"paid","note":"","book":"Book 5"},{"cn":213,"name":"KAUSTAV DE (BABUA)","addr":"13A H B LANE","amt":1001,"st":"paid","note":"","book":"Book 5"},{"cn":214,"name":"MEMBERSHIP - CANCEL","addr":"CANCELED","amt":0,"st":"paid","note":"","book":"Book 5"},{"cn":215,"name":"MEMBERSHIP - CANCEL","addr":"CANCELED","amt":0,"st":"paid","note":"","book":"Book 5"},{"cn":216,"name":"BYABSAHI SAMITY 56NO WARD","addr":"39A POTTERY ROAD","amt":300,"st":"paid","note":"","book":"Book 5"},{"cn":217,"name":"HAPPY MOTORS","addr":"27C H B LANE","amt":800,"st":"paid","note":"","book":"Book 5"},{"cn":218,"name":"SAMBHU DA","addr":"4A H B LANE","amt":700,"st":"paid","note":"","book":"Book 5"},{"cn":219,"name":"MONIKA GHOSH","addr":"4A H B LANE","amt":201,"st":"paid","note":"","book":"Book 5"},{"cn":220,"name":"SANJOY DA","addr":"5L H B LANE","amt":101,"st":"paid","note":"","book":"Book 5"},{"cn":221,"name":"ALPANA DI","addr":"H B LANE","amt":401,"st":"paid","note":"","book":"Book 5"},{"cn":222,"name":"SANKY RAUT","addr":"5/3A H B LANE","amt":1001,"st":"due","note":"","book":"Book 5"},{"cn":223,"name":"PRAMOD DA (IRONMAN)","addr":"H B LANE","amt":101,"st":"paid","note":"","book":"Book 5"},{"cn":224,"name":"ADHOYA(BLOOD COLLECTION)","addr":"A P ROAD","amt":501,"st":"paid","note":"","book":"Book 5"},{"cn":225,"name":"MAHESH DA","addr":"10C H B LANE","amt":500,"st":"paid","note":"","book":"Book 5"},{"cn":226,"name":"PABAN DA SHOP","addr":"14 H B LANE","amt":633,"st":"paid","note":"","book":"Book 5"},{"cn":251,"name":"SUDHANYA BASU","addr":"IBM","amt":1000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":252,"name":"SOMASRI DAS","addr":"IBM","amt":801,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":253,"name":"SURAJIT ROY","addr":"CBS","amt":1501,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":254,"name":"SIMANTINI ROY","addr":"IBM","amt":800,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":255,"name":"SAUBHIK DAS","addr":"IBM","amt":1500,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":256,"name":"SOMSUVRO BANERJEE","addr":"CBS","amt":3000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":257,"name":"DIP DAS","addr":"IBM","amt":1001,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":258,"name":"MANSI BHISE","addr":"IBM","amt":1000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":259,"name":"DEEPAK DA","addr":"H B LANE","amt":20000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":260,"name":"EMON MISHRA","addr":"IBM","amt":1500,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":261,"name":"ROHIT GHOSH - POPO","addr":"17 H B LANE","amt":10000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":262,"name":"SHANKAR DA","addr":"A P ROAD","amt":2000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":263,"name":"MD ASIF","addr":"5A H B LANE","amt":3500,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":264,"name":"WELLWISHER – KMC","addr":"KMC-KAUSHIK-CBS","amt":1000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":265,"name":"DOMICILE ASSC – KMC","addr":"KMC-KAUSHIK-CBS","amt":1700,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":266,"name":"PAR DESIGN – KMC","addr":"KMC-KAUSHIK-CBS","amt":2000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":267,"name":"RATNASREE CHOWDHURY","addr":"IBM","amt":1000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":268,"name":"SAYANTI MUKHERJEE","addr":"IBM","amt":703,"st":"paid","note":"501+101+101","book":"Book 6 (MEMBERSHIP)"},{"cn":269,"name":"CANCELED","addr":"CANCELED","amt":0,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":270,"name":"NIPA","addr":"27 H B LANE","amt":1001,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":271,"name":"LUCKY","addr":"19 H B LANE","amt":1500,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":272,"name":"P L DUTTA - BABUNI","addr":"6B H B LANE","amt":1001,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":273,"name":"GURUPADA GHOSH - GURUKAKA","addr":"19 H B LANE","amt":3000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":274,"name":"BARTICK CHAKRABORTY","addr":"H B LANE","amt":2000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":275,"name":"ARIJIT GUHAROY - PAPPU DA","addr":"H B LANE","amt":2001,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":276,"name":"MANAS KONAR - PAPPU DENTIST","addr":"H B LANE","amt":2000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":277,"name":"NIRMAL KAKA","addr":"RONGKOL","amt":1001,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":278,"name":"RANJAN BISWAS - BUGO DA","addr":"5N H B LANE","amt":8000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":279,"name":"MANAS GHOSH - DUSTU","addr":"4A H B LANE","amt":2501,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":280,"name":"ASHIS DA & CO.","addr":"H B LANE","amt":20000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":281,"name":"DIPANKAR DA","addr":"H B LANE","amt":1500,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":282,"name":"TAPAS DA","addr":"2A/5B H B LANE","amt":601,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":283,"name":"SHRABONI GHOSH - DUSTU TENANT","addr":"4 H B LANE","amt":151,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":284,"name":"TUNAL DA","addr":"11 H B LANE","amt":2000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":285,"name":"RANADHIR BISWAS - TUKA","addr":"20D HB LANE","amt":10000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":286,"name":"BIKRAM DA","addr":"4 HB LANE","amt":1000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":287,"name":"PRANAB ROY - KMC","addr":"KMC-KAUSHIK-CBS","amt":1000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":288,"name":"SUBHAJIT - CHIMNEY","addr":"25 HB LANE","amt":4000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":289,"name":"SHANTANU DAS - BITTU","addr":"26 HB LANE","amt":3000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":290,"name":"PRANAMI BOX","addr":"MANDIR - HB LANE","amt":925,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":291,"name":"ANIRBAN GHOSH - BABAI","addr":"4A HB LANE","amt":1500,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":292,"name":"SHANTANU GHOSH - RAJA","addr":"19 HB LANE","amt":2000,"st":"paid","note":"500 DUE","book":"Book 6 (MEMBERSHIP)"},{"cn":293,"name":"SUDIP DAS - BURO","addr":"26 HB LANE","amt":1000,"st":"due","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":294,"name":"DEBASHISH MUKHERJEE - MASTER","addr":"27F HB LANE","amt":7000,"st":"due","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":295,"name":"RAJIB GHOSH - TATTU","addr":"4 HB LANE","amt":2300,"st":"due","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":296,"name":"DAMU DA","addr":"136 A P ROAD","amt":2000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"},{"cn":297,"name":"DEBKUMAR DUTTA","addr":"3/1B H B LANE","amt":2000,"st":"paid","note":"","book":"Book 6 (MEMBERSHIP)"}];
 const API = "/api/status", LSKEY = "kalipuja2026-state", PINKEY = "kp-pin";
 const BASE = DATA.map(r => ({ id: String(r.cn), cn: r.cn, name: r.name, addr: r.addr, amt25: r.amt, st25: r.st, note: r.note, book: r.book, manual: false }));
-let S = { rec: {}, manual: [], expenses: [], income: [] }, shared = false, pinRequired = false, filter = "all", limit = 60, view = "bills";
+let S = { rec: {}, manual: [], expenses: [], income: [], bhogOnly: [] }, shared = false, pinRequired = false, filter = "all", limit = 60, view = "bills";
 let pin = ""; try { pin = localStorage.getItem(PINKEY) || ""; } catch (e) {}
 const $ = id => document.getElementById(id);
 const rs = n => "₹" + Number(n).toLocaleString("en-IN");
@@ -319,6 +329,14 @@ function match(q) {
   const toks = q.split(/\s+/).filter(Boolean);
   return items().filter(r => { const h = (r.name + " " + r.addr + " " + r.note + " " + (r26(r).bill || "")).toLowerCase(); return toks.every(t => h.includes(t)); });
 }
+const bxs = n => n + " box" + (n === 1 ? "" : "es");
+const ppl = n => n + (n === 1 ? " person" : " people");
+/* all bhog issued: boxes on bills + boxes given to people without a bill */
+function bhogTotals() {
+  let bx = 0, pb = 0; items().forEach(r => { const x = r26(r); if (x.issued) { pb++; bx += x.boxes || 0; } });
+  const nbx = S.bhogOnly.reduce((a, e) => a + e.boxes, 0);
+  return { bx, pb, nbx, pn: S.bhogOnly.length, total: bx + nbx };
+}
 function stats() {
   let a = 0, b = 0, c = 0, d = 0, b1 = 0, b2 = 0, bx = 0;
   items().forEach(r => {
@@ -330,7 +348,8 @@ function stats() {
   const bal = Math.round((c + incTotal() - expTotal()) * 100) / 100;
   $("sbal").textContent = rsb(bal); $("sbalBox").className = "stat wide " + (bal < 0 ? "r" : "g");
   if (view === "exp") renderExp();
-  $("sb1").textContent = b1; $("sb2").textContent = b2; $("sb2x").textContent = bx ? bx + " box" + (bx === 1 ? "" : "es") + " issued" : "";
+  $("sb1").textContent = b1; const T = bhogTotals();
+  $("sb2").textContent = T.total; $("sb2x").textContent = (T.pb + T.pn) ? ppl(T.pb + T.pn) + (T.nbx ? " · " + bxs(T.nbx) + " without a bill" : "") : "";
 }
 /* 2026 bill numbers 251-300 belong to premium members */
 const PREMIUM_MIN = 251, PREMIUM_MAX = 300;
@@ -364,6 +383,10 @@ function render() {
   const q = $("q").value.trim().toLowerCase(), hq = isBillQ(q) ? "" : q;
   $("clr").hidden = !$("q").value;
   let list = (q ? match(q) : items()).filter(passes);
+  if (filter === "bhognobill") list = [];
+  /* people with bhog but no bill: shown when searching by name, and under the Bhog issued / Bhog without bill buttons */
+  const bo = (filter === "bhognobill" || filter === "bhogissued" || (filter === "all" && q)) && !isBillQ(q)
+    ? S.bhogOnly.filter(e => q.split(/\s+/).filter(Boolean).every(t => e.name.toLowerCase().includes(t))).sort((a, b) => b.id.localeCompare(a.id)) : [];
   if (!q && filter === "all") {
     $("info").textContent = "";
     $("out").innerHTML = `<div class="empty"><img class="logo2" src="/logo.jpg" alt="Maa Kali"><b>Search to begin</b><p>Type a name, address or bill number above,<br>or tap any box or button to see a list.</p></div>`;
@@ -371,9 +394,13 @@ function render() {
   }
   const sorted = ["26paid", "26due", "bhogdeliver", "bhogissued", "premium"].includes(filter);
   if (sorted) list.sort(byBill);
-  $("info").textContent = list.length + " result" + (list.length === 1 ? "" : "s") + (sorted ? " · sorted by 2026 bill no." : "");
-  if (!list.length) { $("out").innerHTML = `<div class="empty"><div class="big">🔍</div><b>Nothing found</b><p>Try a shorter name or part of the address.</p></div>`; return; }
-  $("out").innerHTML = list.slice(0, limit).map(r => {
+  const nres = list.length + bo.length;
+  $("info").textContent = nres + " result" + (nres === 1 ? "" : "s") + (sorted && list.length ? " · sorted by 2026 bill no." : "");
+  if (!list.length && !bo.length) { $("out").innerHTML = `<div class="empty"><div class="big">🔍</div><b>Nothing found</b><p>Try a shorter name or part of the address.</p></div>`; return; }
+  const T = bhogTotals();
+  const sumHtml = filter === "bhogissued" || filter === "bhognobill" ? `<div class="bsum"><small>📦 TOTAL BHOG ISSUED</small><b>${bxs(T.total)}</b><div class="split"><span>${bxs(T.bx)} with bill · ${ppl(T.pb)}</span><span>${bxs(T.nbx)} without bill · ${ppl(T.pn)}</span></div></div>` : "";
+  const boHtml = bo.length ? `<div class="gt">Bhog issued without a bill · ${bo.length} · ${bxs(bo.reduce((a, e) => a + e.boxes, 0))}</div>` + bo.map(e => `<div class="card nb"><div class="chead" style="cursor:default"><div class="ctext"><div class="name">${hl(e.name, hq)}</div><div class="addr">🍚 Bhog issued · no bill</div></div><button class="xdel" data-bodel="${e.id}" aria-label="Delete this bhog entry">✕</button></div><div class="pills"><span class="pill issued">✅ Bhog issued · ${bxs(e.boxes)}</span><span class="pill">No bill</span></div><div class="body" style="padding-top:12px"><div class="group"><div class="row"><span>Boxes issued</span><input type="number" min="1" max="100000" step="1" inputmode="numeric" data-boxo="${e.id}" value="${e.boxes}"></div></div></div></div>`).join("") : "";
+  const billHtml = list.slice(0, limit).map(r => {
     const x = r26(r), s = x.status || "", s25 = r.st25;
     const open = expanded.has(r.id) ? expanded.get(r.id) : list.length <= 2;
     const pills = `<div class="pills">
@@ -405,6 +432,7 @@ function render() {
     const prem = isPremium(r);
     return `<div class="card ${open ? "open" : ""} ${prem ? "prem" : ""}"><button class="chead" data-tog="${r.id}"><div class="ctext"><div class="name">${hl(r.name,hq)}</div><div class="addr">${hl(r.addr,hq)}</div>${prem ? '<div class="premrow"><span class="prem-badge"><span class="crown">👑</span>Premium Member</span></div>' : ""}</div><span class="chev">›</span></button>${pills}${body}</div>`;
   }).join("") + (list.length > limit ? `<button class="more" id="more">Show more (${list.length - limit} left)</button>` : "");
+  $("out").innerHTML = sumHtml + billHtml + boHtml;
 }
 /* search autocomplete */
 let sel = -1, sugg = [];
@@ -493,8 +521,15 @@ function applyLocal(p) {
     const b = cleanBill(e.bill); if (b) S.rec[e.id].bill = b;
   } else if (p.action === "delete") {
     S.manual = S.manual.filter(m => m.id !== p.id); delete S.rec[p.id];
+  } else if (p.action === "addBhogOnly") {
+    S.bhogOnly.push(p.bhog);
+  } else if (p.action === "setBhogOnly") {
+    const e = S.bhogOnly.find(x => x.id === p.id); if (e) e.boxes = p.boxes;
+  } else if (p.action === "delBhogOnly") {
+    S.bhogOnly = S.bhogOnly.filter(x => x.id !== p.id);
   } else if (p.action === "restore") {
-    const keep = S.expenses, keepI = S.income; S = norm(JSON.parse(JSON.stringify(p.data)));
+    const keep = S.expenses, keepI = S.income, keepB = S.bhogOnly; S = norm(JSON.parse(JSON.stringify(p.data)));
+    if (!Array.isArray(p.data.bhogOnly)) S.bhogOnly = keepB; // older backups have no bhog-without-bill list
     if (!Array.isArray(p.data.expenses)) S.expenses = keep; // older backups have no expenses
     if (!Array.isArray(p.data.income)) S.income = keepI;
   } else if (p.action === "addExpense") {
@@ -514,7 +549,7 @@ function applyLocal(p) {
 function norm(s) {
   const rec = (s && s.rec) || {};
   for (const k in rec) { const x = rec[k]; if (x && x.bhog) { if (x.bhog === "deliver") x.deliver = true; if (x.bhog === "issued") x.issued = true; delete x.bhog; } } // older single-choice data
-  return { rec, manual: (s && s.manual) || [], expenses: (s && Array.isArray(s.expenses)) ? s.expenses : [], income: (s && Array.isArray(s.income)) ? s.income : [] };
+  return { rec, manual: (s && s.manual) || [], expenses: (s && Array.isArray(s.expenses)) ? s.expenses : [], income: (s && Array.isArray(s.income)) ? s.income : [], bhogOnly: (s && Array.isArray(s.bhogOnly)) ? s.bhogOnly : [] };
 }
 /* Saves are sent one at a time (in order) so quick successive edits can never overwrite each other.
    If a save fails it is NOT kept as a device-only entry: the screen re-syncs with the server and you are told. */
@@ -554,10 +589,18 @@ $("out").addEventListener("click", e => {
   else if (b.dataset.tog) { const id = b.dataset.tog, card = b.closest(".card"); expanded.set(id, !card.classList.contains("open")); render(); }
   else if (b.dataset.s && !b.disabled) act({ action: "set", id: b.dataset.id, status: b.dataset.s }, "2026 marked " + b.dataset.s.toUpperCase());
   else if (b.dataset.save) saveEdit(b.dataset.save);
+  else if (b.dataset.bodel) { if (confirm("Delete this bhog entry?")) act({ action: "delBhogOnly", id: b.dataset.bodel }, "Bhog entry deleted"); }
   else if (b.dataset.del && confirm("Delete this manual entry?")) act({ action: "delete", id: b.dataset.del }, "Entry deleted");
 });
 $("out").addEventListener("change", e => {
   const t = e.target;
+  if (t.dataset && t.dataset.boxo) { /* edit boxes of a bhog-without-bill entry */
+    const id = t.dataset.boxo, n = Number(t.value.trim()), had = (S.bhogOnly.find(x => x.id === id) || {}).boxes;
+    if (t.value.trim() === "" || !okBoxes(n) || n < 1) { render(); return toast("Enter a whole number of boxes (1 or more)"); }
+    if (!bhogReady()) { render(); return toast(NOT_READY); }
+    if (n === had) return;
+    return void act({ action: "setBhogOnly", id, boxes: n }, bxs(n) + " issued saved");
+  }
   if (t.dataset && t.dataset.boxes) {
     const id = t.dataset.boxes, raw = t.value.trim(), had = (S.rec[id] || {}).boxes;
     if (raw === "") { if (had == null) return; return void act({ action: "set", id, boxes: null }, "Boxes cleared"); }
@@ -571,7 +614,7 @@ $("out").addEventListener("change", e => {
   if (kind === "issued" && on && !bhogReady()) { render(); return toast(NOT_READY); }
   act({ action: "set", id: t.dataset.id, [kind]: on }, kind === "issued" ? (on ? "Bhog marked issued" : "Bhog issued removed") : (on ? "Bhog marked to be delivered" : "Bhog to be delivered removed"));
 });
-$("out").addEventListener("keydown", e => { if (e.key === "Enter" && e.target.dataset && e.target.dataset.boxes) { e.preventDefault(); e.target.blur(); return; } const id = e.target.dataset && (e.target.dataset.amt || e.target.dataset.bill); if (e.key === "Enter" && id) { e.preventDefault(); saveEdit(id); } });
+$("out").addEventListener("keydown", e => { if (e.key === "Enter" && e.target.dataset && (e.target.dataset.boxes || e.target.dataset.boxo)) { e.preventDefault(); e.target.blur(); return; } const id = e.target.dataset && (e.target.dataset.amt || e.target.dataset.bill); if (e.key === "Enter" && id) { e.preventDefault(); saveEdit(id); } });
 function saveEdit(id) {
   const bi = document.querySelector(`input[data-bill="${id}"]`), ai = document.querySelector(`input[data-amt="${id}"]`);
   const bill = cleanBill(bi.value), had = (S.rec[id] || {}).bill || "";
@@ -589,7 +632,7 @@ function saveEdit(id) {
 const openSheet = o => { $("addPanel").classList.toggle("open", o); $("bd").classList.toggle("open", o); if (o) setTimeout(() => $("aName").focus(), 300); else $("aSugg").innerHTML = ""; };
 $("addBtn").onclick = async () => { if (await ensureAuth()) (view === "exp" ? openExp(true) : openSheet(true)); };
 $("bd").onclick = () => { openSheet(false); openData(false); openExp(false); };
-$("aCancel").onclick = () => { openSheet(false); $("addForm").reset(); };
+$("aCancel").onclick = () => { openSheet(false); $("addForm").reset(); setAddKind("bill"); };
 /* address autocomplete (from all existing addresses) */
 function addrList() {
   const m = new Map();
@@ -608,12 +651,33 @@ $("aSugg").addEventListener("pointerdown", e => {
   const d = e.target.closest("[data-a]"); if (!d) return; e.preventDefault();
   $("aAddr").value = d.dataset.a; $("aSugg").innerHTML = "";
 });
-let adding = false;
+let adding = false, aKind = "bill";
+function setAddKind(k) {
+  aKind = k; $("aKBill").classList.toggle("sel", k === "bill"); $("aKBhog").classList.toggle("sel", k === "bhog");
+  $("aTitle").textContent = k === "bill" ? "New Entry · 2026" : "Bhog without bill · 2026";
+  $("aAddrRow").hidden = k === "bhog"; $("aSugg").innerHTML = ""; $("aBillGroup").hidden = k === "bhog"; $("aBhogGroup").hidden = k === "bill"; $("aBhogHint").hidden = k === "bill";
+  $("aAmt").required = k === "bill"; $("aBoxesOnly").required = k === "bhog";
+}
+$("aKBill").onclick = () => setAddKind("bill"); $("aKBhog").onclick = () => setAddKind("bhog");
+async function submitBhogOnly() {
+  const name = $("aName").value.trim(), boxes = Number($("aBoxesOnly").value);
+  if (!name) return toast("Name is required");
+  if (!(okBoxes(boxes) && boxes >= 1)) return toast("Enter how many bhog boxes (a whole number, 1 or more)");
+  if (!bhogReady()) return toast(NOT_READY);
+  const btn = document.querySelector(".snav .done");
+  adding = true; btn.disabled = true; btn.textContent = "Saving…";
+  const ok = await act({ action: "addBhogOnly", bhog: { id: newId("b"), name, boxes } }, bxs(boxes) + " issued to " + name);
+  adding = false; btn.disabled = false; btn.textContent = "Add";
+  if (!ok) return; /* keep the sheet open with everything typed so nothing is lost */
+  $("addForm").reset(); setAddKind("bill"); openSheet(false);
+  $("q").value = ""; setFilter("bhognobill");
+}
 const syncBoxRow = () => { $("aBoxRow").hidden = !$("aBhI").checked; };
 $("aBhI").addEventListener("change", syncBoxRow);
 $("addForm").addEventListener("reset", () => setTimeout(syncBoxRow, 0));
 $("addForm").addEventListener("submit", async e => {
   e.preventDefault(); if (adding) return;
+  if (aKind === "bhog") return submitBhogOnly();
   const name = $("aName").value.trim(), amt = parseFloat($("aAmt").value);
   if (!name) return toast("Name is required");
   if (!okAmt(amt)) return toast("Enter a valid amount");
@@ -760,6 +824,16 @@ $("expForm").addEventListener("submit", async e => {
   if (!ok) return; /* keep the sheet open so nothing typed is lost */
   expanded2.set(expense.id, expType === "partial"); $("expForm").reset(); setExpType("full"); setKind("exp"); openExp(false); renderExp();
 });
+function exportBhog() {
+  const withBill = items().map(r => ({ r, x: r26(r) })).filter(o => o.x.issued).sort((a, b) => byBill(a.r, b.r));
+  if (!withBill.length && !S.bhogOnly.length) return toast("No bhog issued yet");
+  const T = bhogTotals(), head = ["SL NO", "NAME", "ADDRESS", "BOXES ISSUED", "TYPE"];
+  const rows = withBill.map(o => [o.x.bill || "", o.r.name, o.r.addr, o.x.boxes ?? "", o.x.bill ? "With bill" : "Bill not issued"]);
+  S.bhogOnly.slice().sort((a, b) => a.id.localeCompare(b.id)).forEach(e => rows.push(["", e.name, "", e.boxes, "No bill"]));
+  rows.push([], ["TOTAL BOXES ISSUED", "", "", T.total, ""], ["WITH BILL", "", "", T.bx, ""], ["WITHOUT BILL", "", "", T.nbx, ""]);
+  download("kalipuja_2026_bhog_" + stamp() + ".csv", "\ufeff" + [head].concat(rows).map(r => r.map(csvCell).join(",")).join("\r\n"), "text/csv;charset=utf-8");
+  toast("Exported bhog list · total " + bxs(T.total));
+}
 function exportExpenses() {
   if (!S.expenses.length && !S.income.length) return toast("No expenses or income to export yet");
   const head = ["PAID TO / FOR", "NOTE", "TYPE", "SUB CATEGORY", "AMOUNT"], rows = [];
@@ -817,7 +891,7 @@ function exportCSV() {
   toast("Exported " + rows.length + " entries" + (nb ? " (" + nb + " without a bill no. at the end)" : ""));
 }
 function backupData() {
-  const t = new Date(), payload = { app: "kalipuja-2026", version: 1, savedAt: t.toISOString(), rec: S.rec, manual: S.manual, expenses: S.expenses, income: S.income };
+  const t = new Date(), payload = { app: "kalipuja-2026", version: 1, savedAt: t.toISOString(), rec: S.rec, manual: S.manual, expenses: S.expenses, income: S.income, bhogOnly: S.bhogOnly };
   download("kalipuja2026_backup_" + stamp() + "_" + pad(t.getHours()) + pad(t.getMinutes()) + ".json", JSON.stringify(payload, null, 1), "application/json");
   try { localStorage.setItem("kp-lastbackup", t.toISOString()); } catch (e) {}
   showDataInfo(); toast("Backup downloaded – keep the file safe");
@@ -825,7 +899,7 @@ function backupData() {
 function showDataInfo() {
   let lb = ""; try { lb = localStorage.getItem("kp-lastbackup") || ""; } catch (e) {}
   const n = Object.keys(S.rec).length;
-  $("dInfo").textContent = n + " records, " + S.manual.length + " manual entries and " + S.expenses.length + " expenses and " + S.income.length + " other income entries saved for 2026 · " + (lb ? "last backup from this device: " + new Date(lb).toLocaleString() : "no backup taken from this device yet");
+  $("dInfo").textContent = n + " records, " + S.manual.length + " manual entries, " + S.bhogOnly.length + " bhog-without-bill entries, " + S.expenses.length + " expenses and " + S.income.length + " other income entries saved for 2026 · " + (lb ? "last backup from this device: " + new Date(lb).toLocaleString() : "no backup taken from this device yet");
 }
 function openData(o) { $("dataPanel").classList.toggle("open", o); $("bd").classList.toggle("open", o); if (o) showDataInfo(); }
 /* checks a backup file and keeps only valid 2026 fields (same rules as the server) */
@@ -849,6 +923,14 @@ function cleanBackup(src) {
     if (Object.keys(c).length) rec[k] = c;
   }
   const out = { rec, manual };
+  if (Array.isArray(src.bhogOnly)) { /* bhog without bill: every entry is "issued", so the 9 Nov rule applies */
+    const ids = new Set(); out.bhogOnly = [];
+    if (bhogReady()) for (const e of src.bhogOnly.slice(0, 5000)) {
+      const id = e && String(e.id || ""), name = e && String(e.name || "").trim().slice(0, 100);
+      if (!/^b\d{6,}$/.test(id) || !name || !okBoxes(e.boxes) || e.boxes < 1 || ids.has(id)) continue;
+      ids.add(id); out.bhogOnly.push({ id, name, boxes: e.boxes });
+    }
+  }
   if (Array.isArray(src.expenses)) {
     const ids = new Set(); out.expenses = [];
     for (const e of src.expenses.slice(0, 5000)) { const c = cleanExp(e); if (c && !ids.has(c.id)) { ids.add(c.id); out.expenses.push(c); } }
@@ -862,7 +944,7 @@ function cleanBackup(src) {
 $("dataBtn").onclick = () => openData(true);
 $("dClose").onclick = () => openData(false);
 $("dExport").onclick = exportCSV;
-$("dExpExport").onclick = exportExpenses;
+$("dExpExport").onclick = exportExpenses; $("dBhogExport").onclick = exportBhog;
 $("dBackup").onclick = backupData;
 $("dRestore").onclick = async () => {
   if (!(await ensureAuth())) return toast("PIN needed to restore");
@@ -874,7 +956,7 @@ $("dFile").addEventListener("change", async e => {
   let obj; try { obj = JSON.parse(await f.text()); } catch (err) { return toast("Not a valid backup file"); }
   const clean = cleanBackup(obj); if (!clean) return toast("This is not a Kali Puja backup file");
   const when = obj.savedAt && !isNaN(new Date(obj.savedAt)) ? new Date(obj.savedAt).toLocaleString() : "unknown date";
-  const cnt = z => Object.keys(z.rec).length + " records, " + z.manual.length + " manual entries" + (z.expenses ? ", " + z.expenses.length + " expenses" : "") + (z.income ? ", " + z.income.length + " other income" : "");
+  const cnt = z => Object.keys(z.rec).length + " records, " + z.manual.length + " manual entries" + (z.expenses ? ", " + z.expenses.length + " expenses" : "") + (z.income ? ", " + z.income.length + " other income" : "") + (z.bhogOnly ? ", " + z.bhogOnly.length + " bhog without bill" : "");
   if (!confirm("Restore this backup?\n\nBackup (" + when + "): " + cnt(clean) + "\nCurrent: " + cnt(S) + "\n\nThis REPLACES all current 2026 data. 2025 data is not affected.")) return;
   if (await act({ action: "restore", data: clean }, "Backup restored")) { openData(false); stats(); render(); }
 });

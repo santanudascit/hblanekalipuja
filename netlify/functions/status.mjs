@@ -2,8 +2,9 @@ import { getStore } from "@netlify/blobs";
 
 // 2025 data is read-only (embedded in index.html). This function stores 2026 data only.
 // GET  /api/status -> { locked: <true if ADMIN_PIN is set>, rec: { "<id>": { status, amt, bill, deliver, issued, boxes } }, manual: [ { id, name, addr } ],
+//                       bhogOnly: [ { id, name, boxes } ]  (bhog issued to people without any bill),
 //                       expenses: [ { id, name, note, date, type: "full"|"partial", pays: [ { id, amt, date } ] } ] }
-// POST /api/status -> { action: "set"|"add"|"delete"|"restore"|"addExpense"|"addPayment"|"delPayment"|"delExpense"|"addIncome"|"delIncome", ...,  pin }   (pin needed only if ADMIN_PIN env var is set)
+// POST /api/status -> { action: "set"|"add"|"delete"|"restore"|"addExpense"|"addPayment"|"delPayment"|"delExpense"|"addIncome"|"delIncome"|"addBhogOnly"|"setBhogOnly"|"delBhogOnly", ...,  pin }   (pin needed only if ADMIN_PIN env var is set)
 const KEY = "data2026";
 // Bhog "Issued" can only be marked from 9 Nov 2026, 12:00 noon India time (= 9 Nov 06:30 UTC).
 const BHOG_OPEN = Date.UTC(2026, 10, 9, 6, 30);
@@ -16,7 +17,7 @@ export default async (req) => {
     const d = (await store.get(KEY, { type: "json" })) || {};
     const rec = d.rec || {};
     for (const k in rec) { const x = rec[k]; if (x && x.bhog) { if (x.bhog === "deliver") x.deliver = true; if (x.bhog === "issued") x.issued = true; delete x.bhog; } } // older single-choice data
-    return { rec, manual: d.manual || [], expenses: Array.isArray(d.expenses) ? d.expenses : [], income: Array.isArray(d.income) ? d.income : [] };
+    return { rec, manual: d.manual || [], expenses: Array.isArray(d.expenses) ? d.expenses : [], income: Array.isArray(d.income) ? d.income : [], bhogOnly: Array.isArray(d.bhogOnly) ? d.bhogOnly : [] };
   };
 
   if (req.method === "GET") return json({ ...(await load()), locked: !!process.env.ADMIN_PIN });
@@ -57,6 +58,13 @@ export default async (req) => {
     const name = String(e.name || "").trim().slice(0, 100);
     if (!name || !okDate(e.date) || typeof e.amt !== "number" || !Number.isFinite(e.amt) || e.amt <= 0 || e.amt > 1e9) return null;
     return { id: e.id, name, note: String(e.note || "").trim().slice(0, 200), date: e.date, amt: e.amt };
+  };
+  // bhog issued to a person who has no bill: just a name and how many boxes (at least 1)
+  const cleanBhog = (e) => {
+    if (!e || typeof e !== "object" || !/^b\d{6,}$/.test(String(e.id))) return null;
+    const name = String(e.name || "").trim().slice(0, 100);
+    if (!name || !okBoxes(e.boxes) || e.boxes < 1) return null;
+    return { id: e.id, name, boxes: e.boxes };
   };
   const d = await load();
 
@@ -122,10 +130,30 @@ export default async (req) => {
       const ids = new Set(); d.expenses = [];
       for (const e of src.expenses.slice(0, 5000)) { const c = cleanExp(e); if (c && !ids.has(c.id)) { ids.add(c.id); d.expenses.push(c); } }
     }
+    if (Array.isArray(src.bhogOnly)) { // older backups have no bhog-without-bill list: then the current entries are kept
+      const ids = new Set(); d.bhogOnly = [];
+      if (!notReady()) for (const e of src.bhogOnly.slice(0, 5000)) { const c = cleanBhog(e); if (c && !ids.has(c.id)) { ids.add(c.id); d.bhogOnly.push(c); } } // all of these are "issued", so the 9 Nov rule applies
+    }
     if (Array.isArray(src.income)) { // older backups have no other income: then the current entries are kept
       const ids = new Set(); d.income = [];
       for (const e of src.income.slice(0, 5000)) { const c = cleanInc(e); if (c && !ids.has(c.id)) { ids.add(c.id); d.income.push(c); } }
     }
+  } else if (b.action === "addBhogOnly") {
+    const e = cleanBhog(b.bhog);
+    if (!e) return json({ error: "bad bhog entry" }, 400);
+    if (notReady()) return json({ error: "bhog_not_ready" }, 400);
+    if (d.bhogOnly.length >= 5000 || d.bhogOnly.some((x) => x.id === e.id)) return json({ error: "bad bhog entry" }, 400);
+    d.bhogOnly.push(e);
+  } else if (b.action === "setBhogOnly") {
+    const x = d.bhogOnly.find((z) => z.id === String(b.id || ""));
+    if (!x) return json({ error: "unknown bhog entry" }, 400);
+    if (!okBoxes(b.boxes) || b.boxes < 1) return json({ error: "bad boxes" }, 400);
+    if (notReady()) return json({ error: "bhog_not_ready" }, 400);
+    x.boxes = b.boxes;
+  } else if (b.action === "delBhogOnly") {
+    const id = String(b.id || "");
+    if (!d.bhogOnly.some((x) => x.id === id)) return json({ error: "unknown bhog entry" }, 400);
+    d.bhogOnly = d.bhogOnly.filter((x) => x.id !== id);
   } else if (b.action === "addIncome") {
     const e = cleanInc(b.income);
     if (!e || d.income.length >= 5000 || d.income.some((x) => x.id === e.id)) return json({ error: "bad income" }, 400);

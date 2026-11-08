@@ -23,6 +23,8 @@ BILLS TAB
 - "Boxes issued" count when Bhog is issued
 - Tags: Bill not issued, NEW · 2026 (manual entries), 2025 bill number
 - Premium members: 2026 bill numbers 251-300 get a gold crown badge and card
+- BHOG WITHOUT A BILL: Add Entry > "Bhog only (no bill)" records just a name and the number of bhog boxes issued (for people who have no bill). They are listed under the "Bhog without bill" button and under "Bhog issued", searchable by name, boxes can be edited, entries deleted. Same 9 Nov noon rule.
+- TOTAL BHOG ISSUED: the "Bhog issued" box shows total boxes (with bill + without bill); the Bhog issued / Bhog without bill lists start with a summary card; Data > "Export bhog issued" downloads the full list with totals
 - Add Entry form (manual entries for new members) with address auto-complete from existing addresses; manual entries can be deleted
 
 EXPENSES TAB

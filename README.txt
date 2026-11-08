@@ -92,3 +92,11 @@ SUB CATEGORY (partial payments)
   When "Partial payment" is chosen in Add Expense, an optional "Sub category" text field appears next to the first payment.
   Every "Add another payment" box also has an optional "Sub category" field. It is shown on each payment line
   (e.g. "Payment 2 · Labour"), can be searched, is saved in backups and has its own column in the expenses CSV.
+
+BHOG WITHOUT A BILL + TOTAL BHOG ISSUED
+  Add Entry > top switch "Bhog only (no bill)": Name + Boxes issued (whole number, 1 or more). Meant for people who have no bill.
+  They never count as bill entries (no amount, not "Bill not issued"). Listed under the "Bhog without bill" button, under
+  "Bhog issued", and in name searches; boxes can be edited in place; the x deletes the entry. Same rule as other issued bhog:
+  only from 9 Nov 2026, 12:00 noon India time (app and server). Included in Backup / Restore (older backups keep the current list).
+  TOTAL: the "Bhog issued" box at the top shows total boxes = boxes on bills + boxes without a bill. Opening it (or the
+  "Bhog without bill" button) shows a summary card with the split. Data > "Export bhog issued" = CSV with every entry and totals.
