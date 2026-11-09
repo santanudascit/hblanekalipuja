@@ -2,10 +2,12 @@ import { getStore } from "@netlify/blobs";
 
 // 2025 data is read-only (embedded in index.html). This function stores 2026 data only.
 // GET  /api/status -> { locked: <true if ADMIN_PIN is set>, rec: { "<id>": { status, amt, bill, deliver, issued, boxes } }, manual: [ { id, name, addr } ],
+//                       base2025: [ { cn, name, addr, amt, st, note, book } ]  (only present after a FULL restore; otherwise the page uses the 2025 bills built into index.html),
 //                       bhogOnly: [ { id, name, boxes } ]  (bhog issued to people without any bill),
 //                       expenses: [ { id, name, note, date, type: "full"|"partial", pays: [ { id, amt, date } ] } ] }
-// POST /api/status -> { action: "set"|"add"|"delete"|"restore"|"addExpense"|"addPayment"|"delPayment"|"delExpense"|"addIncome"|"delIncome"|"addBhogOnly"|"setBhogOnly"|"delBhogOnly", ...,  pin }   (pin needed only if ADMIN_PIN env var is set)
+// POST /api/status -> { action: "set"|"add"|"delete"|"restore"|"addExpense"|"addPayment"|"delPayment"|"delExpense"|"addIncome"|"delIncome"|"restoreFull"|"addBhogOnly"|"setBhogOnly"|"delBhogOnly", ...,  pin }   (pin needed only if ADMIN_PIN env var is set)
 const KEY = "data2026";
+const BASE_KEY = "base2025"; // 2025 bills, only stored here when a full backup has been restored
 // Bhog "Issued" can only be marked from 9 Nov 2026, 12:00 noon India time (= 9 Nov 06:30 UTC).
 const BHOG_OPEN = Date.UTC(2026, 10, 9, 6, 30);
 
@@ -20,7 +22,10 @@ export default async (req) => {
     return { rec, manual: d.manual || [], expenses: Array.isArray(d.expenses) ? d.expenses : [], income: Array.isArray(d.income) ? d.income : [], bhogOnly: Array.isArray(d.bhogOnly) ? d.bhogOnly : [] };
   };
 
-  if (req.method === "GET") return json({ ...(await load()), locked: !!process.env.ADMIN_PIN });
+  if (req.method === "GET") {
+    const base = await store.get(BASE_KEY, { type: "json" }); // 2025 bills saved by a full restore (optional)
+    return json({ ...(await load()), locked: !!process.env.ADMIN_PIN, ...(Array.isArray(base) && base.length ? { base2025: base } : {}) });
+  }
   if (req.method !== "POST") return json({ error: "method not allowed" }, 405);
 
   let b;
@@ -59,6 +64,13 @@ export default async (req) => {
     if (!name || !okDate(e.date) || typeof e.amt !== "number" || !Number.isFinite(e.amt) || e.amt <= 0 || e.amt > 1e9) return null;
     return { id: e.id, name, note: String(e.note || "").trim().slice(0, 200), date: e.date, amt: e.amt };
   };
+  // one 2025 bill from a full backup (2025 stays read-only in the app; only a full restore can replace it)
+  const cleanBase = (r) => {
+    if (!r || typeof r !== "object" || !Number.isInteger(r.cn) || r.cn < 1 || r.cn > 9999) return null;
+    const name = String(r.name || "").trim().slice(0, 200);
+    if (!name || typeof r.amt !== "number" || !Number.isFinite(r.amt) || r.amt < 0 || r.amt > 1e9 || !["paid", "due", "na"].includes(r.st)) return null;
+    return { cn: r.cn, name, addr: String(r.addr || "").trim().slice(0, 300), amt: r.amt, st: r.st, note: String(r.note || "").trim().slice(0, 300), book: String(r.book || "").trim().slice(0, 100) };
+  };
   // bhog issued to a person who has no bill: just a name and how many boxes (at least 1)
   const cleanBhog = (e) => {
     if (!e || typeof e !== "object" || !/^b\d{6,}$/.test(String(e.id))) return null;
@@ -67,6 +79,39 @@ export default async (req) => {
     return { id: e.id, name, boxes: e.boxes };
   };
   const d = await load();
+  // Replaces ALL 2026 data with a backup. Everything is re-validated; unknown or invalid parts are dropped.
+  // full=false (2026-only restore): lists missing from an older backup keep the current data. full=true: missing lists become empty.
+  const applyRestore = (src, full) => {
+    if (!src || typeof src !== "object" || !src.rec || typeof src.rec !== "object" || Array.isArray(src.rec) || Object.keys(src.rec).length > 20000) return "bad backup";
+    const manual = [], seen = new Set(), rec = {};
+    for (const m of Array.isArray(src.manual) ? src.manual.slice(0, 5000) : []) {
+      const id = m ? String(m.id || "") : "", name = m ? String(m.name || "").trim().slice(0, 100) : "";
+      if (!/^m\d{6,}$/.test(id) || !name || seen.has(id)) continue;
+      seen.add(id); manual.push({ id, name, addr: String(m.addr || "").trim().slice(0, 200) });
+    }
+    for (const k in src.rec) {
+      if (!/^\d{1,4}$/.test(k) && !seen.has(k)) continue;
+      const x = src.rec[k]; if (!x || typeof x !== "object") continue;
+      const c = {};
+      if (okStatus(x.status)) c.status = x.status;
+      if (okAmt(x.amt)) c.amt = x.amt;
+      if (typeof x.bill === "string" && x.bill.trim()) c.bill = x.bill.trim().slice(0, 20);
+      if (x.deliver === true || x.bhog === "deliver") c.deliver = true;
+      if ((x.issued === true || x.bhog === "issued") && !notReady()) c.issued = true; // keeps the 9 Nov rule
+      if (c.issued && okBoxes(x.boxes)) c.boxes = x.boxes;
+      if (Object.keys(c).length) rec[k] = c;
+    }
+    d.manual = manual; d.rec = rec;
+    const sect = (name, clean, allowed) => {
+      const v = src[name];
+      if (Array.isArray(v)) { const ids = new Set(), out = []; if (allowed) for (const e of v.slice(0, 5000)) { const c = clean(e); if (c && !ids.has(c.id)) { ids.add(c.id); out.push(c); } } d[name] = out; }
+      else if (full) d[name] = [];
+    };
+    sect("expenses", cleanExp, true);
+    sect("bhogOnly", cleanBhog, !notReady()); // all of these are "issued", so the 9 Nov rule applies
+    sect("income", cleanInc, true);
+    return null;
+  };
 
   if (b.action === "set") {
     const id = String(b.id || "");
@@ -103,41 +148,16 @@ export default async (req) => {
     const bn = typeof e.bill === "string" ? e.bill.trim().slice(0, 20) : "";
     if (bn) d.rec[e.id].bill = bn;
   } else if (b.action === "restore") {
-    // Replace ALL 2026 data with a backup. Everything is re-validated here; unknown or invalid parts are dropped.
+    const err = applyRestore(b.data, false); if (err) return json({ error: err }, 400);
+  } else if (b.action === "restoreFull") {
+    // FULL copy: the 2025 bills AND all 2026 data, so the whole site can be rebuilt on another Netlify site
     const src = b.data;
-    if (!src || typeof src !== "object" || !src.rec || typeof src.rec !== "object" || Array.isArray(src.rec) || Object.keys(src.rec).length > 20000)
-      return json({ error: "bad backup" }, 400);
-    const manual = [], seen = new Set(), rec = {};
-    for (const m of Array.isArray(src.manual) ? src.manual.slice(0, 5000) : []) {
-      const id = m ? String(m.id || "") : "", name = m ? String(m.name || "").trim().slice(0, 100) : "";
-      if (!/^m\d{6,}$/.test(id) || !name || seen.has(id)) continue;
-      seen.add(id); manual.push({ id, name, addr: String(m.addr || "").trim().slice(0, 200) });
-    }
-    for (const k in src.rec) {
-      if (!/^\d{1,4}$/.test(k) && !seen.has(k)) continue;
-      const x = src.rec[k]; if (!x || typeof x !== "object") continue;
-      const c = {};
-      if (okStatus(x.status)) c.status = x.status;
-      if (okAmt(x.amt)) c.amt = x.amt;
-      if (typeof x.bill === "string" && x.bill.trim()) c.bill = x.bill.trim().slice(0, 20);
-      if (x.deliver === true || x.bhog === "deliver") c.deliver = true;
-      if ((x.issued === true || x.bhog === "issued") && !notReady()) c.issued = true; // keeps the 9 Nov rule
-      if (c.issued && okBoxes(x.boxes)) c.boxes = x.boxes;
-      if (Object.keys(c).length) rec[k] = c;
-    }
-    d.manual = manual; d.rec = rec;
-    if (Array.isArray(src.expenses)) { // older backups have no expenses: then the current ones are kept
-      const ids = new Set(); d.expenses = [];
-      for (const e of src.expenses.slice(0, 5000)) { const c = cleanExp(e); if (c && !ids.has(c.id)) { ids.add(c.id); d.expenses.push(c); } }
-    }
-    if (Array.isArray(src.bhogOnly)) { // older backups have no bhog-without-bill list: then the current entries are kept
-      const ids = new Set(); d.bhogOnly = [];
-      if (!notReady()) for (const e of src.bhogOnly.slice(0, 5000)) { const c = cleanBhog(e); if (c && !ids.has(c.id)) { ids.add(c.id); d.bhogOnly.push(c); } } // all of these are "issued", so the 9 Nov rule applies
-    }
-    if (Array.isArray(src.income)) { // older backups have no other income: then the current entries are kept
-      const ids = new Set(); d.income = [];
-      for (const e of src.income.slice(0, 5000)) { const c = cleanInc(e); if (c && !ids.has(c.id)) { ids.add(c.id); d.income.push(c); } }
-    }
+    if (!src || typeof src !== "object" || !Array.isArray(src.base2025) || src.base2025.length < 1 || src.base2025.length > 3000) return json({ error: "bad backup" }, 400);
+    const seenCn = new Set(), base = [];
+    for (const r of src.base2025) { const c = cleanBase(r); if (c && !seenCn.has(c.cn)) { seenCn.add(c.cn); base.push(c); } }
+    if (!base.length) return json({ error: "bad backup" }, 400);
+    const err = applyRestore(src.data2026, true); if (err) return json({ error: err }, 400);
+    await store.setJSON(BASE_KEY, base); // (the 2026 part is saved just below, after everything checked out)
   } else if (b.action === "addBhogOnly") {
     const e = cleanBhog(b.bhog);
     if (!e) return json({ error: "bad bhog entry" }, 400);

@@ -100,3 +100,15 @@ BHOG WITHOUT A BILL + TOTAL BHOG ISSUED
   only from 9 Nov 2026, 12:00 noon India time (app and server). Included in Backup / Restore (older backups keep the current list).
   TOTAL: the "Bhog issued" box at the top shows total boxes = boxes on bills + boxes without a bill. Opening it (or the
   "Bhog without bill" button) shows a summary card with the split. Data > "Export bhog issued" = CSV with every entry and totals.
+
+FULL BACKUP / FULL RESTORE  (Data panel > "Full copy")  - move the whole site to another site
+  Full backup  : downloads ONE file (kalipuja_FULL_backup_....json) with the 2025 bills and all 2026 data
+                 (bills, bhog incl. people without a bill, expenses, other income).
+  Full restore : pick that file on ANY copy of this site (needs the admin PIN). It REPLACES everything: the 2025 bills and all 2026 data.
+                 The 2025 bills are then stored on that site's server, so they come back even if its index.html has different 2025 data.
+  To rebuild on another site:
+    1. Deploy this same project folder on the new Netlify site (from Git, so the function runs).
+    2. Netlify > Environment variables > set ADMIN_PIN on the new site (the PIN is NOT inside the backup, for safety).
+    3. Open the new site > Data (database icon) > Full restore > choose the full backup file.
+  Not in the backup (they are part of the project folder): the page design, logo and icons.
+  The normal "Backup 2026 data / Restore from backup" buttons still work for 2026 only.
