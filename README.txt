@@ -112,3 +112,9 @@ FULL BACKUP / FULL RESTORE  (Data panel > "Full copy")  - move the whole site to
     3. Open the new site > Data (database icon) > Full restore > choose the full backup file.
   Not in the backup (they are part of the project folder): the page design, logo and icons.
   The normal "Backup 2026 data / Restore from backup" buttons still work for 2026 only.
+
+SORTING BY BHOG ISSUED
+  Above every list of results there is a Sort switch: "Bill no. ↑" or "Bhog issued ↓".
+  "Bhog issued ↓" puts the most bhog boxes first (people without a bill are mixed into the same order); bills with bhog issued but
+  no box count come next, then bills without bhog. The "Bhog issued" and "Bhog without bill" lists start in this order;
+  other lists start by bill number. Choosing another button resets to that list's default.

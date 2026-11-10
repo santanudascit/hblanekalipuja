@@ -41,6 +41,7 @@ DATA & SHARING
 - Saves are sent one at a time so quick edits never overwrite each other
 - Export 2026 list (CSV: SL No, Name, Address, Amount, Payment status, bhog columns)
 - Export expenses (CSV: every payment, other income, totals and in-hand balance)
+- SORT: results have a Sort switch - "Bill no. ↑" or "Bhog issued ↓" (most bhog boxes first, people without a bill included). The Bhog issued and Bhog without bill lists open sorted by most bhog boxes first.
 - FULL BACKUP / FULL RESTORE (Data panel): one file with ALL data - the 2025 bills and everything for 2026 - to rebuild the whole site on another site (see README)
 - Backup (JSON, includes bills, bhog, expenses, other income) and Restore (replaces 2026 data; older backups keep current expenses/income)
 - 2025 data is never changed

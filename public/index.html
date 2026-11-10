@@ -167,6 +167,9 @@ mark{background:rgba(245,158,11,.5);color:inherit;border-radius:4px;padding:0 1p
 .bsum b{display:block;font-size:2.1rem;font-weight:800;letter-spacing:-.02em;line-height:1.15}
 .bsum .split{display:flex;flex-wrap:wrap;gap:4px 18px;margin-top:4px;font-size:.84rem;opacity:.92}
 .card.nb{border-left:4px solid var(--ind)}
+.sortbar{display:flex;align-items:center;gap:10px;margin:2px 0 12px}
+.sortbar>span{font-size:.8rem;font-weight:650;color:var(--mut)}
+.sortbar .seg{flex:1;margin:0}.sortbar .seg button{padding:10px 4px;font-size:.86rem}
 .xdel{border:0;background:var(--duebg);color:var(--due);width:26px;height:26px;border-radius:50%;font-size:13px;padding:0;flex:none}
 .row.tot{font-weight:750}.row.tot>span:first-child{color:var(--ink);font-weight:750}
 .addsplit{display:flex;gap:10px;margin-top:10px}.addsplit .tint{margin-top:0}
@@ -399,6 +402,10 @@ const BHOG_OPEN = Date.UTC(2026, 10, 9, 6, 30);
 const bhogReady = () => Date.now() >= BHOG_OPEN;
 const NOT_READY = "Bhog not ready – it can be marked as issued from 9 Nov 2026, 12:00 noon";
 const expanded = new Map();
+let sortPick = null; /* null = automatic (most bhog first on the Bhog lists, bill no. elsewhere); or "bill" / "boxes" picked by the user */
+/* most bhog boxes first; bills with bhog issued but no box count come next, bills without bhog last */
+const boxKey = r => { const x = r26(r); return x.issued ? (x.boxes || 0) : -1; };
+const byBoxes = (a, b) => boxKey(b) - boxKey(a) || byBill(a, b);
 const sw = (kind, id, on, cls) => `<label class="sw ${cls || ""}"><input type="checkbox" data-bh="${kind}" data-id="${id}" ${on ? "checked" : ""}><i></i></label>`;
 function render() {
   const q = $("q").value.trim().toLowerCase(), hq = isBillQ(q) ? "" : q;
@@ -414,14 +421,17 @@ function render() {
     return;
   }
   const sorted = ["26paid", "26due", "bhogdeliver", "bhogissued", "premium"].includes(filter);
+  const sortMode = sortPick || (filter === "bhogissued" || filter === "bhognobill" ? "boxes" : "bill");
   if (sorted) list.sort(byBill);
+  if (sortMode === "boxes") { list.sort(byBoxes); bo.sort((a, b) => b.boxes - a.boxes || a.name.localeCompare(b.name)); }
   const nres = list.length + bo.length;
-  $("info").textContent = nres + " result" + (nres === 1 ? "" : "s") + (sorted && list.length ? " · sorted by 2026 bill no." : "");
+  $("info").textContent = nres + " result" + (nres === 1 ? "" : "s") + (sortMode === "boxes" ? " · most bhog boxes first" : (sorted && list.length ? " · sorted by 2026 bill no." : ""));
   if (!list.length && !bo.length) { $("out").innerHTML = `<div class="empty"><div class="big">🔍</div><b>Nothing found</b><p>Try a shorter name or part of the address.</p></div>`; return; }
   const T = bhogTotals();
   const sumHtml = filter === "bhogissued" || filter === "bhognobill" ? `<div class="bsum"><small>📦 TOTAL BHOG ISSUED</small><b>${bxs(T.total)}</b><div class="split"><span>${bxs(T.bx)} with bill · ${ppl(T.pb)}</span><span>${bxs(T.nbx)} without bill · ${ppl(T.pn)}</span></div></div>` : "";
-  const boHtml = bo.length ? `<div class="gt">Bhog issued without a bill · ${bo.length} · ${bxs(bo.reduce((a, e) => a + e.boxes, 0))}</div>` + bo.map(e => `<div class="card nb"><div class="chead" style="cursor:default"><div class="ctext"><div class="name">${hl(e.name, hq)}</div><div class="addr">🍚 Bhog issued · no bill</div></div><button class="xdel" data-bodel="${e.id}" aria-label="Delete this bhog entry">✕</button></div><div class="pills"><span class="pill issued">✅ Bhog issued · ${bxs(e.boxes)}</span><span class="pill">No bill</span></div><div class="body" style="padding-top:12px"><div class="group"><div class="row"><span>Boxes issued</span><input type="number" min="1" max="100000" step="1" inputmode="numeric" data-boxo="${e.id}" value="${e.boxes}"></div></div></div></div>`).join("") : "";
-  const billHtml = list.slice(0, limit).map(r => {
+  const nbCard = e => `<div class="card nb"><div class="chead" style="cursor:default"><div class="ctext"><div class="name">${hl(e.name, hq)}</div><div class="addr">🍚 Bhog issued · no bill</div></div><button class="xdel" data-bodel="${e.id}" aria-label="Delete this bhog entry">✕</button></div><div class="pills"><span class="pill issued">✅ Bhog issued · ${bxs(e.boxes)}</span><span class="pill">No bill</span></div><div class="body" style="padding-top:12px"><div class="group"><div class="row"><span>Boxes issued</span><input type="number" min="1" max="100000" step="1" inputmode="numeric" data-boxo="${e.id}" value="${e.boxes}"></div></div></div></div>`;
+  const boHtml = bo.length ? `<div class="gt">Bhog issued without a bill · ${bo.length} · ${bxs(bo.reduce((a, e) => a + e.boxes, 0))}</div>` + bo.map(nbCard).join("") : "";
+  const billCard = r => {
     const x = r26(r), s = x.status || "", s25 = r.st25;
     const open = expanded.has(r.id) ? expanded.get(r.id) : list.length <= 2;
     const pills = `<div class="pills">
@@ -452,8 +462,15 @@ function render() {
       ${r.manual ? `<button class="del" data-del="${r.id}">Delete this entry</button>` : ""}</div>`;
     const prem = isPremium(r);
     return `<div class="card ${open ? "open" : ""} ${prem ? "prem" : ""}"><button class="chead" data-tog="${r.id}"><div class="ctext"><div class="name">${hl(r.name,hq)}</div><div class="addr">${hl(r.addr,hq)}</div>${prem ? '<div class="premrow"><span class="prem-badge"><span class="crown">👑</span>Premium Member</span></div>' : ""}</div><span class="chev">›</span></button>${pills}${body}</div>`;
-  }).join("") + (list.length > limit ? `<button class="more" id="more">Show more (${list.length - limit} left)</button>` : "");
-  $("out").innerHTML = sumHtml + billHtml + boHtml;
+  };
+  const sortHtml = `<div class="sortbar"><span>Sort</span><div class="seg"><button class="b1 ${sortMode === "bill" ? "sel" : ""}" data-sort="bill">Bill no. ↑</button><button class="b2 ${sortMode === "boxes" ? "sel" : ""}" data-sort="boxes">Bhog issued ↓</button></div></div>`;
+  const moreBtn = n => n > limit ? `<button class="more" id="more">Show more (${n - limit} left)</button>` : "";
+  let listHtml;
+  if (sortMode === "boxes" && bo.length) { /* one list, so the order is right across bills and people without a bill */
+    const merged = list.map(r => ({ n: boxKey(r), r })).concat(bo.map(e => ({ n: e.boxes, e }))).sort((a, b) => b.n - a.n);
+    listHtml = merged.slice(0, limit).map(o => o.r ? billCard(o.r) : nbCard(o.e)).join("") + moreBtn(merged.length);
+  } else listHtml = list.slice(0, limit).map(billCard).join("") + moreBtn(list.length) + boHtml;
+  $("out").innerHTML = sumHtml + sortHtml + listHtml;
 }
 /* search autocomplete */
 let sel = -1, sugg = [];
@@ -479,6 +496,7 @@ $("sugg").addEventListener("mousedown", e => { const d = e.target.closest("[data
 document.addEventListener("click", e => { if (!e.target.closest(".searchbox")) $("sugg").style.display = "none"; });
 $("f").addEventListener("submit", e => { e.preventDefault(); $("sugg").style.display = "none"; $("q").blur(); limit = 60; render(); });
 function setFilter(f) {
+  sortPick = null; /* each list starts with its own default order */
   filter = f; limit = 60;
   document.querySelectorAll(".chip").forEach(x => x.classList.toggle("on", x.dataset.f === f));
   render(); if (f !== "all") $("info").scrollIntoView({ block: "start" });
@@ -609,6 +627,7 @@ async function act(p, okMsg) {
 $("out").addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
   if (b.id === "more") { limit += 60; render(); }
+  else if (b.dataset.sort) { sortPick = b.dataset.sort; limit = 60; render(); }
   else if (b.dataset.tog) { const id = b.dataset.tog, card = b.closest(".card"); expanded.set(id, !card.classList.contains("open")); render(); }
   else if (b.dataset.s && !b.disabled) act({ action: "set", id: b.dataset.id, status: b.dataset.s }, "2026 marked " + b.dataset.s.toUpperCase());
   else if (b.dataset.save) saveEdit(b.dataset.save);
